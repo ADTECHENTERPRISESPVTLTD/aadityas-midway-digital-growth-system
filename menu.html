@@ -1,0 +1,316 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', Arial, sans-serif; background: #f5f5f5; color: #333; padding: 20px; }
+h1 { text-align: center; margin: 20px 0 10px; font-size: 28px; }
+.subtitle { text-align: center; color: #888; margin-bottom: 20px; font-size: 14px; }
+.filter-bar { display: flex; justify-content: center; gap: 10px; margin-bottom: 25px; flex-wrap: wrap; }
+.filter-btn { padding: 10px 26px; border: 2px solid #ddd; border-radius: 30px; background: #fff; cursor: pointer; font-size: 15px; font-weight: 600; color: #666; transition: all 0.2s; }
+.filter-btn:hover { border-color: #bbb; }
+.filter-btn.active { background: #2c2c2c; color: #fff; border-color: #2c2c2c; }
+.menu-section { background: #fff; border-radius: 12px; padding: 22px 26px; margin-bottom: 22px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+.menu-section h2 { font-size: 20px; margin-bottom: 14px; border-bottom: 2px solid #f0f0f0; padding-bottom: 8px; }
+.menu-section h3 { font-size: 15px; color: #888; margin: 14px 0 8px; font-weight: 600; }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+th, td { padding: 9px 10px; text-align: left; border-bottom: 1px solid #f2f2f2; }
+th { color: #999; font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+.rating { color: #f5a623; letter-spacing: 1px; }
+.price { font-weight: 600; color: #2c2c2c; }
+.add-on { color: #aaa; font-size: 13px; }
+.hidden { display: none !important; }
+.veg-dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 6px; vertical-align: middle; }
+.veg-dot.green { background: #27ae60; }
+.veg-dot.red { background: #e74c3c; }
+.both-dot { background: #2c2c2c; }
+.footer-note { text-align: center; color: #aaa; font-size: 12px; margin-top: 10px; }
+</style>
+</head>
+<body>
+<h1>??? Restaurant Menu</h1>
+<p class="subtitle" id="countLabel">Showing all dishes</p>
+<div class="filter-bar">
+  <button class="filter-btn active" data-filter="all">All</button>
+  <button class="filter-btn" data-filter="veg">?? Veg Only</button>
+  <button class="filter-btn" data-filter="nonveg">?? Non-Veg Only</button>
+</div>
+<div class="menu-section" data-veg="both">
+<h2>?? SOUP</h2>
+<table>
+<tr><th>Dish</th><th>Small</th><th>Large</th><th>Rating</th></tr>
+<tr data-veg="nonveg"><td>Thai Soup (Shrimp / Chicken)</td><td class="price">$7.99</td><td class="price">$12.99</td><td class="rating">?????</td></tr>
+<tr data-veg="nonveg"><td>Salmon Soup</td><td class="price">$10.99</td><td class="price">$13.99</td><td class="rating">?????</td></tr>
+<tr data-veg="veg"><td>Veggie Soup</td><td class="price">$6.99</td><td class="price">$8.99</td><td class="rating">????</td></tr>
+</table>
+</div>
+
+<div class="menu-section" data-veg="both">
+<h2>?? SALAD</h2>
+<table>
+<tr><th>Dish</th><th>Price</th><th>Rating</th></tr>
+<tr data-veg="nonveg"><td>Chicken Salad</td><td class="price">$9.99</td><td class="rating">?????</td></tr>
+<tr data-veg="nonveg"><td>Cashew Nut Salad with Chicken</td><td class="price">$11.99</td><td class="rating">?????</td></tr>
+<tr data-veg="veg"><td>Greek Salad</td><td class="price">$10.99</td><td class="rating">????</td></tr>
+</table>
+</div>
+
+<div class="menu-section" data-veg="nonveg">
+<h2>?? FRIED SPECIAL</h2>
+<table>
+<tr><th>Dish</th><th>Price</th><th>Rating</th></tr>
+<tr><td>Hot Wings (6 pieces)</td><td class="price">$9.99</td><td class="rating">?????</td></tr>
+<tr><td>Peri Peri Wings (6 pieces)</td><td class="price">$11.99</td><td class="rating">?????</td></tr>
+<tr><td>Buffalo Wings (6 pieces)</td><td class="price">$9.99</td><td class="rating">????</td></tr>
+<tr><td>Chicken Tenders (3 pieces with fries)</td><td class="price">$6.99</td><td class="rating">????</td></tr>
+<tr><td>Jumbo Shrimp</td><td class="price">$7.99</td><td class="rating">????</td></tr>
+<tr><td>Shrimp Tempura (6 pcs)</td><td class="price">$7.99</td><td class="rating">????</td></tr>
+<tr><td>Fish and Chips</td><td class="price">$7.00</td><td class="rating">???</td></tr>
+</table>
+</div>
+<div class="menu-section" data-veg="both">
+<h2>?? RICE</h2>
+<table>
+<tr><th>Dish</th><th>Small</th><th>Large</th><th>Rating</th></tr>
+<tr data-veg="veg"><td>Kabuli Pulao</td><td class="price">$9.99</td><td class="price">$12.99</td><td class="rating">?????</td></tr>
+<tr data-veg="nonveg"><td>Chicken Fried Rice</td><td class="price">$9.99</td><td class="price">$12.99</td><td class="rating">?????</td></tr>
+<tr data-veg="nonveg"><td>Shrimp Fried Rice</td><td class="price">$9.99</td><td class="price">$12.99</td><td class="rating">????</td></tr>
+<tr data-veg="nonveg"><td>Mix Fried Rice</td><td class="price">$9.99</td><td class="price">$12.99</td><td class="rating">????</td></tr>
+</table>
+</div>
+
+<div class="menu-section" data-veg="both">
+<h2>?? SANDWICHES & BURGERS</h2>
+<table>
+<tr><th>Dish</th><th>Small</th><th>Large</th><th>Rating</th></tr>
+<tr data-veg="nonveg"><td>Chicken Shawarma</td><td class="price">$8.99</td><td class="price">$12.99</td><td class="rating">?????</td></tr>
+<tr data-veg="nonveg"><td>Lamb Shawarma</td><td class="price">$9.99</td><td class="price">$13.99</td><td class="rating">?????</td></tr>
+<tr data-veg="nonveg"><td>Mix Shawarma</td><td class="price">$9.99</td><td class="price">$13.99</td><td class="rating">?????</td></tr>
+<tr data-veg="nonveg"><td>Chicken Kebab / Kofta Wrap</td><td class="price">$9.99</td><td class="price">$10.99</td><td class="rating">?????</td></tr>
+<tr data-veg="nonveg"><td>Beef Kebab / Kofta Wrap</td><td class="price">$11.99</td><td class="price">$12.99</td><td class="rating">?????</td></tr>
+<tr data-veg="nonveg"><td>Philly Cheese Steak</td><td class="price">$9.99</td><td class="price">$11.99</td><td class="rating">????</td></tr>
+<tr data-veg="veg"><td>Falafel Sandwich</td><td class="price">$9.99</td><td class="price">$10.99</td><td class="rating">????</td></tr>
+<tr data-veg="nonveg"><td>Chopped Salmon</td><td class="price">$13.99</td><td class="price">$14.99</td><td class="rating">?????</td></tr>
+</table>
+</div>
+
+<div class="menu-section" data-veg="nonveg">
+<h2>?? COMBO</h2>
+<table>
+<tr><th>Dish</th><th>Only Fries</th><th>Combo Fries &amp; Soda</th><th>Rating</th></tr>
+<tr><td>Chicken Burger / Home Style</td><td class="price">$8.99</td><td class="price">$11.99</td><td class="rating">?????</td></tr>
+<tr><td>Beef Burger / Home Style</td><td class="price">$9.99</td><td class="price">$11.99</td><td class="rating">?????</td></tr>
+<tr><td>Fish Burger</td><td class="price">$8.99</td><td class="price">$10.99</td><td class="rating">????</td></tr>
+<tr><td>Chicken Sandwich</td><td class="price">$7.99</td><td class="price">$10.99</td><td class="rating">????</td></tr>
+</table>
+</div>
+<div class="menu-section" data-veg="nonveg">
+<h2>?? MEDITERRANEAN MIX GRILL</h2>
+<table>
+<tr><th>Dish</th><th>Price</th><th>Rating</th></tr>
+<tr><td>Combo Special (1 Person)</td><td class="price">$24.99</td><td class="rating">?????</td></tr>
+<tr><td>Combo Special (3 Person)</td><td class="price">$59.99</td><td class="rating">?????</td></tr>
+<tr><td>Combo Special (5 Person)</td><td class="price">$84.99</td><td class="rating">?????</td></tr>
+</table>
+</div>
+
+<div class="menu-section" data-veg="nonveg">
+<h2>?? BEEF PLATTER</h2>
+<table>
+<tr><th>Dish</th><th>Price</th><th>Rating</th></tr>
+<tr><td>Beef Kofta</td><td class="price">$13.99</td><td class="rating">?????</td></tr>
+<tr><td>Beef Chapli Kebab</td><td class="price">$19.99</td><td class="rating">?????</td></tr>
+<tr><td>Beef T-Bone Steak</td><td class="price">$23.99</td><td class="rating">?????</td></tr>
+</table>
+</div>
+
+<div class="menu-section" data-veg="nonveg">
+<h2>?? LAMB PLATTER</h2>
+<table>
+<tr><th>Dish</th><th>Price</th><th>Rating</th></tr>
+<tr><td>Baby Lamb Chop (3 pcs)</td><td class="price">$24.99</td><td class="rating">?????</td></tr>
+<tr><td>Lamb Kebab</td><td class="price">$15.99</td><td class="rating">?????</td></tr>
+<tr><td>Lamb Shawarma Platter</td><td class="price">$12.50</td><td class="rating">????</td></tr>
+<tr><td>Lamb + Chicken Mix Platter</td><td class="price">$12.50</td><td class="rating">????</td></tr>
+<tr><td>Mix Kebab Platter</td><td class="price">$13.99</td><td class="rating">?????</td></tr>
+</table>
+</div>
+
+<div class="menu-section" data-veg="nonveg">
+<h2>?? CHICKEN PLATTER</h2>
+<table>
+<tr><th>Dish</th><th>Price</th><th>Rating</th></tr>
+<tr><td>Chicken Tikka Kebab</td><td class="price">$12.99</td><td class="rating">?????</td></tr>
+<tr><td>Chicken Behari Kebab</td><td class="price">$13.99</td><td class="rating">?????</td></tr>
+<tr><td>Peri Peri Chicken</td><td class="price">$15.99</td><td class="rating">?????</td></tr>
+<tr><td>Chicken Kofta Kebab</td><td class="price">$12.99</td><td class="rating">?????</td></tr>
+<tr><td>Grill Chicken</td><td class="price">$14.99</td><td class="rating">?????</td></tr>
+<tr><td>Chicken Shawarma</td><td class="price">$12.99</td><td class="rating">?????</td></tr>
+<tr><td>Chicken Wings (B.B.Q)</td><td class="price">$13.99</td><td class="rating">?????</td></tr>
+<tr><td>Falafel Platter</td><td class="price">$12.99</td><td class="rating">????</td></tr>
+</table>
+</div>
+
+<div class="menu-section" data-veg="nonveg">
+<h2>?? GRILL FISH &amp; SEAFOOD</h2>
+<table>
+<tr><th>Dish</th><th>Price</th><th>Rating</th></tr>
+<tr><td>Grill Salmon</td><td class="price">$21.99</td><td class="rating">?????</td></tr>
+<tr><td>Tandoori Salmon</td><td class="price">$16.99</td><td class="rating">?????</td></tr>
+<tr><td>Grill Jumbo Shrimp (6 pcs)</td><td class="price">$14.99</td><td class="rating">?????</td></tr>
+<tr><td>Grill Fish Fillet</td><td class="price">$13.99</td><td class="rating">????</td></tr>
+<tr><td>Whole Branzino Fish</td><td class="price">$26.99</td><td class="rating">?????</td></tr>
+</table>
+</div>
+<div class="menu-section" data-veg="veg">
+<h2>?? BEVERAGE MENU</h2>
+<h3>?? REFRESHER SERIES — Large</h3>
+<table>
+<tr><th>Drink</th><th>Price</th><th>Rating</th></tr>
+<tr><td>Strawberry Four Seasons</td><td class="price">$6.99</td><td class="rating">????</td></tr>
+<tr><td>Passionfruit Jasmine</td><td class="price">$6.99</td><td class="rating">????</td></tr>
+<tr><td>Mango Jasmine</td><td class="price">$6.99</td><td class="rating">????</td></tr>
+<tr><td>Tropical Hawaiian</td><td class="price">$6.99</td><td class="rating">????</td></tr>
+<tr><td>Lemonade</td><td class="price">$5.99</td><td class="rating">????</td></tr>
+<tr><td>Ocean Blue Lemonade</td><td class="price">$5.99</td><td class="rating">????</td></tr>
+<tr><td>Peachy Paradise</td><td class="price">$5.99</td><td class="rating">????</td></tr>
+<tr><td>Tropical Punch</td><td class="price">$5.99</td><td class="rating">????</td></tr>
+<tr><td>Iced Tea</td><td class="price">$5.99</td><td class="rating">???</td></tr>
+</table>
+<h3>?? PROTEIN SHAKE — Large</h3>
+<table>
+<tr><th>Flavor</th><th>Price</th><th>Rating</th></tr>
+<tr><td>French Vanilla</td><td class="price">$7.99</td><td class="rating">????</td></tr>
+<tr><td>Peach</td><td class="price">$7.99</td><td class="rating">????</td></tr>
+<tr><td>Milk &amp; Yogurt</td><td class="price">$7.99</td><td class="rating">????</td></tr>
+<tr><td>Melon</td><td class="price">$7.99</td><td class="rating">????</td></tr>
+</table>
+<h3> Mango SLUSH / SMOOTHIE SERIES — Large</h3>
+<table>
+<tr><th>Drink</th><th>Price</th><th>Rating</th></tr>
+<tr><td>Mango Pomelo</td><td class="price">$7.99</td><td class="rating">?????</td></tr>
+<tr><td>Peachy Slush</td><td class="price">$7.99</td><td class="rating">?????</td></tr>
+<tr><td>Mango / Strawberry Slush</td><td class="price">$7.99</td><td class="rating">?????</td></tr>
+<tr><td>Passionfruit Slush</td><td class="price">$7.99</td><td class="rating">?????</td></tr>
+<tr><td>Mango/Strawberry Slush</td><td class="price">$7.99</td><td class="rating">?????</td></tr>
+</table>
+<h3>?? MOJITO SERIES</h3>
+<table>
+<tr><th>Drink</th><th>Price</th><th>Rating</th></tr>
+<tr><td>Mango Mojito</td><td class="price">$6.99</td><td class="rating">?????</td></tr>
+</table>
+</div>
+<div class="divider"></div>
+<h2 style="text-align:center;color:#555;">?? Menu 2 — Wraps, Breakfast &amp; Snacks</h2>
+
+<div class="menu-section" data-veg="both">
+<h2>Folder WRAPS</h2>
+<table>
+<tr><th>Dish</th><th>Price</th><th>Rating</th></tr>
+<tr data-veg="veg"><td>Bombay Frankie (Veg Wrap)</td><td class="price">8,000</td><td class="rating">????</td></tr>
+<tr data-veg="veg"><td>Paneer Wrap Plate</td><td class="price">14,000</td><td class="rating">?????</td></tr>
+<tr data-veg="nonveg"><td>Chicken Wrap Plate</td><td class="price">12,000</td><td class="rating">?????</td></tr>
+</table>
+</div>
+
+<div class="menu-section" data-veg="both">
+<h2> fries FOOD SIGNATURE</h2>
+<table>
+<tr><th>Dish</th><th>Price</th><th>Rating</th></tr>
+<tr data-veg="nonveg"><td>Kebab Loaded Fries (Beef / Chicken)</td><td class="price">18,000</td><td class="rating">?????</td></tr>
+<tr data-veg="veg"><td>Paneer Loaded Fries</td><td class="price">20,000</td><td class="rating">????</td></tr>
+</table>
+</div>
+
+<div class="menu-section" data-veg="both">
+<h2>?? BREAKFAST</h2>
+<table>
+<tr><th>Dish</th><th>Price</th><th>Rating</th></tr>
+<tr data-veg="nonveg"><td>Full English</td><td class="price">14,500</td><td class="rating">?????</td></tr>
+<tr data-veg="nonveg"><td>B&amp;B Egg Wrap</td><td class="price">9,000</td><td class="rating">????</td></tr>
+<tr data-veg="nonveg"><td>Spanish Omelette</td><td class="price">8,500</td><td class="rating">????</td></tr>
+<tr data-veg="nonveg"><td>Omelette</td><td class="price">7,000</td><td class="rating">???</td></tr>
+<tr data-veg="veg"><td>French Toast</td><td class="price">11,000</td><td class="rating">?????</td></tr>
+<tr data-veg="veg"><td>Classic Pancakes</td><td class="price">12,000</td><td class="rating">?????</td></tr>
+<tr data-veg="veg"><td>Mocha Pancakes</td><td class="price">14,000</td><td class="rating">?????</td></tr>
+<tr data-veg="veg"><td>Mini Pancakes</td><td class="price">11,000</td><td class="rating">????</td></tr>
+<tr data-veg="veg"><td>Nutella Pancakes</td><td class="price">12,000</td><td class="rating">?????</td></tr>
+</table>
+<h3>ADD ON — 2,000 each</h3>
+<table>
+<tr><th>Item</th><th>Price</th><th>Rating</th></tr>
+<tr data-veg="nonveg"><td>Sausage (2 pcs)</td><td class="price">2,000</td><td class="rating">???</td></tr>
+<tr data-veg="veg"><td>Toast (2 pcs)</td><td class="price">2,000</td><td class="rating">???</td></tr>
+<tr data-veg="nonveg"><td>Egg</td><td class="price">2,000</td><td class="rating">???</td></tr>
+<tr data-veg="veg"><td>Maple Syrup</td><td class="price">2,000</td><td class="rating">????</td></tr>
+<tr data-veg="veg"><td>Nutella</td><td class="price">2,000</td><td class="rating">?????</td></tr>
+<tr data-veg="veg"><td>Honey</td><td class="price">2,000</td><td class="rating">????</td></tr>
+<tr data-veg="veg"><td>Chapati</td><td class="price">2,000</td><td class="rating">???</td></tr>
+<tr data-veg="veg"><td>Baked Beans</td><td class="price">2,000</td><td class="rating">???</td></tr>
+<tr data-veg="veg"><td>Avocado</td><td class="price">2,000</td><td class="rating">????</td></tr>
+</table>
+</div>
+<div class="menu-section" data-veg="nonveg">
+<h2>?? NON-VEG</h2>
+<table>
+<tr><th>Dish</th><th>Price</th><th>Rating</th></tr>
+<tr><td>Beef Kebabs</td><td class="price">8,000</td><td class="rating">?????</td></tr>
+<tr><td>Mutton Kebabs</td><td class="price">8,000</td><td class="rating">?????</td></tr>
+<tr><td>Chicken Kebabs</td><td class="price">8,000</td><td class="rating">?????</td></tr>
+<tr><td>Shaami Kebabs</td><td class="price">8,000</td><td class="rating">?????</td></tr>
+<tr><td>Beef Samosas</td><td class="price">8,000</td><td class="rating">????</td></tr>
+<tr><td>Mutton Samosas</td><td class="price">8,000</td><td class="rating">????</td></tr>
+<tr><td>Chicken Samosas</td><td class="price">9,000</td><td class="rating">?????</td></tr>
+<tr><td>Chicken Wrap</td><td class="price">8,000</td><td class="rating">?????</td></tr>
+</table>
+</div>
+
+<div class="menu-section" data-veg="veg">
+<h2>?? VEG</h2>
+<table>
+<tr><th>Dish</th><th>Price</th><th>Rating</th></tr>
+<tr><td>Samosas</td><td class="price">8,000</td><td class="rating">????</td></tr>
+<tr><td>B&amp;B Fries</td><td class="price">7,000</td><td class="rating">????</td></tr>
+<tr><td>Maru Bhajia</td><td class="price">6,000</td><td class="rating">???</td></tr>
+<tr><td>Dal Bhajia</td><td class="price">6,000</td><td class="rating">???</td></tr>
+<tr><td>Spring Potato</td><td class="price">6,000</td><td class="rating">???</td></tr>
+<tr><td>Dal Kachori</td><td class="price">8,000</td><td class="rating">????</td></tr>
+<tr><td>Spring Roll</td><td class="price">8,000</td><td class="rating">???</td></tr>
+<tr><td>Plain Fries</td><td class="price">4,000</td><td class="rating">???</td></tr>
+</table>
+</div>
+
+<p class="footer-note">Ratings are illustrative. Prices as shown on the menu.</p>
+
+<script>
+(function(){
+  var buttons = document.querySelectorAll('.filter-btn');
+  var label = document.getElementById('countLabel');
+  function applyFilter(filter){
+    var visible = 0;
+    document.querySelectorAll('.menu-section').forEach(function(sec){
+      var secVeg = sec.getAttribute('data-veg');
+      var show = false;
+      if(filter === 'all'){ show = true; }
+      else if(filter === 'veg'){ show = (secVeg === 'veg' || secVeg === 'both'); }
+      else if(filter === 'nonveg'){ show = (secVeg === 'nonveg' || secVeg === 'both'); }
+      sec.classList.toggle('hidden', !show);
+      if(show){
+        sec.querySelectorAll('tr').forEach(function(row){
+          if(row.hasAttribute('data-veg')){
+            var rv = row.getAttribute('data-veg');
+            var rowShow = (filter === 'all') || (rv === filter) || (rv === 'both');
+            row.classList.toggle('hidden', !rowShow);
+            if(rowShow) visible++;
+          }
+        });
+      }
+    });
+    var map = {all:'all dishes', veg:'veg dishes', nonveg:'non-veg dishes'};
+    label.textContent = 'Showing ' + visible + ' ' + map[filter];
+    buttons.forEach(function(b){ b.classList.toggle('active', b.getAttribute('data-filter') === filter); });
+  }
+  buttons.forEach(function(b){
+    b.addEventListener('click', function(){ applyFilter(b.getAttribute('data-filter')); });
+  });
+  applyFilter('all');
+})();
+</script>
+</body>
+</html>
