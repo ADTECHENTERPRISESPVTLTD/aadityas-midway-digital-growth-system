@@ -29,6 +29,19 @@
   --radius-md: 10px;
 }
 
+html.light-theme {
+  color-scheme: light;
+  --bg-obsidian: #f7f3ea;
+  --bg-card: #ffffff;
+  --bg-card-hover: #fffaf0;
+  --bg-glass: rgba(255, 255, 255, 0.92);
+  --text-main: #1f2933;
+  --text-muted: #667085;
+  --text-gold: #8b6915;
+  --gold-light: #805f0c;
+  --border-subtle: rgba(31, 41, 51, 0.13);
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -248,6 +261,23 @@ h1, h2, h3, h4, .serif-font {
   place-items: center;
   cursor: pointer;
   transition: all 0.2s ease;
+}
+
+.theme-toggle-btn {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--border-gold);
+  border-radius: 10px;
+  color: var(--gold-light);
+  background: var(--bg-card);
+  cursor: pointer;
+}
+
+.theme-toggle-btn:hover {
+  background: var(--gold-primary);
+  color: #0b0e14;
 }
 
 .cart-trigger-btn:hover {
@@ -720,7 +750,7 @@ h1, h2, h3, h4, .serif-font {
 
 /* Category Filter Toolbar */
 .menu-toolbar-wrapper {
-  background: var(--bg-card);
+  background: var(--bg-obsidian);
   border: 1px solid var(--border-subtle);
   border-radius: 16px;
   padding: 16px 20px;
@@ -745,7 +775,7 @@ h1, h2, h3, h4, .serif-font {
 }
 
 .cat-tab-btn {
-  background: transparent;
+  background: var(--bg-obsidian);
   border: 1px solid var(--border-subtle);
   color: var(--text-muted);
   padding: 8px 18px;
@@ -1170,6 +1200,10 @@ h1, h2, h3, h4, .serif-font {
   color: #ffffff;
   font-size: 13px;
   outline: none;
+}
+
+.form-field input[type="date"] {
+  min-width: 0;
 }
 
 .form-field input:focus, .form-field select:focus {
@@ -1679,14 +1713,14 @@ h1, h2, h3, h4, .serif-font {
     position: fixed;
     inset: 0;
     z-index: 45;
-    background: rgba(0,0,0,0.9);
-    backdrop-filter: blur(12px);
+    background: #000;
+    backdrop-filter: none;
     display: flex;
     justify-content: flex-end;
   }
   .mobile-nav-panel {
     width: min(320px, 100%);
-    background: var(--bg-card);
+    background: #000;
     height: 100%;
     padding: 30px;
     display: flex;
@@ -1702,9 +1736,53 @@ h1, h2, h3, h4, .serif-font {
   .mobile-nav-item.active {
     color: var(--gold-primary);
   }
+
+  .theme-toggle-btn {
+    width: 38px;
+    height: 38px;
+  }
 }
 
 @media (max-width: 600px) {
+  .luxury-modal-card {
+    width: 100%;
+    max-height: calc(100vh - 24px);
+    padding: 24px 18px;
+    border-radius: 18px;
+  }
+  .modal-head-section h2 {
+    font-size: 27px;
+    padding-right: 34px;
+  }
+  .form-group-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+    margin: 20px 0;
+  }
+  .form-field.half,
+  .form-field.full {
+    grid-column: auto;
+  }
+  .form-field input,
+  .form-field select {
+    width: 100%;
+    min-height: 46px;
+    font-size: 16px;
+  }
+  .review-form-card {
+    padding: 20px !important;
+  }
+  .menu-insta-banner {
+    padding: 20px;
+  }
+  .banner-right {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  .banner-right a {
+    width: 100%;
+  }
   .footer-grid {
     grid-template-columns: 1fr;
   }

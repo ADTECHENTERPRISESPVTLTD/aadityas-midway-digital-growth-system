@@ -24,6 +24,7 @@ import {
   Flame,
   Heart,
   ShieldCheck,
+  Star,
   Sparkles,
   Utensils,
 } from 'lucide-react'
@@ -34,6 +35,15 @@ export default function Home() {
   const [isBookingOpen, setIsBookingOpen] = useState(false)
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false)
   const [isAssistantOpen, setIsAssistantOpen] = useState(false)
+  const [reviewRating, setReviewRating] = useState(5)
+  const [reviewName, setReviewName] = useState('')
+  const [reviewText, setReviewText] = useState('')
+  const [reviewSubmitted, setReviewSubmitted] = useState(false)
+  const [customerReviews, setCustomerReviews] = useState([
+    { rating: 5, customerName: 'Major Rajesh Sharma', date: 'September 2026', review: 'We stopped here on our drive from Nagpur and were completely blown away. The Kabuli Pulao and Mango Pomelo smoothie were divine. Truly world-class hospitality on SH 19.' },
+    { rating: 5, customerName: 'Dr. Ananya Deshmukh', date: 'August 2026', review: 'The Baby Lamb Chops and Paneer Loaded Fries are incredible. 100% unique dish presentation and ultra clean atmosphere. Highly recommended for families!' },
+    { rating: 5, customerName: 'Vikramaditya Singh', date: 'July 2026', review: 'Cleanest restaurant on the highway with authentic Mediterranean kebabs! Quick order placement and friendly staff. Will always stop here.' },
+  ])
 
   const cartCount = Object.values(cart).reduce((a, b) => a + b, 0)
   const subtotal = ALL_MENU_ITEMS.filter((item) => cart[item.id] > 0).reduce(
@@ -244,26 +254,96 @@ export default function Home() {
         </div>
 
         <div className="food-card-grid">
-          <ReviewCard
-            rating={5}
-            customerName="Major Rajesh Sharma"
-            date="September 2026"
-            review="We stopped here on our drive from Nagpur and were completely blown away. The Kabuli Pulao and Mango Pomelo smoothie were divine. Truly world-class hospitality on SH 19."
-          />
+          {customerReviews.map((review) => (
+            <ReviewCard key={`${review.customerName}-${review.date}`} {...review} />
+          ))}
+        </div>
 
-          <ReviewCard
-            rating={5}
-            customerName="Dr. Ananya Deshmukh"
-            date="August 2026"
-            review="The Baby Lamb Chops and Paneer Loaded Fries are incredible. 100% unique dish presentation and ultra clean atmosphere. Highly recommended for families!"
-          />
+        {/* Review Submission Form */}
+        <div className="review-form-card" style={{ marginTop: '32px', background: 'var(--bg-card)', border: '1px solid var(--border-subtle)', borderRadius: '16px', padding: '32px' }}>
+          <div className="review-form-header" style={{ marginBottom: '24px' }}>
+            <h3 style={{ color: '#fff', fontFamily: 'Georgia, serif', fontSize: '22px', marginBottom: '6px' }}>Share Your Experience</h3>
+            <p style={{ color: 'var(--text-muted)', fontSize: '14px' }}>How was your meal at Aaditya&apos;s Midway?</p>
+          </div>
 
-          <ReviewCard
-            rating={5}
-            customerName="Vikramaditya Singh"
-            date="July 2026"
-            review="Cleanest restaurant on the highway with authentic Mediterranean kebabs! Quick order placement and friendly staff. Will always stop here."
-          />
+          <form className="review-form" onSubmit={(e) => {
+            e.preventDefault()
+            setCustomerReviews((reviews) => [
+              ...reviews,
+              { rating: reviewRating, customerName: reviewName, date: 'Just now', review: reviewText },
+            ])
+            setReviewName('')
+            setReviewText('')
+            setReviewRating(5)
+            setReviewSubmitted(true)
+          }}>
+            {/* Star Rating Input */}
+            <div className="form-group" style={{ marginBottom: '20px' }}>
+              <label style={{ color: 'var(--text-muted)', fontSize: '13px', marginBottom: '8px', display: 'block' }}>Your Rating</label>
+              <div style={{ display: 'flex', gap: '4px' }}>
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <button
+                    key={star}
+                    type="button"
+                    onClick={() => setReviewRating(star)}
+                    style={{ background: 'none', border: 'none', cursor: 'pointer', color: star <= reviewRating ? 'var(--gold-primary)' : 'var(--border-subtle)', padding: '2px' }}
+                  >
+                    <Star size={24} fill={star <= reviewRating ? 'currentColor' : 'none'} />
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Name */}
+            <div className="form-group" style={{ marginBottom: '16px' }}>
+              <label style={{ color: 'var(--text-muted)', fontSize: '13px', marginBottom: '8px', display: 'block' }}>Your Name</label>
+              <input
+                type="text"
+                required
+                value={reviewName}
+                onChange={(e) => setReviewName(e.target.value)}
+                placeholder="Enter your name"
+                style={{ width: '100%', padding: '12px 16px', background: 'var(--bg-obsidian)', border: '1px solid var(--border-subtle)', borderRadius: '10px', color: '#fff', fontSize: '14px', boxSizing: 'border-box' }}
+              />
+            </div>
+
+            {/* Review Text */}
+            <div className="form-group" style={{ marginBottom: '16px' }}>
+              <label style={{ color: 'var(--text-muted)', fontSize: '13px', marginBottom: '8px', display: 'block' }}>Your Review</label>
+              <textarea
+                required
+                value={reviewText}
+                onChange={(e) => setReviewText(e.target.value)}
+                placeholder="Tell us about your experience..."
+                rows={4}
+                style={{ width: '100%', padding: '12px 16px', background: 'var(--bg-obsidian)', border: '1px solid var(--border-subtle)', borderRadius: '10px', color: '#fff', fontSize: '14px', boxSizing: 'border-box', resize: 'vertical' }}
+              />
+            </div>
+
+            {/* Submit */}
+            <button
+              type="submit"
+              style={{
+                background: 'var(--gold-primary)',
+                color: '#0b0e14',
+                border: 'none',
+                padding: '12px 28px',
+                borderRadius: '10px',
+                fontSize: '14px',
+                fontWeight: '700',
+                cursor: 'pointer',
+                transition: 'all 0.2s ease',
+              }}
+            >
+              Submit Review
+            </button>
+
+            {reviewSubmitted && (
+              <p style={{ color: 'var(--gold-light)', marginTop: '16px', fontSize: '14px' }}>
+                ✓ Thank you for your review! It will be published after moderation.
+              </p>
+            )}
+          </form>
         </div>
       </section>
 
