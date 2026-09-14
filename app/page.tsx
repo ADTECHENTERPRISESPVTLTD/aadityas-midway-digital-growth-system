@@ -12,6 +12,7 @@ import DiningAssistantModal from '@/components/DiningAssistantModal'
 import FoodCard from '@/components/FoodCard'
 import OfferCard from '@/components/OfferCard'
 import ReviewCard from '@/components/ReviewCard'
+import ReviewSection from '@/components/ReviewSection'
 import FoodGallery from '@/components/FoodGallery'
 import LocationSection from '@/components/LocationSection'
 import LiveOrderToast from '@/components/LiveOrderToast'
@@ -235,37 +236,8 @@ export default function Home() {
       {/* Task L-06: FOOD GALLERY SECTION */}
       <FoodGallery />
 
-      {/* Task L-05: REVIEWS SECTION (REUSABLE REVIEWCARDS) */}
-      <section className="luxury-section">
-        <div className="section-head">
-          <span className="gold-eyebrow">VOICES OF OUR GUESTS</span>
-          <h2>Loved By Travelers & Gourmands</h2>
-          <p>Over 4,000 verified 5-star ratings across Google & dining platforms</p>
-        </div>
-
-        <div className="food-card-grid">
-          <ReviewCard
-            rating={5}
-            customerName="Major Rajesh Sharma"
-            date="September 2026"
-            review="We stopped here on our drive from Nagpur and were completely blown away. The Kabuli Pulao and Mango Pomelo smoothie were divine. Truly world-class hospitality on SH 19."
-          />
-
-          <ReviewCard
-            rating={5}
-            customerName="Dr. Ananya Deshmukh"
-            date="August 2026"
-            review="The Baby Lamb Chops and Paneer Loaded Fries are incredible. 100% unique dish presentation and ultra clean atmosphere. Highly recommended for families!"
-          />
-
-          <ReviewCard
-            rating={5}
-            customerName="Vikramaditya Singh"
-            date="July 2026"
-            review="Cleanest restaurant on the highway with authentic Mediterranean kebabs! Quick order placement and friendly staff. Will always stop here."
-          />
-        </div>
-      </section>
+      {/* Task L-05: REVIEWS SECTION (INTERACTIVE REVIEW COMPONENT) */}
+      <ReviewSection />
 
       {/* Task L-07: LOCATION SECTION */}
       <LocationSection onOpenBooking={() => setIsBookingOpen(true)} />

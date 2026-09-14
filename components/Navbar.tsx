@@ -1,9 +1,9 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Calendar, Menu, ShoppingBag, Sparkles, X } from 'lucide-react'
+import { Calendar, Menu, Moon, ShoppingBag, Sparkles, Sun, X } from 'lucide-react'
 
 interface NavbarProps {
   cartCount: number
@@ -14,6 +14,28 @@ interface NavbarProps {
 export default function Navbar({ cartCount, onOpenCart, onOpenBooking }: NavbarProps) {
   const pathname = usePathname()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [theme, setTheme] = useState<'dark' | 'light'>('dark')
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('am_theme') as 'dark' | 'light' | null
+    if (savedTheme) {
+      setTheme(savedTheme)
+      if (savedTheme === 'light') {
+        document.documentElement.classList.add('light-mode')
+      }
+    }
+  }, [])
+
+  function toggleTheme() {
+    const nextTheme = theme === 'dark' ? 'light' : 'dark'
+    setTheme(nextTheme)
+    localStorage.setItem('am_theme', nextTheme)
+    if (nextTheme === 'light') {
+      document.documentElement.classList.add('light-mode')
+    } else {
+      document.documentElement.classList.remove('light-mode')
+    }
+  }
 
   const navLinks = [
     { name: 'Home', href: '/' },
@@ -71,6 +93,16 @@ export default function Navbar({ cartCount, onOpenCart, onOpenBooking }: NavbarP
 
           {/* Action Buttons */}
           <div className="navbar-actions">
+            {/* Theme Toggle Button */}
+            <button
+              onClick={toggleTheme}
+              className="theme-toggle-btn"
+              title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Mode`}
+              aria-label="Toggle Theme"
+            >
+              {theme === 'dark' ? <Sun size={18} className="gold-icon" /> : <Moon size={18} />}
+            </button>
+
             {/* Cart Button */}
             <button
               onClick={onOpenCart}
@@ -97,21 +129,47 @@ export default function Navbar({ cartCount, onOpenCart, onOpenBooking }: NavbarP
           </div>
         </div>
 
-        {/* Mobile Navigation Drawer */}
+        {/* Mobile Navigation Drawer - Solid Dark Background */}
         {mobileMenuOpen && (
-          <div className="mobile-nav-overlay">
-            <div className="mobile-nav-panel">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className={`mobile-nav-item ${pathname === link.href ? 'active' : ''}`}
-                >
-                  {link.name}
+          <div className="mobile-nav-overlay" onClick={() => setMobileMenuOpen(false)}>
+            <div className="mobile-nav-panel solid-dark-panel" onClick={(e) => e.stopPropagation()}>
+              <div className="mobile-nav-header">
+                <Link href="/" onClick={() => setMobileMenuOpen(false)} className="brand-logo">
+                  <div className="brand-emblem">AM</div>
+                  <div className="brand-text">
+                    <span className="brand-primary">AADITYA&apos;S</span>
+                    <span className="brand-sub">MIDWAY · SAUSAR</span>
+                  </div>
                 </Link>
-              ))}
+                <button onClick={() => setMobileMenuOpen(false)} className="close-btn">
+                  <X size={20} />
+                </button>
+              </div>
+
+              <div className="mobile-nav-links">
+                {navLinks.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={`mobile-nav-item ${pathname === link.href ? 'active' : ''}`}
+                  >
+                    {link.name}
+                  </Link>
+                ))}
+              </div>
+
               <div className="mobile-nav-footer">
+                <div style={{ display: 'flex', gap: '10px', width: '100%', marginBottom: '12px' }}>
+                  <button
+                    onClick={toggleTheme}
+                    className="btn-luxury-outline full-w"
+                    style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
+                  >
+                    {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
+                    <span>{theme === 'dark' ? 'Light Mode' : 'Dark Mode'}</span>
+                  </button>
+                </div>
                 <button
                   onClick={() => {
                     setMobileMenuOpen(false)
