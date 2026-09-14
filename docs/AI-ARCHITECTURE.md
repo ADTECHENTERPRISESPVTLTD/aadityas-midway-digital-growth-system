@@ -185,6 +185,21 @@ new logic lives here on purpose.
 
 API: `GET /api/ai/dashboard`.
 
+## Testing the customer journey
+
+`npm run test:e2e` drives the actual running site in a headless browser
+(Playwright) and clicks through the main flow — nav pages, add to cart,
+cart drawer, booking modal, and the AI chat itself (typing real
+questions and checking the reply is grounded, e.g. contains a real ₹
+price, not the same canned sentence every time). This is a smoke test,
+not a full test suite — it proves the pieces are wired together, not
+every edge case.
+
+Usage: start the dev server first (`npm run dev`), then in a second
+terminal run `npm run test:e2e`. Screenshots and a `results.json` land
+in `scripts/e2e-screenshots/` (gitignored — regenerated each run, not
+committed).
+
 ## Known limitations (by design, for a same-week prototype)
 
 - **The menu content itself is placeholder, not Aaditya's Midway's real

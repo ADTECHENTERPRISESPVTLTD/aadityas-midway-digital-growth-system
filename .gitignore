@@ -24,3 +24,6 @@ build/
 AGENTS.md
 CLAUDE.md
 *.tsbuildinfo
+
+# Output from npm run test:e2e - screenshots/results, not source
+scripts/e2e-screenshots/
