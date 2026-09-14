@@ -53,10 +53,14 @@ information."
 All AI features read through `lib/ai/knowledge.ts`, which currently reads
 static JSON in `lib/ai/data/`:
 - `menu.json` — generated from the same menu rows used in the live
-  frontend (`app/page.tsx`), so prices/descriptions never disagree with
-  what the customer sees. Includes a `bestseller` flag (derived from the
-  menu's star ratings) and an `available` flag — **both are demo/seed
-  values** until real order and inventory data exists.
+  frontend (`app/page.tsx`). Prices are stored as the *original* $/TZS
+  label; `formatPriceInr()` in `knowledge.ts` converts them to rupees
+  using the exact same formula the frontend uses, so a price the AI says
+  out loud always matches the number on screen. (This wasn't true in an
+  earlier version — the AI briefly quoted raw $/TZS prices instead of
+  rupees; fixed before submission.) Includes a `bestseller` flag (derived
+  from the menu's star ratings) and an `available` flag — **both are
+  demo/seed values** until real order and inventory data exists.
 - `business.json` — address, hours, contact numbers, offers.
 - `reviews.json`, `customers.json` — sample data for AI-06/07/08/09,
   clearly synthetic, for demoing the sentiment/segmentation/dashboard

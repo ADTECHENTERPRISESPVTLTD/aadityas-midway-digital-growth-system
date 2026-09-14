@@ -6,17 +6,13 @@
 // information (prices, hours, dishes that don't exist, etc).
 
 import { classifyIntent } from './intents'
-import { getBusinessInfo, getBestsellers, searchMenu } from './knowledge'
+import { getBusinessInfo, getBestsellers, formatPriceInr, searchMenu } from './knowledge'
 import { recommendForQuery, trendingRecommendations } from './recommend'
 import type { AssistantResponse, MenuItem, RecommendationCard } from './types'
 
-function formatPrice(priceLabel: string, currency: string) {
-  return currency === '$' ? priceLabel : `${priceLabel} TZS`
-}
-
 function describeMenuItem(item: MenuItem, intent: AssistantResponse['intent']): AssistantResponse {
   return {
-    reply: `${item.name} (${item.category}) — ${item.description} Priced at ${formatPrice(item.priceLabel, item.currency)}.${item.veg ? ' This is a vegetarian dish.' : ''}${item.bestseller ? ' It\'s one of our bestsellers.' : ''}`,
+    reply: `${item.name} (${item.category}) — ${item.description} Priced at ${formatPriceInr(item.priceLabel, item.currency)}.${item.veg ? ' This is a vegetarian dish.' : ''}${item.bestseller ? ' It\'s one of our bestsellers.' : ''}`,
     intent,
     recommendations: [],
     groundedInData: true,
@@ -32,7 +28,7 @@ function describeMenuMatches(matches: MenuItem[], intent: AssistantResponse['int
   const categories = new Set(matches.map((item) => item.category))
   if (categories.size === 1) {
     const [category] = categories
-    const names = matches.map((item) => `${item.name} (${formatPrice(item.priceLabel, item.currency)})`).join(', ')
+    const names = matches.map((item) => `${item.name} (${formatPriceInr(item.priceLabel, item.currency)})`).join(', ')
     return {
       reply: `Our ${category} options: ${names}. Ask me about any one of these for more detail.`,
       intent,
@@ -110,7 +106,7 @@ export function answerCustomerQuestion(message: string): AssistantResponse {
         return { reply: `I couldn't find that item on our menu. Could you check the spelling, or tell me the category (e.g. "shawarma", "wraps", "breakfast")?`, intent, recommendations: [], groundedInData: false }
       }
       const item = matches[0]
-      return { reply: `${item.name} is ${formatPrice(item.priceLabel, item.currency)}.`, intent, recommendations: [], groundedInData: true }
+      return { reply: `${item.name} is ${formatPriceInr(item.priceLabel, item.currency)}.`, intent, recommendations: [], groundedInData: true }
     }
 
     case 'menu': {

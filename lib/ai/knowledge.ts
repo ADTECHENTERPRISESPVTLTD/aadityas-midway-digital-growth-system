@@ -65,3 +65,16 @@ export function getReviews(): Review[] {
 export function getCustomers(): Customer[] {
   return customersData as Customer[]
 }
+
+// Mirrors formatInrPrice() in app/page.tsx exactly (same regex, same
+// $/TZS -> INR rates). The website displays prices converted to rupees;
+// the AI must say the same numbers, not the original $/TZS priceLabel.
+// If the frontend's conversion ever changes, update it here too.
+export function formatPriceInr(priceLabel: string, currency: string): string {
+  const rate = currency === '$' ? 86 : 0.032
+  const amounts = priceLabel.match(/\d[\d,]*(?:\.\d+)?/g) ?? []
+  const converted = amounts.map((value) =>
+    Math.round(Number(value.replace(/,/g, '')) * rate).toLocaleString('en-IN')
+  )
+  return `₹${converted.join(' / ₹')}`
+}

@@ -8,7 +8,7 @@
 // `ruleBasedEngine` in getRecommendationEngine() without touching any
 // caller (assistant.ts, the /api/ai/recommend route, etc).
 
-import { getBestsellers, getMenu, getMenuByCategory, getMenuItemById, searchMenu } from './knowledge'
+import { formatPriceInr, getBestsellers, getMenu, getMenuByCategory, getMenuItemById, searchMenu } from './knowledge'
 import type { MenuItem, RecommendationCard } from './types'
 
 export interface RecommendationEngine {
@@ -53,7 +53,7 @@ const ruleBasedEngine: RecommendationEngine = {
       for (const category of rule.pairWith) {
         if (cards.length >= limit) break
         const pick = pickFromCategory(category, item.id)
-        if (pick) cards.push({ itemId: pick.id, name: pick.name, priceLabel: pick.priceLabel, reason: rule.reason })
+        if (pick) cards.push({ itemId: pick.id, name: pick.name, priceLabel: formatPriceInr(pick.priceLabel, pick.currency), reason: rule.reason })
       }
     }
 
@@ -61,7 +61,7 @@ const ruleBasedEngine: RecommendationEngine = {
       for (const pick of getBestsellers(limit + 1)) {
         if (cards.length >= limit) break
         if (pick.id === item.id || cards.some((c) => c.itemId === pick.id)) continue
-        cards.push({ itemId: pick.id, name: pick.name, priceLabel: pick.priceLabel, reason: 'one of our most-loved dishes' })
+        cards.push({ itemId: pick.id, name: pick.name, priceLabel: formatPriceInr(pick.priceLabel, pick.currency), reason: 'one of our most-loved dishes' })
       }
     }
 
@@ -91,7 +91,7 @@ export function trendingRecommendations(limit = 3): RecommendationCard[] {
   return getBestsellers(limit).map((item) => ({
     itemId: item.id,
     name: item.name,
-    priceLabel: item.priceLabel,
+    priceLabel: formatPriceInr(item.priceLabel, item.currency),
     reason: 'trending with other customers this week',
   }))
 }
