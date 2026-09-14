@@ -50,7 +50,7 @@ export default function OfferCard({
         {icon === 'percent' && <Percent size={28} className="gold-icon pulse-glow" />}
       </div>
 
-      <h3 style={{ fontFamily: 'Georgia, serif', fontSize: '26px', color: '#fff', marginBottom: '12px' }}>
+      <h3 style={{ fontFamily: 'Georgia, serif', fontSize: '26px', color: 'var(--text-heading)', marginBottom: '12px' }}>
         {title}
       </h3>
       <p style={{ color: 'var(--text-muted)', fontSize: '14px', lineHeight: '1.6', marginBottom: '24px' }}>

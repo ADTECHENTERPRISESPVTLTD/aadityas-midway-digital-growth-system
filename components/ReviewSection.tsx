@@ -86,7 +86,7 @@ export default function ReviewSection() {
           <span className="rating-stars" style={{ fontSize: '20px' }}>
             ★★★★★
           </span>
-          <strong style={{ color: '#fff', fontSize: '18px', fontFamily: 'Georgia, serif' }}>
+          <strong style={{ color: 'var(--text-heading)', fontSize: '18px', fontFamily: 'Georgia, serif' }}>
             4.9 / 5.0 Average Rating
           </strong>
           <span style={{ color: 'var(--text-muted)', fontSize: '13px' }}>({reviews.length + 4200} Reviews)</span>
@@ -122,7 +122,7 @@ export default function ReviewSection() {
             {submitted ? (
               <div style={{ textAlign: 'center', padding: '30px 10px' }}>
                 <CheckCircle2 size={54} className="gold-icon animate-bounce mb-3" />
-                <h3 style={{ fontFamily: 'Georgia, serif', color: '#fff', fontSize: '26px' }}>Thank You For Your Review!</h3>
+                <h3 style={{ fontFamily: 'Georgia, serif', color: 'var(--text-heading)', fontSize: '26px' }}>Thank You For Your Review!</h3>
                 <p style={{ color: 'var(--text-muted)', fontSize: '14px', marginTop: '8px' }}>
                   Your feedback has been published live to our customer showcase.
                 </p>
@@ -131,7 +131,7 @@ export default function ReviewSection() {
               <form onSubmit={handleSubmitReview} className="booking-form">
                 <div className="modal-head-section">
                   <span className="gold-eyebrow">SHARE YOUR FEEDBACK</span>
-                  <h2 style={{ fontFamily: 'Georgia, serif', color: '#fff', fontSize: '26px' }}>Rate Your Experience</h2>
+                  <h2 style={{ fontFamily: 'Georgia, serif', color: 'var(--text-heading)', fontSize: '26px' }}>Rate Your Experience</h2>
                   <p className="subtext">Help fellow travelers discover the soul of Aaditya&apos;s Midway</p>
                 </div>
 
@@ -152,7 +152,7 @@ export default function ReviewSection() {
                           background: 'none',
                           border: 'none',
                           cursor: 'pointer',
-                          color: (hoverRating || rating) >= star ? '#d4af37' : 'rgba(255,255,255,0.2)',
+                          color: (hoverRating || rating) >= star ? '#d4af37' : 'rgba(150,150,150,0.3)',
                           fontSize: '28px',
                           transition: 'transform 0.15s ease',
                         }}
@@ -184,11 +184,11 @@ export default function ReviewSection() {
                       value={reviewText}
                       onChange={(e) => setReviewText(e.target.value)}
                       style={{
-                        background: '#0b0e14',
+                        background: 'var(--bg-obsidian)',
                         border: '1px solid var(--border-subtle)',
                         borderRadius: '10px',
                         padding: '12px',
-                        color: '#fff',
+                        color: 'var(--text-main)',
                         fontSize: '13px',
                         outline: 'none',
                         width: '100%',

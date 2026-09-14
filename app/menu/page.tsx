@@ -141,7 +141,7 @@ export default function MenuPage() {
         {filteredItems.length === 0 ? (
           <div style={{ textAlign: 'center', padding: '60px 20px', background: 'var(--bg-card)', borderRadius: '20px', border: '1px solid var(--border-subtle)' }}>
             <Search size={40} className="gold-icon mb-3" />
-            <h3 style={{ fontFamily: 'Georgia, serif', color: '#fff', fontSize: '22px' }}>No Dishes Found</h3>
+            <h3 style={{ fontFamily: 'Georgia, serif', color: 'var(--text-heading)', fontSize: '22px' }}>No Dishes Found</h3>
             <p style={{ color: 'var(--text-muted)', margin: '10px 0 20px' }}>Try resetting your search query or switching dietary filters.</p>
             <button
               onClick={() => {
@@ -191,7 +191,7 @@ export default function MenuPage() {
             <img src={detailItem.image} alt={detailItem.name} style={{ width: '100%', height: '260px', objectFit: 'cover' }} />
             <div style={{ padding: '28px' }}>
               <span className="food-card-category">{detailItem.category}</span>
-              <h2 style={{ fontFamily: 'Georgia, serif', color: '#fff', fontSize: '28px', margin: '6px 0 12px' }}>
+              <h2 style={{ fontFamily: 'Georgia, serif', color: 'var(--text-heading)', fontSize: '28px', margin: '6px 0 12px' }}>
                 {detailItem.name}
               </h2>
               <p style={{ color: 'var(--text-muted)', fontSize: '14px', lineHeight: '1.6', marginBottom: '20px' }}>
@@ -204,7 +204,7 @@ export default function MenuPage() {
                 </div>
                 <div style={{ borderLeft: '1px solid var(--border-subtle)', paddingLeft: '20px' }}>
                   <span style={{ fontSize: '11px', color: 'var(--text-muted)', display: 'block' }}>Menu Reference</span>
-                  <strong style={{ color: '#fff', fontSize: '15px' }}>{detailItem.priceLabel}</strong>
+                  <strong style={{ color: 'var(--text-heading)', fontSize: '15px' }}>{detailItem.priceLabel}</strong>
                 </div>
               </div>
               <button

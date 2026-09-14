@@ -17,7 +17,7 @@ export default function LocationSection({ onOpenBooking }: LocationSectionProps)
         {/* Address & Contact Info */}
         <div>
           <span className="gold-eyebrow">LOCATION DETAILS</span>
-          <h3 style={{ fontFamily: 'Georgia, serif', fontSize: '32px', color: '#fff', marginBottom: '20px' }}>
+          <h3 style={{ fontFamily: 'Georgia, serif', fontSize: '32px', color: 'var(--text-heading)', marginBottom: '20px' }}>
             Aaditya&apos;s Midway
           </h3>
 
@@ -25,7 +25,7 @@ export default function LocationSection({ onOpenBooking }: LocationSectionProps)
             <div style={{ display: 'flex', gap: '16px', alignItems: 'start' }}>
               <MapPin size={22} className="gold-icon" style={{ flexShrink: 0, marginTop: '3px' }} />
               <div>
-                <strong style={{ color: '#fff', fontSize: '15px', display: 'block' }}>Official Address</strong>
+                <strong style={{ color: 'var(--text-heading)', fontSize: '15px', display: 'block' }}>Official Address</strong>
                 <span style={{ color: 'var(--text-muted)', fontSize: '14px', lineHeight: '1.5' }}>
                   Aaditya&apos;s Midway SH 19, Gokuldham, Sausar, Madhya Pradesh
                 </span>
@@ -35,7 +35,7 @@ export default function LocationSection({ onOpenBooking }: LocationSectionProps)
             <div style={{ display: 'flex', gap: '16px', alignItems: 'start' }}>
               <Clock size={22} className="gold-icon" style={{ flexShrink: 0, marginTop: '3px' }} />
               <div>
-                <strong style={{ color: '#fff', fontSize: '15px', display: 'block' }}>Opening Hours</strong>
+                <strong style={{ color: 'var(--text-heading)', fontSize: '15px', display: 'block' }}>Opening Hours</strong>
                 <span style={{ color: 'var(--text-muted)', fontSize: '14px' }}>
                   Open Daily · 11:00 AM – 11:00 PM
                 </span>
@@ -45,7 +45,7 @@ export default function LocationSection({ onOpenBooking }: LocationSectionProps)
             <div style={{ display: 'flex', gap: '16px', alignItems: 'start' }}>
               <Phone size={22} className="gold-icon" style={{ flexShrink: 0, marginTop: '3px' }} />
               <div>
-                <strong style={{ color: '#fff', fontSize: '15px', display: 'block' }}>Direct Reservations</strong>
+                <strong style={{ color: 'var(--text-heading)', fontSize: '15px', display: 'block' }}>Direct Reservations</strong>
                 <span style={{ color: 'var(--text-muted)', fontSize: '14px' }}>
                   +91 74153 88571
                 </span>
@@ -101,14 +101,14 @@ export default function LocationSection({ onOpenBooking }: LocationSectionProps)
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', margin: '20px 0', position: 'relative', zIndex: 2 }}>
-            <div style={{ background: '#0b0e14', padding: '10px 14px', borderRadius: '10px', fontSize: '12px' }}>
+            <div style={{ background: 'var(--bg-obsidian)', padding: '10px 14px', borderRadius: '10px', fontSize: '12px' }}>
               <Car size={16} className="gold-icon mb-1" />
-              <strong style={{ color: '#fff', display: 'block' }}>Drive-In Parking</strong>
+              <strong style={{ color: 'var(--text-heading)', display: 'block' }}>Drive-In Parking</strong>
               <span style={{ color: 'var(--text-muted)' }}>Free 50+ slots</span>
             </div>
-            <div style={{ background: '#0b0e14', padding: '10px 14px', borderRadius: '10px', fontSize: '12px' }}>
+            <div style={{ background: 'var(--bg-obsidian)', padding: '10px 14px', borderRadius: '10px', fontSize: '12px' }}>
               <Wifi size={16} className="gold-icon mb-1" />
-              <strong style={{ color: '#fff', display: 'block' }}>Free Wi-Fi</strong>
+              <strong style={{ color: 'var(--text-heading)', display: 'block' }}>Free Wi-Fi</strong>
               <span style={{ color: 'var(--text-muted)' }}>High Speed</span>
             </div>
           </div>
