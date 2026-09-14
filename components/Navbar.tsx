@@ -3,7 +3,22 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Calendar, Menu, Moon, ShoppingBag, Sparkles, Sun, X } from 'lucide-react'
+import {
+  BookOpen,
+  Calendar,
+  Home,
+  MapPin,
+  Menu,
+  MessageCircle,
+  Moon,
+  Phone,
+  ShoppingBag,
+  Sparkles,
+  Sun,
+  Tag,
+  Utensils,
+  X,
+} from 'lucide-react'
 
 interface NavbarProps {
   cartCount: number
@@ -38,11 +53,11 @@ export default function Navbar({ cartCount, onOpenCart, onOpenBooking }: NavbarP
   }
 
   const navLinks = [
-    { name: 'Home', href: '/' },
-    { name: 'Menu', href: '/menu' },
-    { name: 'Our Story', href: '/story' },
-    { name: 'Offers & Passes', href: '/offers' },
-    { name: 'Visit Us', href: '/visit' },
+    { name: 'Home', href: '/', icon: Home },
+    { name: 'Culinary Menu', href: '/menu', icon: Utensils },
+    { name: 'Our Story', href: '/story', icon: BookOpen },
+    { name: 'Offers & Passes', href: '/offers', icon: Tag },
+    { name: 'Visit Us & Maps', href: '/visit', icon: MapPin },
   ]
 
   return (
@@ -129,10 +144,10 @@ export default function Navbar({ cartCount, onOpenCart, onOpenBooking }: NavbarP
           </div>
         </div>
 
-        {/* Mobile Navigation Drawer - Solid Dark Background */}
+        {/* Mobile Navigation Drawer - Ultra Visible High-Contrast Panel */}
         {mobileMenuOpen && (
           <div className="mobile-nav-overlay" onClick={() => setMobileMenuOpen(false)}>
-            <div className="mobile-nav-panel solid-dark-panel" onClick={(e) => e.stopPropagation()}>
+            <div className="mobile-nav-panel luxury-mobile-drawer" onClick={(e) => e.stopPropagation()}>
               <div className="mobile-nav-header">
                 <Link href="/" onClick={() => setMobileMenuOpen(false)} className="brand-logo">
                   <div className="brand-emblem">AM</div>
@@ -141,35 +156,55 @@ export default function Navbar({ cartCount, onOpenCart, onOpenBooking }: NavbarP
                     <span className="brand-sub">MIDWAY · SAUSAR</span>
                   </div>
                 </Link>
-                <button onClick={() => setMobileMenuOpen(false)} className="close-btn">
+                <button onClick={() => setMobileMenuOpen(false)} className="close-btn" aria-label="Close navigation">
                   <X size={20} />
                 </button>
               </div>
 
-              <div className="mobile-nav-links">
-                {navLinks.map((link) => (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className={`mobile-nav-item ${pathname === link.href ? 'active' : ''}`}
-                  >
-                    {link.name}
-                  </Link>
-                ))}
+              <div className="mobile-nav-body">
+                <span className="mobile-nav-section-title">EXPLORE HEAVEN</span>
+                <div className="mobile-nav-links">
+                  {navLinks.map((link) => {
+                    const IconComp = link.icon
+                    const isActive = pathname === link.href
+                    return (
+                      <Link
+                        key={link.href}
+                        href={link.href}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className={`mobile-nav-card-item ${isActive ? 'active' : ''}`}
+                      >
+                        <div className="nav-card-icon-wrap">
+                          <IconComp size={18} className="gold-icon" />
+                        </div>
+                        <span className="nav-card-label">{link.name}</span>
+                        {isActive && <span className="nav-card-dot" />}
+                      </Link>
+                    )
+                  })}
+                </div>
+
+                {/* Quick Phone & WhatsApp Actions */}
+                <div className="mobile-quick-actions my-3">
+                  <a href="tel:7415388571" className="mobile-action-pill">
+                    <Phone size={14} className="gold-icon" /> Call 7415388571
+                  </a>
+                  <a href="https://wa.me/917415388571" target="_blank" rel="noreferrer" className="mobile-action-pill wa">
+                    <MessageCircle size={14} /> WhatsApp
+                  </a>
+                </div>
               </div>
 
               <div className="mobile-nav-footer">
-                <div style={{ display: 'flex', gap: '10px', width: '100%', marginBottom: '12px' }}>
-                  <button
-                    onClick={toggleTheme}
-                    className="btn-luxury-outline full-w"
-                    style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
-                  >
-                    {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
-                    <span>{theme === 'dark' ? 'Light Mode' : 'Dark Mode'}</span>
-                  </button>
-                </div>
+                <button
+                  onClick={toggleTheme}
+                  className="btn-luxury-outline full-w mb-2"
+                  style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
+                >
+                  {theme === 'dark' ? <Sun size={16} className="gold-icon" /> : <Moon size={16} />}
+                  <span>Switch to {theme === 'dark' ? 'Light Gourmet' : 'Dark Obsidian'} Mode</span>
+                </button>
+
                 <button
                   onClick={() => {
                     setMobileMenuOpen(false)

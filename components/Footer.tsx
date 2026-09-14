@@ -19,7 +19,7 @@ export default function Footer() {
               </div>
             </div>
             <p className="footer-philosophy">
-              A haven of fine culinary artistry on State Highway 19. Crafted for discerning travelers, gourmands, and families who seek authentic flavors and unforgettable dining memories.
+              A heaven of fine culinary artistry on State Highway 19. Crafted for discerning travelers, gourmands, and families who seek authentic flavors and unforgettable dining memories.
             </p>
             <div className="social-links">
               <a
@@ -60,7 +60,7 @@ export default function Footer() {
 
           {/* Contact & Hours (Task L-02 Requirements) */}
           <div className="footer-col contact-col">
-            <h4 className="footer-title">Reach Our Haven</h4>
+            <h4 className="footer-title">Reach Our Culinary Heaven</h4>
             <div className="contact-info-item">
               <MapPin size={18} className="gold-icon" />
               <span>Aaditya&apos;s Midway SH 19, Gokuldham, Sausar</span>
