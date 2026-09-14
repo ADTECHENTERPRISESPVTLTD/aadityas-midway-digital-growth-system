@@ -1,175 +1,301 @@
 'use client'
 
-import { useMemo, useState } from 'react'
-import { usePathname } from 'next/navigation'
+import { useState } from 'react'
+import Link from 'next/link'
+import { ALL_MENU_ITEMS, MenuItem } from '@/lib/menuData'
+import Navbar from '@/components/Navbar'
+import Footer from '@/components/Footer'
+import CartDrawer from '@/components/CartDrawer'
+import CheckoutModal from '@/components/CheckoutModal'
+import BookingModal from '@/components/BookingModal'
+import DiningAssistantModal from '@/components/DiningAssistantModal'
+import FoodCard from '@/components/FoodCard'
+import OfferCard from '@/components/OfferCard'
+import ReviewCard from '@/components/ReviewCard'
+import ReviewSection from '@/components/ReviewSection'
+import FoodGallery from '@/components/FoodGallery'
+import LocationSection from '@/components/LocationSection'
+import LiveOrderToast from '@/components/LiveOrderToast'
 import {
   ArrowRight,
+  Award,
   Bot,
-  CalendarDays,
-  Check,
-  Clock3,
-  Gift,
-  Camera,
-  MapPin,
-  Menu as MenuIcon,
-  MessageCircle,
-  Minus,
-  Phone,
-  Plus,
-  Search,
-  ShoppingBag,
+  Calendar,
+  Compass,
+  Flame,
+  Heart,
+  ShieldCheck,
   Sparkles,
-  X,
+  Utensils,
 } from 'lucide-react'
 
-type Item = { id: number; name: string; category: string; price: number; priceLabel: string; description: string; image: string; badge: string; veg: boolean; currency: '$' | 'TZS' }
-
-const foodImages: Record<string, string> = {
-  Soup: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&w=900&q=85',
-  Salad: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=900&q=85',
-  'Fried Special': 'https://images.unsplash.com/photo-1562967914-608f82629710?auto=format&fit=crop&w=900&q=85',
-  Rice: 'https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=900&q=85',
-  'Sandwiches & Burgers': 'https://images.unsplash.com/photo-1521305916504-4a1121188589?auto=format&fit=crop&w=900&q=85',
-  Combo: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=900&q=85',
-  'Mediterranean Mix Grill': 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=900&q=85',
-  'Beef Platter': 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=900&q=85',
-  'Lamb Platter': 'https://images.unsplash.com/photo-1529692236671-f1f6cf9683ba?auto=format&fit=crop&w=900&q=85',
-  'Chicken Platter': 'https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?auto=format&fit=crop&w=900&q=85',
-  'Grill Fish & Seafood': 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?auto=format&fit=crop&w=900&q=85',
-  Refreshers: 'https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&w=900&q=85',
-  Shakes: 'https://images.unsplash.com/photo-1572490122747-3968b75cc699?auto=format&fit=crop&w=900&q=85',
-  Smoothies: 'https://images.unsplash.com/photo-1505252585461-04db1eb84625?auto=format&fit=crop&w=900&q=85',
-  Mojitos: 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=900&q=85',
-  Wraps: 'https://images.unsplash.com/photo-1626700051175-6818013e1d4f?auto=format&fit=crop&w=900&q=85',
-  Signature: 'https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=900&q=85',
-  Breakfast: 'https://images.unsplash.com/photo-1533089860892-a7c6f0a88666?auto=format&fit=crop&w=900&q=85',
-  'Breakfast Add-ons': 'https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=900&q=85',
-  'Non-Veg Snacks': 'https://images.unsplash.com/photo-1601050690117-94f5f6fa8bd7?auto=format&fit=crop&w=900&q=85',
-  'Veg Snacks': 'https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=900&q=85',
-}
-
-const makeItems = (rows: Array<[string, string, string, boolean]>, category: string, currency: '$' | 'TZS' = '$', start = 0): Item[] => rows.map(([name, priceLabel, description, veg], index) => ({
-  id: start + index + 1, name, category, price: Math.round(Number(priceLabel.replace(/[^0-9.]/g, '')) * (currency === '$' ? 86 : 0.032)), priceLabel, description, image: foodImages[category], badge: '', veg, currency,
-}))
-
-const formatInrPrice = (priceLabel: string, currency: '$' | 'TZS') => `₹${(priceLabel.match(/\d[\d,]*(?:\.\d+)?/g) || []).map((value) => Math.round(Number(value.replace(',', '')) * (currency === '$' ? 86 : 0.032)).toLocaleString('en-IN')).join(' / ₹')}`
-
-const menuItems: Item[] = [
-  ...makeItems([['Thai Soup (Shrimp / Chicken)', '$7.99 / $12.99', 'Small or large Thai-style soup with shrimp or chicken.', false], ['Salmon Soup', '$10.99 / $13.99', 'Small or large salmon soup.', false], ['Veggie Soup', '$6.99 / $8.99', 'Small or large vegetable soup.', true]], 'Soup'),
-  ...makeItems([['Chicken Salad', '$9.99', 'Fresh salad with chicken.', false], ['Cashew Nut Salad with Chicken', '$11.99', 'Chicken salad finished with cashew nuts.', false], ['Greek Salad', '$10.99', 'Classic Greek-style salad.', true]], 'Salad', '$', 3),
-  ...makeItems([['Hot Wings (6 pieces)', '$9.99', 'Six crispy hot wings.', false], ['Peri Peri Wings (6 pieces)', '$11.99', 'Six peri peri wings.', false], ['Buffalo Wings (6 pieces)', '$9.99', 'Six buffalo-style wings.', false], ['Chicken Tenders (3 pieces with fries)', '$6.99', 'Three chicken tenders served with fries.', false], ['Jumbo Shrimp', '$7.99', 'Crispy jumbo shrimp.', false], ['Shrimp Tempura (6 pcs)', '$7.99', 'Six pieces of shrimp tempura.', false], ['Fish and Chips', '$7.00', 'Crispy fish with chips.', false]], 'Fried Special', '$', 6),
-  ...makeItems([['Kabuli Pulao', '$9.99 / $12.99', 'Small or large Kabuli pulao.', false], ['Chicken Fried Rice', '$9.99 / $12.99', 'Small or large chicken fried rice.', false], ['Shrimp Fried Rice', '$9.99 / $12.99', 'Small or large shrimp fried rice.', false], ['Mix Fried Rice', '$9.99 / $12.99', 'Small or large mixed fried rice.', false]], 'Rice', '$', 13),
-  ...makeItems([['Chicken Shawarma', '$8.99 / $12.99', 'Small or large chicken shawarma.', false], ['Lamb Shawarma', '$9.99 / $13.99', 'Small or large lamb shawarma.', false], ['Mix Shawarma', '$9.99 / $13.99', 'Small or large mixed shawarma.', false], ['Chicken Kebab / Kofta Wrap', '$9.99 / $10.99', 'Chicken kebab or kofta wrap.', false], ['Beef Kebab / Kofta Wrap', '$11.99 / $12.99', 'Beef kebab or kofta wrap.', false], ['Philly Cheese Steak', '$9.99 / $11.99', 'Small or large Philly cheese steak.', false], ['Falafel Sandwich', '$9.99 / $10.99', 'Small or large falafel sandwich.', true], ['Chopped Salmon', '$13.99 / $14.99', 'Small or large chopped salmon sandwich.', false]], 'Sandwiches & Burgers', '$', 17),
-  ...makeItems([['Chicken Burger / Home Style', '$8.99 / $11.99', 'Only fries or combo with fries and soda.', false], ['Beef Burger / Home Style', '$9.99 / $11.99', 'Only fries or combo with fries and soda.', false], ['Fish Burger', '$8.99 / $10.99', 'Only fries or combo with fries and soda.', false], ['Chicken Sandwich', '$7.99 / $10.99', 'Only fries or combo with fries and soda.', false]], 'Combo', '$', 25),
-  ...makeItems([['Combo Special (1 Person)', '$24.99', 'Chicken kebab, lamb chop, beef kofta, tikka, salad, pita, chickpeas and Arabian rice.', false], ['Combo Special (3 Person)', '$59.99', 'Mediterranean mix grill family platter for three.', false], ['Combo Special (5 Person)', '$84.99', 'Mediterranean mix grill family platter for five.', false]], 'Mediterranean Mix Grill', '$', 29),
-  ...makeItems([['Beef Kofta', '$13.99', 'Seasoned beef kofta platter.', false], ['Beef Chapli Kebab', '$19.99', 'Beef chapli kebab platter.', false], ['Beef T-Bone Steak', '$23.99', 'Grilled beef T-bone steak.', false]], 'Beef Platter', '$', 32),
-  ...makeItems([['Baby Lamb Chop (3 pcs)', '$24.99', 'Three baby lamb chops.', false], ['Lamb Kebab', '$15.99', 'Grilled lamb kebab.', false], ['Lamb Shawarma Platter', '$12.50', 'Lamb shawarma platter.', false], ['Lamb + Chicken Mix Platter', '$12.50', 'Lamb and chicken mixed platter.', false], ['Mix Kebab Platter', '$13.99', 'Mixed kebab platter.', false]], 'Lamb Platter', '$', 35),
-  ...makeItems([['Chicken Tikka Kebab', '$12.99', 'Chicken tikka kebab platter.', false], ['Chicken Behari Kebab', '$13.99', 'Chicken Behari kebab platter.', false], ['Peri Peri Chicken', '$15.99', 'Peri peri grilled chicken.', false], ['Chicken Kofta Kebab', '$12.99', 'Chicken kofta kebab platter.', false], ['Grill Chicken', '$14.99', 'Fresh grilled chicken.', false], ['Chicken Shawarma', '$12.99', 'Chicken shawarma platter.', false], ['Chicken Wings (B.B.Q)', '$13.99', 'Barbecue chicken wings.', false], ['Falafel Platter', '$12.99', 'Falafel platter.', true]], 'Chicken Platter', '$', 40),
-  ...makeItems([['Grill Salmon', '$21.99', 'Fresh grilled salmon.', false], ['Tandoori Salmon', '$16.99', 'Tandoori-spiced salmon.', false], ['Grill Jumbo Shrimp (6 pcs)', '$14.99', 'Six grilled jumbo shrimp.', false], ['Grill Fish Fillet', '$13.99', 'Grilled fish fillet.', false], ['Whole Branzino Fish', '$26.99', 'Whole grilled branzino fish.', false]], 'Grill Fish & Seafood', '$', 48),
-  ...makeItems([['Strawberry Four Seasons', '$6.99', 'Large refresher.', true], ['Passionfruit Jasmine', '$6.99', 'Large refresher.', true], ['Mango Jasmine', '$6.99', 'Large refresher.', true], ['Tropical Hawaiian', '$6.99', 'Large refresher.', true], ['Lemonade', '$5.99', 'Large refresher.', true], ['Ocean Blue Lemonade', '$5.99', 'Large refresher.', true], ['Peachy Paradise', '$5.99', 'Large refresher.', true], ['Tropical Punch', '$5.99', 'Large refresher.', true], ['Iced Tea', '$5.99', 'Large iced tea.', true]], 'Refreshers', '$', 53),
-  ...makeItems([['French Vanilla Protein Shake', '$7.99', 'Large protein shake.', true], ['Peach Protein Shake', '$7.99', 'Large protein shake.', true], ['Milk & Yogurt Protein Shake', '$7.99', 'Large protein shake.', true], ['Melon Protein Shake', '$7.99', 'Large protein shake.', true]], 'Shakes', '$', 62),
-  ...makeItems([['Mango Pomelo', '$7.99', 'Large slush or smoothie.', true], ['Peachy Slush', '$7.99', 'Large peach slush.', true], ['Mango / Strawberry Slush', '$7.99', 'Large mango or strawberry slush.', true], ['Passionfruit Slush', '$7.99', 'Large passionfruit slush.', true], ['Mango/Strawberry Slush', '$7.99', 'Large mango and strawberry slush.', true]], 'Smoothies', '$', 66),
-  ...makeItems([['Mango Mojito', '$6.99', 'Mango mojito.', true]], 'Mojitos', '$', 71),
-  ...makeItems([['Bombay Frankie (Veg Wrap)', '8,000', 'Vegetable and potato filling wrapped in a soft tortilla. Make it a plate with fries: +4,000.', true], ['Paneer Wrap Plate', '14,000', 'Pan-fried paneer and tangy vegetables in a tortilla, served with fries. Only wrap: 10,000.', true], ['Chicken Wrap Plate', '12,000', 'Tender pulled chicken and vegetables, served with fries. Only wrap: 8,000.', false]], 'Wraps', 'TZS', 72),
-  ...makeItems([['Kebab Loaded Fries (Beef / Chicken)', '18,000', 'Seasoned fries, salad, succulent kebabs and house sauces.', false], ['Paneer Loaded Fries', '20,000', 'B&B seasoned fries with paneer cubes and special sauces.', true]], 'Signature', 'TZS', 75),
-  ...makeItems([['Full English', '14,500', 'Eggs, sausages, beef bacon, beans, toast, charred tomatoes and avocado.', false], ['B&B Egg Wrap', '9,000', 'Fluffy eggs in a soft roti with avocado.', true], ['Spanish Omelette', '8,500', 'Served with toast.', true], ['Omelette', '7,000', 'Your choice of egg, served with toast.', true], ['French Toast', '11,000', 'Golden grilled bread, sweet and satisfying.', true], ['Classic Pancakes', '12,000', 'Three fluffy pancakes with maple syrup.', true], ['Mocha Pancakes', '14,000', 'Coffee-infused pancakes with Nutella or chocolate syrup.', true], ['Mini Pancakes', '11,000', 'Bite-sized pancakes with maple syrup.', true], ['Nutella Pancakes', '12,000', 'Classic pancakes topped with creamy Nutella.', true]], 'Breakfast', 'TZS', 77),
-  ...makeItems([['Sausage (2 pcs)', '2,000', 'Breakfast add-on.', false], ['Toast (2 pcs)', '2,000', 'Breakfast add-on.', true], ['Egg', '2,000', 'Breakfast add-on.', true], ['Maple Syrup', '2,000', 'Breakfast add-on.', true], ['Nutella', '2,000', 'Breakfast add-on.', true], ['Honey', '2,000', 'Breakfast add-on.', true], ['Chapati', '2,000', 'Breakfast add-on.', true], ['Baked Beans', '2,000', 'Breakfast add-on.', true], ['Avocado', '2,000', 'Breakfast add-on.', true]], 'Breakfast Add-ons', 'TZS', 86),
-  ...makeItems([['Beef Kebabs', '8,000', 'Deep-fried minced beef kebabs.', false], ['Mutton Kebabs', '8,000', 'Crispy spiced minced mutton kebabs.', false], ['Chicken Kebabs', '8,000', 'Tender minced chicken kebabs.', false], ['Shaami Kebabs', '8,000', 'Spiced shredded mutton patties.', false], ['Beef Samosas', '8,000', 'Crispy golden beef samosas.', false], ['Mutton Samosas', '8,000', 'Golden crunchy mutton samosas.', false], ['Chicken Samosas', '9,000', 'Tender chicken filled samosas.', false], ['Chicken Wrap', '8,000', 'Tender pulled chicken and vegetables in a soft tortilla.', false]], 'Non-Veg Snacks', 'TZS', 95),
-  ...makeItems([['Samosas', '8,000', 'Potato, peas and vegetables in a golden flaky shell.', true], ['B&B Fries', '7,000', 'Seasoned crispy fries with sauces.', true], ['Maru Bhajia', '6,000', 'Golden potato fritters in seasoned chickpea flour.', true], ['Dal Bhajia', '6,000', 'Crispy spiced lentil fritters.', true], ['Spring Potato', '6,000', 'Fiery seasoned fried potato.', true], ['Dal Kachori', '8,000', 'Golden pastry filled with spiced lentils.', true], ['Spring Roll', '8,000', 'Vegetable-filled fried rolls.', true], ['Plain Fries', '4,000', 'Classic crispy French fries.', true]], 'Veg Snacks', 'TZS', 103),
-]
-
-const categories = ['All', ...Array.from(new Set(menuItems.map((item) => item.category)))]
-
-export default function Page() {
-  const pathname = usePathname()
-  const pageKind = pathname === '/' ? 'home-page' : `${pathname.split('/')[1]}-page`
-  const [category, setCategory] = useState('All')
-  const [dietary, setDietary] = useState<'All' | 'Veg' | 'Non-Veg'>('All')
-  const [query, setQuery] = useState('')
+export default function Home() {
   const [cart, setCart] = useState<Record<number, number>>({})
-  const [cartOpen, setCartOpen] = useState(false)
-  const [modal, setModal] = useState<'checkout' | 'booking' | 'chat' | null>(null)
-  const [selectedItem, setSelectedItem] = useState<Item | null>(null)
-  const [bookingDone, setBookingDone] = useState(false)
-  const [orderDone, setOrderDone] = useState(false)
-  const [mobileNav, setMobileNav] = useState(false)
-  const [chatInput, setChatInput] = useState('')
-  const [chatLoading, setChatLoading] = useState(false)
-  const [chatMessages, setChatMessages] = useState<Array<{ from: 'ai' | 'user'; text: string; recommendations?: { itemId: number; name: string; priceLabel: string; reason: string }[] }>>([
-    { from: 'ai', text: 'Namaste! I can help you find the perfect meal, book a table or share today\'s offers.' },
-  ])
+  const [isCartOpen, setIsCartOpen] = useState(false)
+  const [isBookingOpen, setIsBookingOpen] = useState(false)
+  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false)
+  const [isAssistantOpen, setIsAssistantOpen] = useState(false)
 
-  const filteredItems = useMemo(() => menuItems.filter((item) => (category === 'All' || item.category === category) && (dietary === 'All' || (dietary === 'Veg' ? item.veg : !item.veg)) && item.name.toLowerCase().includes(query.toLowerCase())), [category, dietary, query])
-  const cartItems = menuItems.filter((item) => cart[item.id])
-  const itemCount = Object.values(cart).reduce((sum, count) => sum + count, 0)
-  const subtotal = cartItems.reduce((sum, item) => sum + item.price * cart[item.id], 0)
-  const discount = 0
-  const total = subtotal
+  const cartCount = Object.values(cart).reduce((a, b) => a + b, 0)
+  const subtotal = ALL_MENU_ITEMS.filter((item) => cart[item.id] > 0).reduce(
+    (sum, item) => sum + item.price * cart[item.id],
+    0
+  )
 
-  function addToCart(item: Item) { setCart((current) => ({ ...current, [item.id]: (current[item.id] || 0) + 1 })) }
-  function updateQuantity(id: number, change: number) { setCart((current) => { const next = Math.max(0, (current[id] || 0) + change); const copy = { ...current }; if (next === 0) delete copy[id]; else copy[id] = next; return copy }) }
-  async function sendChat() {
-    const question = chatInput.trim()
-    if (!question || chatLoading) return
-    setChatMessages((messages) => [...messages, { from: 'user', text: question }])
-    setChatInput('')
-    setChatLoading(true)
-    try {
-      const response = await fetch('/api/ai/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: question }),
-      })
-      const payload = await response.json()
-      if (!response.ok || !payload.ok) throw new Error(payload.error || 'AI request failed')
-      setChatMessages((messages) => [...messages, { from: 'ai', text: payload.data.reply, recommendations: payload.data.recommendations }])
-    } catch {
-      setChatMessages((messages) => [...messages, { from: 'ai', text: "Sorry, I couldn't reach the assistant just now. Please try again in a moment." }])
-    } finally {
-      setChatLoading(false)
-    }
+  const signatureDishes = ALL_MENU_ITEMS.filter(
+    (item) => item.badge === 'Signature' || item.badge === 'Chef Special' || item.badge === 'Bestseller'
+  ).slice(0, 6)
+
+  function updateQuantity(id: number, delta: number) {
+    setCart((prev) => {
+      const current = prev[id] || 0
+      const next = current + delta
+      const copy = { ...prev }
+      if (next <= 0) delete copy[id]
+      else copy[id] = next
+      return copy
+    })
   }
-  function handleImageError(event: React.SyntheticEvent<HTMLImageElement>) { event.currentTarget.style.display = 'none'; event.currentTarget.parentElement?.classList.add('image-fallback') }
+
+  function addToCart(item: MenuItem) {
+    updateQuantity(item.id, 1)
+  }
 
   return (
-    <main className={`site-shell ${pageKind}`}>
-      <div className="announcement"><span>Open daily 11:00 AM — 11:00 PM</span><span className="announcement-link">Free delivery on orders above ₹999 <ArrowRight size={14} /></span></div>
-      <header className="site-header">
-        <a href="/" className="brand"><span className="brand-mark">AM</span><span><strong>Aaditya&apos;s</strong><em>Midway</em></span></a>
-        <nav className={mobileNav ? 'nav-links nav-open' : 'nav-links'}>
-          <a href="/" onClick={() => setMobileNav(false)}>Home</a><a href="/menu" onClick={() => setMobileNav(false)}>Menu</a><a href="/story" onClick={() => setMobileNav(false)}>Our story</a><a href="/offers" onClick={() => setMobileNav(false)}>Offers</a><a href="/visit" onClick={() => setMobileNav(false)}>Visit us</a>
-        </nav>
-        <div className="header-actions"><button className="icon-button" aria-label="Open cart" onClick={() => setCartOpen(true)}><ShoppingBag size={20} /><span className="cart-count">{itemCount}</span></button><button className="menu-toggle" aria-label="Toggle navigation" onClick={() => setMobileNav(!mobileNav)}><MenuIcon size={22} /></button><button className="button button-dark header-book" onClick={() => setModal('booking')}>Book a table</button></div>
-      </header>
+    <div className="main-wrapper">
+      {/* Task L-01: Header */}
+      <Navbar
+        cartCount={cartCount}
+        onOpenCart={() => setIsCartOpen(true)}
+        onOpenBooking={() => setIsBookingOpen(true)}
+      />
 
-      <section id="top" className="hero section-wrap"><div className="hero-copy"><p className="eyebrow"><span className="eyebrow-line" /> A taste of the journey</p><h1>Good food.<br /><i>Good mood.</i><br />Great memories.</h1><p className="hero-text">A warm, welcoming stop on SH 19 where slow food, bold flavours and the best company come together.</p><div className="hero-buttons"><a className="button button-primary" href="/menu">Explore the menu <ArrowRight size={17} /></a><button className="button button-ghost" onClick={() => setModal('booking')}>Book a table <CalendarDays size={17} /></button></div><div className="hero-note"><div className="avatar-stack"><span>R</span><span>M</span><span>S</span></div><span><strong>Loved by 4,000+</strong><br /><small>happy travellers & locals</small></span></div></div><div className="hero-visual"><div className="hero-image"><img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=85" alt="Warmly lit restaurant dining room" /></div><div className="hero-badge"><span className="badge-star">✦</span><strong>Made with<br />heart, served<br />with soul.</strong></div><div className="hero-stamp">EST.<br /><strong>2021</strong><br />SAUSAR</div></div></section>
+      {/* HERO SECTION */}
+      <section className="hero-section">
+        <div className="hero-bg-overlay" />
+        <div className="hero-grid">
+          <div className="hero-content">
+            <span className="gold-eyebrow">
+              <Flame size={12} className="gold-icon inline mr-1 animate-bounce" /> A CULINARY HAVEN ON SH 19 · SAUSAR
+            </span>
+            <h1>
+              Good Food.<br />
+              <i>Good Mood.</i><br />
+              Great Memories.
+            </h1>
+            <p className="hero-description">
+              Welcome to Aaditya&apos;s Midway — where slow-cooked royal Afghan Kabuli pulao, wood-fired lamb chops, flame-grilled Mediterranean grills, and artisanal beverages unite under one roof.
+            </p>
+            <div className="hero-actions">
+              <Link href="/menu" className="btn-luxury-gold">
+                Explore Culinary Menu (~80 Dishes) <ArrowRight size={16} />
+              </Link>
+              <button onClick={() => setIsBookingOpen(true)} className="btn-luxury-outline">
+                <Calendar size={16} /> Reserve a Table
+              </button>
+            </div>
+            <div className="hero-stats-row">
+              <div className="stat-item">
+                <strong>4.9 ★★★★★</strong>
+                <span>4,000+ Happy Travelers & Locals</span>
+              </div>
+              <div className="stat-item">
+                <strong>~80 Dishes</strong>
+                <span>100% Unique Prepared Fresh Daily</span>
+              </div>
+              <div className="stat-item">
+                <strong>11 AM – 11 PM</strong>
+                <span>Open Daily on SH 19</span>
+              </div>
+            </div>
+          </div>
 
-      <section className="intro-band" id="story"><div className="section-wrap intro-grid"><div><p className="eyebrow eyebrow-light"><span className="eyebrow-line" /> The midway story</p><h2>Not just a stop.<br /><i>It&apos;s a feeling.</i></h2></div><div className="intro-copy"><p>Some places feed you. Some places stay with you. Aaditya&apos;s Midway was created for the long drives, the spontaneous plans and the meals that turn into stories.</p><p>Rooted in the flavours of India and inspired by every traveller who walks through our doors, we bring a little more warmth to the road.</p><a href="#contact" className="text-link">Meet us on the midway <ArrowRight size={16} /></a></div></div></section>
+          <div className="hero-visual-card">
+            <img
+              src="https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1200&q=85"
+              alt="Mediterranean Mix Grill Feast at Aaditya's Midway"
+              className="hero-visual-img"
+            />
+            <div className="hero-floating-badge">
+              <span className="badge-icon-star">✦</span>
+              <div className="badge-text">
+                <strong>Made with Heart</strong>
+                <small>Served with Royal Soul on SH 19</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
-      <section className="section-wrap menu-section" id="menu"><div className="section-heading"><div><p className="eyebrow"><span className="eyebrow-line" /> Complete menu</p><h2>Come hungry.<br /><i>Leave happy.</i></h2></div><p className="section-description">Every dish from both supplied menus, now displayed in Indian rupees.</p></div><div className="menu-toolbar"><div className="category-tabs">{categories.map((item) => <button key={item} className={category === item ? 'tab active' : 'tab'} onClick={() => setCategory(item)}>{item}</button>)}</div><label className="search-box"><Search size={17} /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search the menu" aria-label="Search the menu" /></label></div><div className="dietary-toggle" aria-label="Dietary preference"><span>Show:</span>{(['All', 'Veg', 'Non-Veg'] as const).map((option) => <button key={option} className={dietary === option ? 'dietary-button active' : 'dietary-button'} onClick={() => setDietary(option)}>{option}</button>)}</div><p className="menu-count">{filteredItems.length} dishes shown · prices in Indian rupees.</p><div className="food-grid">{filteredItems.map((item) => <article className="food-card" key={item.id}><button className="food-image-button" onClick={() => setSelectedItem(item)}><img src={item.image} alt={item.name} onError={handleImageError} />{item.badge && <span className="food-badge">{item.badge}</span>}<span className="veg-dot" data-veg={item.veg} /></button><div className="food-info"><div><h3>{item.name}</h3><p>{item.description}</p></div><div className="food-bottom"><strong>{formatInrPrice(item.priceLabel, item.currency)}</strong><button className="add-button" onClick={() => addToCart(item)}><Plus size={17} /> Add</button></div></div></article>)}</div><div className="center-action"><button className="button button-outline" onClick={() => { setCategory('All'); setDietary('All'); setQuery('') }}>Show all dishes <ArrowRight size={16} /></button></div><div className="order-platform"><div><span className="platform-dot" /><strong>Order online</strong><small>Tap any dish for its complete price and details</small></div><div className="platform-actions"><button className="platform-link" onClick={() => { setCategory('All'); setDietary('All'); setQuery(''); document.getElementById('menu')?.scrollIntoView({ behavior: 'smooth' }) }}>View menu</button><button className="button button-primary" onClick={() => setCartOpen(true)}>Order now <ShoppingBag size={15} /></button></div></div></section>
+      {/* BRAND PHILOSOPHY */}
+      <section className="luxury-section">
+        <div className="section-head">
+          <span className="gold-eyebrow">OUR CULINARY PHILOSOPHY</span>
+          <h2>Not Just A Stop. <i>It&apos;s A Feeling.</i></h2>
+          <p>
+            Rooted in the rich culinary heritage of India and the Mediterranean, Aaditya&apos;s Midway was born out of a desire to create a heartwarming sanctuary for long road trips and family gatherings.
+          </p>
+        </div>
 
-      <section className="feature-section section-wrap"><div className="feature-image"><img src="https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=1200&q=85" alt="Indian thali meal served on a table" /><span className="vertical-label">THE AADITYA&apos;S EXPERIENCE</span></div><div className="feature-copy"><p className="eyebrow"><span className="eyebrow-line" /> Why stop here</p><h2>The kind of meal<br /><i>you remember.</i></h2><p>Every dish begins with something real — hand-ground spices, patient cooking and recipes that feel like home. Whether you&apos;re passing through or pulling up a chair for the evening, there&apos;s always a place for you here.</p><div className="feature-points"><div><span>01</span><strong>Fresh, always</strong><small>Made to order, never made ahead.</small></div><div><span>02</span><strong>Rooted in flavour</strong><small>Recipes inspired by the heart of India.</small></div><div><span>03</span><strong>Room for everyone</strong><small>Families, friends, four-legged companions.</small></div></div><button className="text-link" onClick={() => setModal('booking')}>Plan your visit <ArrowRight size={16} /></button></div></section>
+        <div className="food-card-grid">
+          <div className="luxury-food-card" style={{ padding: '32px' }}>
+            <Compass size={36} className="gold-icon mb-3" />
+            <h3 style={{ fontFamily: 'Georgia, serif', fontSize: '22px', color: '#fff', marginBottom: '10px' }}>
+              Organic & Fresh Daily
+            </h3>
+            <p style={{ color: 'var(--text-muted)', fontSize: '14px', lineHeight: '1.6' }}>
+              Every spice is hand-ground, and every marinade is aged in small batches. We never use pre-frozen meats or artificial colors.
+            </p>
+          </div>
 
-      <section className="offers-section" id="offers"><div className="section-wrap"><div className="section-heading offers-heading"><div><p className="eyebrow"><span className="eyebrow-line" /> A little extra</p><h2>Good things<br /><i>come in offers.</i></h2></div><p className="section-description">Because a great meal is even better when shared with someone special.</p></div><div className="offer-grid"><div className="offer-card offer-main"><span className="offer-kicker">WEEKDAY SPECIAL</span><h3>Two for<br /><i>the road.</i></h3><p>Enjoy 20% off your total bill when you dine in with a friend, Monday to Thursday.</p><button className="button button-light" onClick={() => alert('Offer claimed! Show this offer at the counter.')}>Claim this offer <ArrowRight size={16} /></button><span className="offer-code">MIDWEEK20</span></div><div className="offer-card offer-small"><Gift size={25} /><h3>First bite<br /><i>on us.</i></h3><p>Get ₹150 off your first online order above ₹699.</p><button className="text-link text-link-light" onClick={() => alert('Coupon FIRSTBITE copied!')}>Copy FIRSTBITE <ArrowRight size={15} /></button></div><div className="offer-card offer-small offer-dark"><Sparkles size={25} /><h3>Gather<br /><i>around.</i></h3><p>Complimentary dessert for groups of 6 or more. Just ask.</p><button className="text-link text-link-light" onClick={() => setModal('booking')}>Book a table <ArrowRight size={15} /></button></div></div></div></section>
+          <div className="luxury-food-card" style={{ padding: '32px' }}>
+            <Award size={36} className="gold-icon mb-3" />
+            <h3 style={{ fontFamily: 'Georgia, serif', fontSize: '22px', color: '#fff', marginBottom: '10px' }}>
+              Master Chef Integrity
+            </h3>
+            <p style={{ color: 'var(--text-muted)', fontSize: '14px', lineHeight: '1.6' }}>
+              From charcoal-fired clay tandoors to wok-tossed jasmine rice, our chefs craft authentic recipes loved across borders.
+            </p>
+          </div>
 
-      <section className="reviews-section section-wrap"><div className="review-quote"><div className="quote-mark">“</div><blockquote>We stopped here on a road trip and ended up staying for three hours. The food, the music, the people — it felt like the best kind of detour.</blockquote><div className="reviewer"><span className="reviewer-avatar">A</span><span><strong>Ananya Mehta</strong><small>Google review · 5.0 <span className="stars">★★★★★</span></small></span></div></div><div className="review-image"><img src="https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=900&q=85" alt="Friends enjoying a meal together" /><div className="review-stat"><strong>4.9</strong><span>average rating<br /><span className="stars">★★★★★</span></span></div></div></section>
+          <div className="luxury-food-card" style={{ padding: '32px' }}>
+            <Heart size={36} className="gold-icon mb-3" />
+            <h3 style={{ fontFamily: 'Georgia, serif', fontSize: '22px', color: '#fff', marginBottom: '10px' }}>
+              Warm Roadside Hospitality
+            </h3>
+            <p style={{ color: 'var(--text-muted)', fontSize: '14px', lineHeight: '1.6' }}>
+              Generous seating, sparkling clean amenities, lush ambience, and friendly service make every visit memorable.
+            </p>
+          </div>
+        </div>
+      </section>
 
-      <section className="instagram-section"><div className="section-wrap"><div className="section-heading insta-heading"><div><p className="eyebrow"><Camera size={17} /> @aadityasmidway</p><h2>Pull up a chair<br /><i>on your feed.</i></h2></div><a className="text-link" href="https://www.instagram.com/aadityasmidway" target="_blank" rel="noreferrer">Follow along <ArrowRight size={16} /></a></div><div className="insta-grid">{['photo-1515003197210-e0cd71810b5f','photo-1565299624946-b28f40a0ae38','photo-1547592180-85f173990554','photo-1559339352-11d035aa65de'].map((photo, index) => <a href="https://www.instagram.com/aadityasmidway" target="_blank" rel="noreferrer" className="insta-photo" key={photo}><img src={`https://images.unsplash.com/${photo}?auto=format&fit=crop&w=700&q=80`} alt={`Aaditya's Midway food and dining ${index + 1}`} /><span><Camera size={18} /></span></a>)}</div></div></section>
+      {/* Task L-03: CHEF'S SIGNATURE SHOWCASE (REUSABLE FOODCARDS) */}
+      <section className="luxury-section" style={{ background: 'var(--bg-card)', borderRadius: '32px' }}>
+        <div className="section-head">
+          <span className="gold-eyebrow">CHEF&apos;S MASTERPIECES</span>
+          <h2>Signature Culinary Highlights</h2>
+          <p>Hand-picked dishes that define the soul of Aaditya&apos;s Midway</p>
+        </div>
 
-      <section className="contact-section" id="contact"><div className="section-wrap contact-grid"><div><p className="eyebrow eyebrow-light"><span className="eyebrow-line" /> Find your way here</p><h2>See you<br /><i>at the midway.</i></h2><div className="contact-detail"><MapPin size={20} /><span><strong>Address</strong><br />SH 19, Gokuldham, Sausar</span></div><div className="contact-detail"><Clock3 size={20} /><span><strong>Hours</strong><br />Every day · 11:00 AM — 11:00 PM</span></div><div className="contact-actions"><a className="button button-light" href="tel:7415388571"><Phone size={17} /> Call us</a><a className="button button-whatsapp" href="https://wa.me/917415388571" target="_blank" rel="noreferrer"><MessageCircle size={17} /> WhatsApp</a></div></div><div className="map-card"><div className="map-grid" /><div className="map-pin"><MapPin size={25} fill="currentColor" /></div><div className="map-label"><strong>Aaditya&apos;s Midway</strong><small>SH 19 · Sausar</small></div><a className="button button-dark directions" href="https://www.google.com/maps/search/?api=1&query=Aaditya's+Midway+SH+19+Gokuldham+Sausar" target="_blank" rel="noreferrer">Get directions <ArrowRight size={16} /></a></div></div></section>
+        <div className="food-card-grid">
+          {signatureDishes.map((item) => (
+            <FoodCard
+              key={item.id}
+              item={item}
+              onAddToCart={addToCart}
+            />
+          ))}
+        </div>
 
-      <footer className="site-footer"><div className="section-wrap footer-grid"><div className="brand footer-brand"><span className="brand-mark">AM</span><span><strong>Aaditya&apos;s</strong><em>Midway</em></span></div><p>A little more warmth<br />on the road.</p><div className="footer-links"><a href="/menu">Menu</a><a href="/offers">Offers</a><a href="/visit">Contact</a><a href="https://www.instagram.com/aadityasmidway" target="_blank" rel="noreferrer">Instagram</a></div></div><div className="section-wrap footer-bottom"><span>© 2024 Aaditya&apos;s Midway. Made with heart.</span><span>Privacy · Terms</span></div></footer>
+        <div style={{ textAlign: 'center', marginTop: '40px' }}>
+          <Link href="/menu" className="btn-luxury-gold">
+            View Complete Menu (~80 Dishes) <ArrowRight size={16} />
+          </Link>
+        </div>
+      </section>
 
-      <button className="chat-fab" aria-label="Open AI assistant" onClick={() => setModal('chat')}><Bot size={22} /><span>Ask Aaditya&apos;s</span></button>
+      {/* Task L-04: OFFERS SECTION (REUSABLE OFFERCARDS) */}
+      <section className="luxury-section">
+        <div className="section-head">
+          <span className="gold-eyebrow">EXCLUSIVE PRIVILEGES</span>
+          <h2>Good Things Come In Offers</h2>
+          <p>Claim digital discount passes for your dine-in and delivery orders</p>
+        </div>
 
-      {selectedItem && <div className="overlay" onClick={() => setSelectedItem(null)}><div className="detail-modal" onClick={(event) => event.stopPropagation()}><button className="modal-close" onClick={() => setSelectedItem(null)}><X size={20} /></button><img src={selectedItem.image} alt={selectedItem.name} onError={handleImageError} /><div className="detail-content"><span className="eyebrow">{selectedItem.category}</span><h2>{selectedItem.name}</h2><p>{selectedItem.description}</p><strong className="detail-price">{formatInrPrice(selectedItem.priceLabel, selectedItem.currency)}</strong><button className="button button-primary full-button" onClick={() => { addToCart(selectedItem); setSelectedItem(null); setCartOpen(true) }}>Add to cart <ShoppingBag size={16} /></button></div></div></div>}
-      {cartOpen && <div className="overlay" onClick={() => setCartOpen(false)}><aside className="cart-drawer" onClick={(event) => event.stopPropagation()}><div className="drawer-head"><div><p className="eyebrow">Your order</p><h2>Good choice.</h2></div><button className="modal-close" onClick={() => setCartOpen(false)}><X size={20} /></button></div>{cartItems.length === 0 ? <div className="empty-cart"><ShoppingBag size={38} /><p>Your cart is waiting for something delicious.</p><button className="button button-primary" onClick={() => setCartOpen(false)}>Explore menu</button></div> : <><div className="cart-list">{cartItems.map((item) => <div className="cart-item" key={item.id}><img src={item.image} alt="" /><div><strong>{item.name}</strong><small>₹{item.price}</small><div className="quantity"><button onClick={() => updateQuantity(item.id, -1)}><Minus size={14} /></button><span>{cart[item.id]}</span><button onClick={() => updateQuantity(item.id, 1)}><Plus size={14} /></button></div></div></div>)}</div><div className="cart-summary"><div><span>Subtotal</span><strong>₹{subtotal}</strong></div>{discount > 0 && <div className="discount"><span>Midway saving</span><strong>-₹{discount}</strong></div>}<div className="total-line"><span>Total</span><strong>₹{total}</strong></div><button className="button button-primary full-button" onClick={() => { setCartOpen(false); setModal('checkout') }}>Continue to checkout <ArrowRight size={16} /></button></div></>}</aside></div>}
-      {modal === 'booking' && <div className="overlay" onClick={() => setModal(null)}><div className="form-modal" onClick={(event) => event.stopPropagation()}><button className="modal-close" onClick={() => setModal(null)}><X size={20} /></button>{bookingDone ? <Confirmation title="You&apos;re on the list." text="Your table request is confirmed. We&apos;ll see you soon at the midway." onClose={() => setModal(null)} /> : <><p className="eyebrow">Make it a plan</p><h2>Book a table.</h2><p className="modal-subtitle">Tell us when you&apos;re coming and we&apos;ll save you a seat.</p><div className="form-grid"><label>Date<input type="date" defaultValue="2024-12-20" /></label><label>Time<select defaultValue="7:30 PM"><option>7:30 PM</option><option>8:00 PM</option><option>8:30 PM</option></select></label><label>Guests<select defaultValue="2 guests"><option>2 guests</option><option>4 guests</option><option>6 guests</option><option>8+ guests</option></select></label><label>Your name<input placeholder="Aaditya" /></label><label className="wide">Mobile number<input placeholder="10-digit mobile number" type="tel" /></label></div><button className="button button-primary full-button" onClick={() => setBookingDone(true)}>Request a table <CalendarDays size={16} /></button></>}</div></div>}
-      {modal === 'checkout' && <div className="overlay" onClick={() => setModal(null)}><div className="form-modal" onClick={(event) => event.stopPropagation()}><button className="modal-close" onClick={() => setModal(null)}><X size={20} /></button>{orderDone ? <Confirmation title="Order received." text="Your delicious order is being prepared. We&apos;ll call you when it&apos;s ready." onClose={() => { setModal(null); setOrderDone(false); setCart({}) }} /> : <><p className="eyebrow">Almost there</p><h2>Checkout.</h2><div className="checkout-total"><span>Order total</span><strong>₹{total}</strong></div><div className="form-grid"><label className="wide">Full name<input placeholder="Your name" /></label><label className="wide">Mobile number<input placeholder="10-digit mobile number" type="tel" /></label><label className="wide">Order type<select defaultValue="Pickup from restaurant"><option>Pickup from restaurant</option><option>Home delivery</option></select></label><label className="wide">Delivery address<input placeholder="House / street / landmark (needed for delivery)" /></label><fieldset className="payment-options wide"><legend>Payment method</legend><label><input type="radio" name="payment" defaultChecked /> UPI / QR</label><label><input type="radio" name="payment" /> Card / wallet</label><label><input type="radio" name="payment" /> Pay at counter</label><label><input type="radio" name="payment" /> Cash on delivery</label></fieldset></div><p className="payment-note">Secure checkout · UPI, cards and cash accepted · Order confirmation is sent to your mobile number.</p><button className="button button-primary full-button" onClick={() => setOrderDone(true)}>Pay & place order <ArrowRight size={16} /></button></>}</div></div>}
-      {modal === 'chat' && <div className="overlay" onClick={() => setModal(null)}><div className="chat-modal" onClick={(event) => event.stopPropagation()}><div className="chat-head"><div className="chat-avatar"><Bot size={20} /></div><div><strong>Aaditya&apos;s assistant</strong><small>Usually replies instantly</small></div><button className="modal-close" onClick={() => setModal(null)}><X size={20} /></button></div><div className="messages">{chatMessages.map((message, index) => <div key={`${message.text}-${index}`}><div className={message.from === 'user' ? 'message user-message' : 'message ai-message'} style={{ whiteSpace: 'pre-line' }}>{message.text}</div>{message.recommendations?.map((rec) => { const menuMatch = menuItems.find((item) => item.id === rec.itemId); return <div className="recommendation" key={rec.itemId}>{menuMatch && <img src={menuMatch.image} alt={rec.name} />}<div><small>{rec.reason}</small><strong>{rec.name}</strong><span>{rec.priceLabel}</span></div>{menuMatch && <button onClick={() => addToCart(menuMatch)}><Plus size={15} /></button>}</div> })}</div>)}{chatLoading && <div className="message ai-message">Thinking…</div>}</div><div className="chat-input"><input value={chatInput} onChange={(event) => setChatInput(event.target.value)} onKeyDown={(event) => { if (event.key === 'Enter' && !event.nativeEvent.isComposing && event.keyCode !== 229) sendChat() }} placeholder="Ask about the menu..." disabled={chatLoading} /><button onClick={sendChat} disabled={chatLoading}><ArrowRight size={18} /></button></div></div></div>}
-      <div className="menu-order-bar"><div><small>{itemCount ? `${itemCount} item${itemCount > 1 ? 's' : ''} added` : 'Add dishes to begin your order'}</small><strong>{itemCount ? `₹${total.toLocaleString('en-IN')}` : 'Free pickup available'}</strong></div><button className="button button-primary" onClick={() => setCartOpen(true)}>{itemCount ? 'View order' : 'Start order'} <ShoppingBag size={16} /></button></div>
-    </main>
+        <div className="food-card-grid">
+          <OfferCard
+            kicker="WEEKDAY SPECIAL"
+            title="20% Off Dine-In Bill"
+            description="Enjoy 20% off your total bill when you dine in Monday to Thursday with family or friends."
+            code="MIDWEEK20"
+            icon="percent"
+          />
+
+          <OfferCard
+            kicker="ONLINE ORDER BONUS"
+            title="₹150 Off First Order"
+            description="Get ₹150 off your first online order above ₹699. Instant express delivery or pickup."
+            code="FIRSTBITE"
+            icon="gift"
+            bgGradient="linear-gradient(135deg, #241d18 0%, #15100c 100%)"
+          />
+
+          <OfferCard
+            kicker="ROYAL GROUP PASS"
+            title="Complimentary Dessert"
+            description="Complimentary signature chef dessert for dining groups of 6 or more."
+            code="GROUPDESSERT"
+            icon="sparkles"
+            bgGradient="linear-gradient(135deg, #19251c 0%, #0e1710 100%)"
+            onClaim={() => setIsBookingOpen(true)}
+          />
+        </div>
+      </section>
+
+      {/* Task L-06: FOOD GALLERY SECTION */}
+      <FoodGallery />
+
+      {/* Task L-05: REVIEWS SECTION (INTERACTIVE REVIEW COMPONENT) */}
+      <ReviewSection />
+
+      {/* Task L-07: LOCATION SECTION */}
+      <LocationSection onOpenBooking={() => setIsBookingOpen(true)} />
+
+      {/* FLOATING AI ASSISTANT TRIGGER */}
+      <button
+        onClick={() => setIsAssistantOpen(true)}
+        className="floating-ai-fab"
+        aria-label="Open AI Dining Assistant"
+      >
+        <Bot size={22} />
+        <span>Ask Aaditya&apos;s Assistant</span>
+      </button>
+
+      {/* Mouth-Watering Live Order Toast */}
+      <LiveOrderToast />
+
+      {/* Task L-02: Footer */}
+      <Footer />
+
+      {/* MODALS */}
+      <CartDrawer
+        isOpen={isCartOpen}
+        onClose={() => setIsCartOpen(false)}
+        cart={cart}
+        allItems={ALL_MENU_ITEMS}
+        onUpdateQuantity={updateQuantity}
+        onCheckout={() => {
+          setIsCartOpen(false)
+          setIsCheckoutOpen(true)
+        }}
+      />
+
+      <CheckoutModal
+        isOpen={isCheckoutOpen}
+        onClose={() => setIsCheckoutOpen(false)}
+        totalAmount={subtotal > 999 ? subtotal : subtotal + (subtotal > 0 ? 99 : 0)}
+        onSuccess={() => {
+          setCart({})
+          setIsCheckoutOpen(false)
+        }}
+      />
+
+      <BookingModal
+        isOpen={isBookingOpen}
+        onClose={() => setIsBookingOpen(false)}
+      />
+
+      <DiningAssistantModal
+        isOpen={isAssistantOpen}
+        onClose={() => setIsAssistantOpen(false)}
+        onAddToCart={(item) => {
+          addToCart(item)
+          setIsAssistantOpen(false)
+          setIsCartOpen(true)
+        }}
+        allItems={ALL_MENU_ITEMS}
+      />
+    </div>
   )
 }
-
-function Confirmation({ title, text, onClose }: { title: string; text: string; onClose: () => void }) { return <div className="confirmation"><span className="confirm-icon"><Check size={27} /></span><h2>{title}</h2><p>{text}</p><button className="button button-primary full-button" onClick={onClose}>Done</button></div> }
