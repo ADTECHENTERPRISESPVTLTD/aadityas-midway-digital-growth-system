@@ -62,7 +62,7 @@ export default function VisitPage() {
         <div className="hero-bg-overlay" style={{ opacity: 0.15 }} />
         <div style={{ maxWidth: '800px', margin: '0 auto', textAlign: 'center', position: 'relative', zIndex: 2 }}>
           <span className="gold-eyebrow">LOCATION & RESERVATIONS</span>
-          <h1 style={{ fontSize: 'clamp(36px, 5vw, 60px)', color: '#fff', marginBottom: '16px' }}>
+          <h1 style={{ fontSize: 'clamp(36px, 5vw, 60px)', color: 'var(--text-heading)', marginBottom: '16px' }}>
             See You At The Midway
           </h1>
           <p style={{ color: 'var(--text-muted)', fontSize: '16px', lineHeight: '1.6', maxWidth: '640px', margin: '0 auto' }}>

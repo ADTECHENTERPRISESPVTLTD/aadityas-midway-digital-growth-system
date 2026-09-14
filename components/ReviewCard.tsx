@@ -29,7 +29,7 @@ export default function ReviewCard({
       </div>
 
       {/* Review Text */}
-      <p style={{ color: '#e2e5eb', fontStyle: 'italic', fontSize: '15px', lineHeight: '1.65', marginBottom: '20px' }}>
+      <p style={{ color: 'var(--text-main)', fontStyle: 'italic', fontSize: '15px', lineHeight: '1.65', marginBottom: '20px' }}>
         “{review}”
       </p>
 

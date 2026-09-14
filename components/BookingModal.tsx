@@ -46,17 +46,17 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
               <CheckCircle2 size={54} className="gold-icon animate-bounce" />
             </div>
             <span className="gold-eyebrow">RESERVATION CONFIRMED</span>
-            <h2 style={{ fontFamily: 'Georgia, serif', color: '#fff', fontSize: '28px', margin: '8px 0 12px' }}>
+            <h2 style={{ fontFamily: 'Georgia, serif', color: 'var(--text-heading)', fontSize: '28px', margin: '8px 0 12px' }}>
               Table Reserved For You!
             </h2>
             <p style={{ color: 'var(--text-muted)', fontSize: '14px', lineHeight: '1.6', marginBottom: '24px' }}>
-              Dear <strong style={{ color: 'var(--gold-light)' }}>{name || 'Honored Guest'}</strong>, your luxury table for <strong style={{ color: '#fff' }}>{guests}</strong> at <strong style={{ color: 'var(--gold-light)' }}>{seating}</strong> on <strong style={{ color: '#fff' }}>{date || 'Today'}</strong> at <strong style={{ color: 'var(--gold-light)' }}>{time}</strong> is officially booked.
+              Dear <strong style={{ color: 'var(--gold-light)' }}>{name || 'Honored Guest'}</strong>, your luxury table for <strong style={{ color: 'var(--text-heading)' }}>{guests}</strong> at <strong style={{ color: 'var(--gold-light)' }}>{seating}</strong> on <strong style={{ color: 'var(--text-heading)' }}>{date || 'Today'}</strong> at <strong style={{ color: 'var(--gold-light)' }}>{time}</strong> is officially booked.
             </p>
 
-            <div className="order-receipt-summary mb-4" style={{ background: '#0b0e14', border: '1px solid var(--border-gold)', borderRadius: '14px', padding: '16px', textAlign: 'left' }}>
+            <div className="order-receipt-summary mb-4" style={{ background: 'var(--bg-obsidian)', border: '1px solid var(--border-gold)', borderRadius: '14px', padding: '16px', textAlign: 'left' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', fontSize: '13px' }}>
                 <span style={{ color: 'var(--text-muted)' }}>Location:</span>
-                <strong style={{ color: '#fff' }}>Aaditya&apos;s Midway, SH 19, Sausar</strong>
+                <strong style={{ color: 'var(--text-heading)' }}>Aaditya&apos;s Midway, SH 19, Sausar</strong>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', fontSize: '13px' }}>
                 <span style={{ color: 'var(--text-muted)' }}>Booking Reference:</span>
@@ -64,7 +64,7 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px' }}>
                 <span style={{ color: 'var(--text-muted)' }}>Contact Mobile:</span>
-                <strong style={{ color: '#fff' }}>+91 {phone}</strong>
+                <strong style={{ color: 'var(--text-heading)' }}>+91 {phone}</strong>
               </div>
             </div>
 
@@ -76,7 +76,7 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
           <form onSubmit={handleSubmit} className="booking-form">
             <div className="modal-head-section">
               <span className="gold-eyebrow">HIGHWAY HOSPITALITY</span>
-              <h2 style={{ fontFamily: 'Georgia, serif', color: '#fff', fontSize: '28px' }}>Reserve Your Table</h2>
+              <h2 style={{ fontFamily: 'Georgia, serif', color: 'var(--text-heading)', fontSize: '28px' }}>Reserve Your Table</h2>
               <p className="subtext">Enjoy priority luxury seating & personalized dining on SH 19</p>
             </div>
 

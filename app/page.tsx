@@ -140,7 +140,7 @@ export default function Home() {
         <div className="food-card-grid">
           <div className="luxury-food-card" style={{ padding: '32px' }}>
             <Compass size={36} className="gold-icon mb-3" />
-            <h3 style={{ fontFamily: 'Georgia, serif', fontSize: '22px', color: '#fff', marginBottom: '10px' }}>
+            <h3 style={{ fontFamily: 'Georgia, serif', fontSize: '22px', marginBottom: '10px' }}>
               Organic & Fresh Daily
             </h3>
             <p style={{ color: 'var(--text-muted)', fontSize: '14px', lineHeight: '1.6' }}>
@@ -150,7 +150,7 @@ export default function Home() {
 
           <div className="luxury-food-card" style={{ padding: '32px' }}>
             <Award size={36} className="gold-icon mb-3" />
-            <h3 style={{ fontFamily: 'Georgia, serif', fontSize: '22px', color: '#fff', marginBottom: '10px' }}>
+            <h3 style={{ fontFamily: 'Georgia, serif', fontSize: '22px', marginBottom: '10px' }}>
               Master Chef Integrity
             </h3>
             <p style={{ color: 'var(--text-muted)', fontSize: '14px', lineHeight: '1.6' }}>
@@ -160,7 +160,7 @@ export default function Home() {
 
           <div className="luxury-food-card" style={{ padding: '32px' }}>
             <Heart size={36} className="gold-icon mb-3" />
-            <h3 style={{ fontFamily: 'Georgia, serif', fontSize: '22px', color: '#fff', marginBottom: '10px' }}>
+            <h3 style={{ fontFamily: 'Georgia, serif', fontSize: '22px', marginBottom: '10px' }}>
               Warm Roadside Hospitality
             </h3>
             <p style={{ color: 'var(--text-muted)', fontSize: '14px', lineHeight: '1.6' }}>

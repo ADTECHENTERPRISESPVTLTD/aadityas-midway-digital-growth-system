@@ -60,8 +60,8 @@ export default function StoryPage() {
         <div className="hero-bg-overlay" style={{ opacity: 0.18 }} />
         <div style={{ maxWidth: '900px', margin: '0 auto', textAlign: 'center', position: 'relative', zIndex: 2 }}>
           <span className="gold-eyebrow">OUR CULINARY GENESIS</span>
-          <h1 style={{ fontSize: 'clamp(36px, 5vw, 64px)', color: '#fff', marginBottom: '20px' }}>
-            A Haven for Travelers & Connoisseurs on SH 19
+          <h1 style={{ fontSize: 'clamp(36px, 5vw, 64px)', color: 'var(--text-heading)', marginBottom: '20px' }}>
+            A Heaven for Travelers & Connoisseurs on SH 19
           </h1>
           <p style={{ color: 'var(--text-muted)', fontSize: '17px', lineHeight: '1.7', maxWidth: '720px', margin: '0 auto 30px' }}>
             Some places feed you. Some places stay with you forever. Aaditya&apos;s Midway was born out of a passion to transform highway journeys into moments of warm hospitality, slow-cooked royal flavors, and timeless memories.
@@ -77,7 +77,7 @@ export default function StoryPage() {
         <div className="hero-grid">
           <div>
             <span className="gold-eyebrow">CHAPTER I: THE VISION</span>
-            <h2 style={{ fontSize: '42px', color: '#fff', marginBottom: '20px' }}>
+            <h2 style={{ fontSize: '42px', color: 'var(--text-heading)', marginBottom: '20px' }}>
               Born on State Highway 19, Sausar
             </h2>
             <p style={{ color: 'var(--text-muted)', fontSize: '15px', lineHeight: '1.7', marginBottom: '16px' }}>
@@ -130,7 +130,7 @@ export default function StoryPage() {
         <div className="food-card-grid">
           <div className="luxury-food-card" style={{ padding: '28px' }}>
             <Utensils size={32} className="gold-icon mb-3" />
-            <h3 style={{ fontFamily: 'Georgia, serif', color: '#fff', fontSize: '20px', marginBottom: '8px' }}>
+            <h3 style={{ fontFamily: 'Georgia, serif', color: 'var(--text-heading)', fontSize: '20px', marginBottom: '8px' }}>
               Hand-Ground Spices
             </h3>
             <p style={{ color: 'var(--text-muted)', fontSize: '13px', lineHeight: '1.6' }}>
@@ -140,7 +140,7 @@ export default function StoryPage() {
 
           <div className="luxury-food-card" style={{ padding: '28px' }}>
             <ShieldCheck size={32} className="gold-icon mb-3" />
-            <h3 style={{ fontFamily: 'Georgia, serif', color: '#fff', fontSize: '20px', marginBottom: '8px' }}>
+            <h3 style={{ fontFamily: 'Georgia, serif', color: 'var(--text-heading)', fontSize: '20px', marginBottom: '8px' }}>
               100% Fresh & Halal
             </h3>
             <p style={{ color: 'var(--text-muted)', fontSize: '13px', lineHeight: '1.6' }}>
@@ -150,7 +150,7 @@ export default function StoryPage() {
 
           <div className="luxury-food-card" style={{ padding: '28px' }}>
             <Clock size={32} className="gold-icon mb-3" />
-            <h3 style={{ fontFamily: 'Georgia, serif', color: '#fff', fontSize: '20px', marginBottom: '8px' }}>
+            <h3 style={{ fontFamily: 'Georgia, serif', color: 'var(--text-heading)', fontSize: '20px', marginBottom: '8px' }}>
               Slow Charcoal Cooking
             </h3>
             <p style={{ color: 'var(--text-muted)', fontSize: '13px', lineHeight: '1.6' }}>
@@ -160,7 +160,7 @@ export default function StoryPage() {
 
           <div className="luxury-food-card" style={{ padding: '28px' }}>
             <Heart size={32} className="gold-icon mb-3" />
-            <h3 style={{ fontFamily: 'Georgia, serif', color: '#fff', fontSize: '20px', marginBottom: '8px' }}>
+            <h3 style={{ fontFamily: 'Georgia, serif', color: 'var(--text-heading)', fontSize: '20px', marginBottom: '8px' }}>
               Heartfelt Service
             </h3>
             <p style={{ color: 'var(--text-muted)', fontSize: '13px', lineHeight: '1.6' }}>
