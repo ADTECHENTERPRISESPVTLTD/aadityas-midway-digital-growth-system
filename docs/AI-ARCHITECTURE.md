@@ -175,6 +175,15 @@ API: `GET /api/ai/dashboard`.
 
 ## Known limitations (by design, for a same-week prototype)
 
+- **The menu content itself is placeholder, not Aaditya's Midway's real
+  menu.** It was inherited as-is from the frontend scaffold (added in the
+  project's first commit) and appears to originate from unrelated
+  Instagram posts (one section's TZS pricing traces to a Tanzania-based
+  cafe, not this restaurant). Flagged to the team lead; the decision was
+  to launch with this placeholder menu for now and swap in the real menu
+  later. No code change needed for that swap — everything reads through
+  `lib/ai/knowledge.ts`, so replacing `lib/ai/data/menu.json` (and the
+  matching array in `app/page.tsx`) with the real menu is enough.
 - All data is static JSON, not a database — matches the current state of
   the rest of the project (no backend yet). See "Data retrieval" above
   for the swap path once FS-02/FS-03 land.
