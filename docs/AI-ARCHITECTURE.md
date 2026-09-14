@@ -107,6 +107,14 @@ network call) and answers using only data resolved through
 location, recommendations, and booking guidance (the booking flow itself
 lives in the frontend; the assistant only explains how to use it).
 
+**Frontend wiring:** `components/DiningAssistantModal.tsx` calls
+`POST /api/ai/chat` and renders `reply` plus, if present, the first
+`recommendations[]` entry as a suggested-item card (looked up by id in
+`lib/menuData.ts`). An earlier version of that component had its own
+hardcoded reply logic (a placeholder built before this API existed) —
+replaced with the real call so there's exactly one source of truth for
+what the assistant says.
+
 If a lookup finds nothing (e.g. an item not on the menu), the assistant
 says so honestly instead of guessing — `groundedInData: false` on the
 response flags this case explicitly for the frontend/tests.
