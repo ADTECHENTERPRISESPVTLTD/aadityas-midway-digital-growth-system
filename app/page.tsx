@@ -76,7 +76,7 @@ export default function Home() {
         <div className="hero-grid">
           <div className="hero-content">
             <span className="gold-eyebrow">
-              <Flame size={12} className="gold-icon inline mr-1 animate-bounce" /> A CULINARY HAVEN ON SH 19 · SAUSAR
+              <Flame size={12} className="gold-icon inline mr-1 animate-bounce" /> A CULINARY HEAVEN ON SH 19 · SAUSAR
             </span>
             <h1>
               Good Food.<br />

@@ -11,15 +11,15 @@
   --bg-card-hover: #1c2230;
   --bg-glass: rgba(20, 24, 34, 0.75);
   
-  --gold-primary: #d4af37;
+  --gold-primary: #f1db92;
   --gold-light: #f3e098;
   --gold-glow: rgba(212, 175, 55, 0.25);
 
   --terracotta: #c9553e;
   --terracotta-dark: #9e3d29;
   
-  --text-main: #f5f5f7;
-  --text-muted: #9ba3b2;
+  --text-main: #0a0a6d;
+  --text-muted: #c5cad3;
   --text-gold: #e5c158;
   
   --border-gold: rgba(212, 175, 55, 0.28);
@@ -44,11 +44,11 @@ html.light-mode {
   --terracotta-dark: #9e3d29;
   
   --text-main: #1a1d24;
-  --text-muted: #596273;
+  --text-muted: #e1e7f4;
   --text-gold: #8c6400;
   
   --border-gold: rgba(184, 134, 11, 0.35);
-  --border-subtle: rgba(0, 0, 0, 0.12);
+  --border-subtle: rgba(0, 0, 0, 0.86);
 }
 
 .theme-toggle-btn {
