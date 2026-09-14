@@ -1,0 +1,50 @@
+{
+  "name": "Aaditya's Midway",
+  "tagline": "Good food. Good mood. Great memories.",
+  "address": "SH 19, Gokuldham, Sausar",
+  "hours": {
+    "display": "Every day, 11:00 AM - 11:00 PM",
+    "days": "Monday to Sunday",
+    "open": "11:00",
+    "close": "23:00"
+  },
+  "contact": {
+    "phones": ["7415388571", "8435172222"],
+    "whatsapp": "917415388571"
+  },
+  "social": {
+    "instagram": "https://www.instagram.com/aadityasmidway"
+  },
+  "delivery": {
+    "freeDeliveryAboveInr": 999
+  },
+  "offers": [
+    {
+      "code": "MIDWEEK20",
+      "title": "Two for the road",
+      "description": "20% off your total bill when you dine in with a friend, Monday to Thursday.",
+      "type": "dine-in",
+      "discountPercent": 20,
+      "validDays": ["Monday", "Tuesday", "Wednesday", "Thursday"]
+    },
+    {
+      "code": "FIRSTBITE",
+      "title": "First bite on us",
+      "description": "Get INR 150 off your first online order above INR 699.",
+      "type": "first-order",
+      "discountFlatInr": 150,
+      "minOrderInr": 699
+    },
+    {
+      "code": "GROUPDESSERT",
+      "title": "Gather around",
+      "description": "Complimentary dessert for dine-in groups of 6 or more.",
+      "type": "dine-in",
+      "minGuests": 6
+    }
+  ],
+  "booking": {
+    "acceptsOnlineRequests": true,
+    "note": "Booking requests are confirmed by the restaurant; the site collects date, time, guest count, name and mobile number."
+  }
+}

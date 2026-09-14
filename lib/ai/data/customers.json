@@ -1,0 +1,7 @@
+[
+  { "id": "c1", "name": "Ananya Mehta", "firstOrderDate": "2025-11-01", "lastOrderDate": "2026-09-10", "totalOrders": 24, "totalSpendInr": 18400 },
+  { "id": "c2", "name": "Rohit Sharma", "firstOrderDate": "2026-08-25", "lastOrderDate": "2026-09-12", "totalOrders": 2, "totalSpendInr": 1200 },
+  { "id": "c3", "name": "Priya Nair", "firstOrderDate": "2025-02-01", "lastOrderDate": "2025-08-10", "totalOrders": 6, "totalSpendInr": 4300 },
+  { "id": "c4", "name": "Karan Patel", "firstOrderDate": "2026-09-13", "lastOrderDate": "2026-09-13", "totalOrders": 1, "totalSpendInr": 950 },
+  { "id": "c5", "name": "Meera Iyer", "firstOrderDate": "2024-05-01", "lastOrderDate": "2026-09-13", "totalOrders": 41, "totalSpendInr": 32500 }
+]
