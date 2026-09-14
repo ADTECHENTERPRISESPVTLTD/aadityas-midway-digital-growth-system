@@ -1,316 +1,1519 @@
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'Segoe UI', Arial, sans-serif; background: #f5f5f5; color: #333; padding: 20px; }
-h1 { text-align: center; margin: 20px 0 10px; font-size: 28px; }
-.subtitle { text-align: center; color: #888; margin-bottom: 20px; font-size: 14px; }
-.filter-bar { display: flex; justify-content: center; gap: 10px; margin-bottom: 25px; flex-wrap: wrap; }
-.filter-btn { padding: 10px 26px; border: 2px solid #ddd; border-radius: 30px; background: #fff; cursor: pointer; font-size: 15px; font-weight: 600; color: #666; transition: all 0.2s; }
-.filter-btn:hover { border-color: #bbb; }
-.filter-btn.active { background: #2c2c2c; color: #fff; border-color: #2c2c2c; }
-.menu-section { background: #fff; border-radius: 12px; padding: 22px 26px; margin-bottom: 22px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
-.menu-section h2 { font-size: 20px; margin-bottom: 14px; border-bottom: 2px solid #f0f0f0; padding-bottom: 8px; }
-.menu-section h3 { font-size: 15px; color: #888; margin: 14px 0 8px; font-weight: 600; }
-table { width: 100%; border-collapse: collapse; font-size: 14px; }
-th, td { padding: 9px 10px; text-align: left; border-bottom: 1px solid #f2f2f2; }
-th { color: #999; font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
-.rating { color: #f5a623; letter-spacing: 1px; }
-.price { font-weight: 600; color: #2c2c2c; }
-.add-on { color: #aaa; font-size: 13px; }
-.hidden { display: none !important; }
-.veg-dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 6px; vertical-align: middle; }
-.veg-dot.green { background: #27ae60; }
-.veg-dot.red { background: #e74c3c; }
-.both-dot { background: #2c2c2c; }
-.footer-note { text-align: center; color: #aaa; font-size: 12px; margin-top: 10px; }
+﻿<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Menu - Restaurant</title>
+<meta name="description" content="Restaurant menu with veg/non-veg filter, ratings, and Indian Rupee pricing">
+<style>
+:root {
+  --bg: #f8f9fa;
+  --bg-elevated: #ffffff;
+  --text: #1a1a2e;
+  --text-muted: #6b7280;
+  --primary: #e85d04;
+  --primary-light: #ff7b2b;
+  --primary-dark: #c44a03;
+  --accent: #f5a623;
+  --border: #e5e7eb;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+  --shadow: 0 4px 12px rgba(0,0,0,0.08);
+  --shadow-lg: 0 12px 32px rgba(0,0,0,0.12);
+  --radius: 16px;
+  --radius-sm: 10px;
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --header-h: 72px;
+}
+
+[data-theme="dark"] {
+  --bg: #0f172a;
+  --bg-elevated: #1e293b;
+  --text: #f1f5f9;
+  --text-muted: #94a3b8;
+  --primary: #ff7b2b;
+  --primary-light: #ff9f5c;
+  --primary-dark: #e85d04;
+  --border: #334155;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.2);
+  --shadow: 0 4px 12px rgba(0,0,0,0.3);
+  --shadow-lg: 0 12px 32px rgba(0,0,0,0.4);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-sans);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+  transition: background 0.4s ease, color 0.4s ease;
+  padding: 0;
+  margin: 0;
+}
+
+/* Animated background */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: 
+    radial-gradient(ellipse 80% 50% at 20% 0%, rgba(232, 93, 4, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse 60% 40% at 80% 100%, rgba(245, 166, 35, 0.06) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: -1;
+  transition: opacity 0.4s ease;
+}
+
+[data-theme="dark"]::before {
+  background: 
+    radial-gradient(ellipse 80% 50% at 20% 0%, rgba(255, 123, 43, 0.12) 0%, transparent 50%),
+    radial-gradient(ellipse 60% 40% at 80% 100%, rgba(245, 166, 35, 0.08) 0%, transparent 50%);
+}
+
+/* Layout */
+.page-wrapper {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px 20px 60px;
+}
+
+/* Header */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: linear-gradient(180deg, rgba(248,249,250,0.95) 0%, rgba(248,249,250,0) 100%);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 16px 0 20px;
+  margin: -24px -20px 32px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+[data-theme="dark"] .header {
+  background: linear-gradient(180deg, rgba(15,23,42,0.95) 0%, rgba(15,23,42,0) 100%);
+}
+
+.header-content {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: var(--text);
+}
+
+.logo-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 20px;
+  box-shadow: 0 4px 14px rgba(232, 93, 4, 0.4);
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 4px 14px rgba(232, 93, 4, 0.4); }
+  50% { box-shadow: 0 6px 24px rgba(232, 93, 4, 0.6); }
+}
+
+.logo-text {
+  font-size: 1.5rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--text), var(--primary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.5px;
+}
+
+.logo-tagline {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--primary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: -4px;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Theme Toggle */
+.theme-toggle {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg-elevated);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text);
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+
+.theme-toggle:hover {
+  border-color: var(--primary);
+  transform: scale(1.05);
+  box-shadow: 0 4px 16px rgba(232, 93, 4, 0.2);
+}
+
+.theme-toggle svg { width: 20px; height: 20px; transition: var(--transition); }
+.theme-toggle .sun-icon { opacity: 1; transform: rotate(0) scale(1); }
+.theme-toggle .moon-icon { opacity: 0; transform: rotate(-90deg) scale(0.5); position: absolute; }
+
+[data-theme="dark"] .theme-toggle .sun-icon { opacity: 0; transform: rotate(90deg) scale(0.5); }
+[data-theme="dark"] .theme-toggle .moon-icon { opacity: 1; transform: rotate(0) scale(1); }
+
+/* Sign In Button */
+.signin-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 22px;
+  border: 2px solid var(--primary);
+  border-radius: 100px;
+  background: transparent;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--primary);
+  transition: var(--transition);
+  text-decoration: none;
+}
+
+.signin-btn:hover {
+  background: var(--primary);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(232, 93, 4, 0.3);
+}
+
+.signin-btn:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.signin-btn svg { width: 18px; height: 18px; }
+
+/* Review Button */
+.review-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 22px;
+  border: 2px solid var(--border);
+  border-radius: 100px;
+  background: var(--bg-elevated);
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text);
+  transition: var(--transition);
+  text-decoration: none;
+}
+
+.review-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(245, 166, 35, 0.2);
+}
+
+.review-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.review-btn svg { width: 18px; height: 18px; }
+
+/* Title Section */
+.title-section {
+  text-align: center;
+  padding: 40px 0 24px;
+  position: relative;
+}
+
+.title-section::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  border-radius: 2px;
+  animation: line-grow 0.8s ease-out forwards;
+  transform-origin: center;
+}
+
+@keyframes line-grow {
+  from { width: 0; opacity: 0; }
+  to { width: 80px; opacity: 1; }
+}
+
+.main-title {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -1px;
+  margin-bottom: 10px;
+  background: linear-gradient(135deg, var(--text) 0%, var(--primary) 50%, var(--accent) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: title-reveal 0.8s ease-out forwards;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+@keyframes title-reveal {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.subtitle {
+  font-size: 1.1rem;
+  color: var(--text-muted);
+  font-weight: 400;
+  animation: fade-in 0.8s ease-out 0.2s forwards;
+  opacity: 0;
+}
+
+@keyframes fade-in {
+  to { opacity: 1; }
+}
+
+.counter-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-top: 16px;
+  animation: fade-in 0.8s ease-out 0.4s forwards;
+  opacity: 0;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+}
+
+.counter-badge:hover {
+  border-color: var(--primary);
+  box-shadow: var(--shadow);
+}
+
+.counter-badge .count {
+  color: var(--primary);
+  font-weight: 800;
+  font-size: 1rem;
+}
+
+/* Filter Bar */
+.filter-bar {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 40px 0 32px;
+  flex-wrap: wrap;
+  padding: 0 4px;
+  animation: slide-up 0.6s ease-out 0.6s forwards;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+@keyframes slide-up {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.filter-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border: 2px solid var(--border);
+  border-radius: 100px;
+  background: var(--bg-elevated);
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+
+.filter-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  border-radius: 100px;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+  z-index: -1;
+}
+
+.filter-btn:hover {
+  border-color: var(--primary);
+  color: var(--text);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(232, 93, 4, 0.25);
+}
+
+.filter-btn.active {
+  border-color: transparent;
+  color: white;
+}
+
+.filter-btn.active::before {
+  transform: scaleX(1);
+}
+
+.filter-btn:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.filter-icon { font-size: 1.1rem; }
+
+/* Section Cards */
+.menu-section {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px 32px;
+  margin-bottom: 24px;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+  opacity: 0;
+  transform: translateY(30px);
+  animation: section-reveal 0.6s ease-out forwards;
+}
+
+.menu-section:nth-child(odd) { animation-delay: calc(0.1s * var(--i)); }
+.menu-section:nth-child(even) { animation-delay: calc(0.1s * var(--i)); }
+
+@keyframes section-reveal {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.menu-section:hover {
+  box-shadow: var(--shadow);
+  border-color: var(--primary);
+  transform: translateY(-2px);
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.section-title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.section-emoji {
+  font-size: 1.5rem;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+}
+
+.section-count {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: var(--bg);
+  padding: 4px 12px;
+  border-radius: 100px;
+}
+
+.section-toggle {
+  display: none;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.section-toggle:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.section-toggle svg { width: 16px; height: 16px; transition: transform 0.3s ease; }
+.section-toggle.collapsed svg { transform: rotate(-90deg); }
+
+/* Table Styles */
+.table-wrapper {
+  overflow-x: auto;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+}
+
+th, td {
+  padding: 14px 16px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  transition: var(--transition);
+}
+
+th {
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  background: var(--bg);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+tbody tr {
+  opacity: 0;
+  transform: translateX(-20px);
+  animation: row-reveal 0.4s ease-out forwards;
+}
+
+tbody tr:nth-child(1) { animation-delay: 0.1s; }
+tbody tr:nth-child(2) { animation-delay: 0.15s; }
+tbody tr:nth-child(3) { animation-delay: 0.2s; }
+tbody tr:nth-child(4) { animation-delay: 0.25s; }
+tbody tr:nth-child(5) { animation-delay: 0.3s; }
+tbody tr:nth-child(6) { animation-delay: 0.35s; }
+tbody tr:nth-child(7) { animation-delay: 0.4s; }
+tbody tr:nth-child(8) { animation-delay: 0.45s; }
+tbody tr:nth-child(9) { animation-delay: 0.5s; }
+tbody tr:nth-child(10) { animation-delay: 0.55s; }
+
+@keyframes row-reveal {
+  to { opacity: 1; transform: translateX(0); }
+}
+
+tbody tr:last-child td { border-bottom: none; }
+
+tbody tr:hover {
+  background: linear-gradient(90deg, rgba(232, 93, 4, 0.04) 0%, transparent 100%);
+}
+
+tbody tr:hover td:first-child {
+  color: var(--primary);
+}
+
+.veg-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 100px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.veg-badge.veg { background: #dcfce7; color: #166534; }
+.veg-badge.nonveg { background: #fee2e2; color: #991b1b; }
+.veg-badge.both { background: #fef3c7; color: #92400e; }
+
+[data-theme="dark"] .veg-badge.veg { background: #14532d; color: #86efac; }
+[data-theme="dark"] .veg-badge.nonveg { background: #7f1d1d; color: #fca5a5; }
+[data-theme="dark"] .veg-badge.both { background: #78350f; color: #fde68a; }
+
+.dish-name {
+  font-weight: 500;
+  color: var(--text);
+  transition: var(--transition);
+}
+
+.dish-desc {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.price {
+  font-weight: 700;
+  color: var(--primary);
+  font-size: 1rem;
+  white-space: nowrap;
+}
+
+.rating {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  color: var(--accent);
+  font-size: 1rem;
+  line-height: 1;
+}
+
+/* Rating stars */
+.rating::before {
+  content: "";
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23f5a623'%3E%3Cpath d='M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14l-5-4.87 6.88-1.18L12 2z'/%3E%3C/svg%3E") center/contain no-repeat;
+  margin-right: 4px;
+}
+
+/* Rating text fallback for no-star rows */
+.rating.text { color: var(--accent); font-weight: 700; }
+
+/* Divider between menus */
+.menu-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin: 40px 0;
+  padding: 0 16px;
+}
+
+.menu-divider::before,
+.menu-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border), transparent);
+}
+
+.menu-divider span {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  white-space: nowrap;
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 40px 0 20px;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  border-top: 1px solid var(--border);
+  margin-top: 20px;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+
+.footer-links a {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-weight: 500;
+  transition: var(--transition);
+}
+
+.footer-links a:hover {
+  color: var(--primary);
+}
+
+/* Scroll to top */
+.scroll-top {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  border: none;
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-lg);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(20px);
+  transition: var(--transition);
+  z-index: 1000;
+}
+
+.scroll-top.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.scroll-top:hover {
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 0 16px 40px rgba(232, 93, 4, 0.5);
+}
+
+.scroll-top svg { width: 22px; height: 22px; }
+
+/* Loading skeleton */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, var(--border) 25%, var(--bg) 50%, var(--border) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 6px;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .page-wrapper { padding: 16px 16px 100px; }
+  
+  .header { padding: 12px 16px 16px; margin: -16px -16px 24px; }
+  
+  .header-content { gap: 12px; }
+  
+  .logo-text { font-size: 1.25rem; }
+  
+  .logo-tagline { display: none; }
+  
+  .theme-toggle { width: 40px; height: 40px; }
+
+  .signin-btn { padding: 8px 16px; font-size: 0.85rem; }
+
+  .review-btn { padding: 8px 16px; font-size: 0.85rem; }
+
+  .title-section { padding: 24px 0 16px; }
+  
+  .main-title { font-size: 2rem; }
+  
+  .filter-bar { gap: 8px; margin: 24px 0 20px; }
+  
+  .filter-btn { padding: 10px 18px; font-size: 0.85rem; }
+  
+  .menu-section { padding: 20px 20px; margin-bottom: 16px; border-radius: 12px; }
+  
+  .section-header { flex-direction: column; align-items: flex-start; }
+  
+  .section-toggle { display: flex; }
+  
+  th, td { padding: 12px 14px; font-size: 0.88rem; }
+  
+  .footer-links { gap: 16px; }
+  
+  .scroll-top { bottom: 100px; right: 16px; width: 48px; height: 48px; }
+
+  .signin-card { padding: 20px; }
+
+  .reviews-summary { flex-direction: column; gap: 20px; }
+
+  .reviews-bars { max-width: 100%; }
+
+  .review-header { gap: 8px; }
+}
+
+@media (max-width: 480px) {
+  .filter-btn span { display: none; }
+  .filter-btn { padding: 10px; min-width: 44px; justify-content: center; }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Print styles */
+@media print {
+  .header, .filter-bar, .scroll-top, .section-toggle { display: none !important; }
+  .menu-section { break-inside: avoid; box-shadow: none; border: 1px solid #ccc; }
+  body { background: white; color: black; }
+  body::before { display: none; }
+}
+
+/* Sign In Section */
+.signin-wrapper {
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+.signin-card {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 32px;
+  box-shadow: var(--shadow);
+}
+
+.signin-card h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.signin-subtitle {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 24px;
+}
+
+.signin-form .form-group {
+  margin-bottom: 16px;
+}
+
+.signin-form label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
+.signin-form input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 0.95rem;
+  font-family: var(--font-sans);
+  transition: var(--transition);
+}
+
+.signin-form input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(232, 93, 4, 0.15);
+}
+
+.signin-submit-btn {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  color: white;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition);
+  margin-top: 8px;
+}
+
+.signin-submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(232, 93, 4, 0.35);
+}
+
+.signin-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 20px 0;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.signin-divider::before,
+.signin-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.signup-btn {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.signup-btn:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.signin-footer {
+  text-align: center;
+  margin-top: 16px;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.signin-footer a {
+  color: var(--primary);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.signin-footer a:hover {
+  text-decoration: underline;
+}
+
+/* Reviews Section */
+.reviews-summary {
+  display: flex;
+  gap: 40px;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 32px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--border);
+}
+
+.reviews-overall {
+  text-align: center;
+}
+
+.reviews-big-rating {
+  font-size: 3.5rem;
+  font-weight: 800;
+  color: var(--text);
+  line-height: 1;
+}
+
+.reviews-stars {
+  color: var(--accent);
+  font-size: 1.2rem;
+  letter-spacing: 2px;
+  margin: 4px 0;
+}
+
+.reviews-count {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.reviews-bars {
+  flex: 1;
+  min-width: 200px;
+  max-width: 300px;
+}
+
+.reviews-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.reviews-bar-track {
+  flex: 1;
+  height: 8px;
+  background: var(--bg);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.reviews-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--primary-light));
+  border-radius: 4px;
+}
+
+.reviews-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.review-card {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 20px;
+  transition: var(--transition);
+}
+
+.review-card:hover {
+  border-color: var(--accent);
+  box-shadow: var(--shadow-sm);
+}
+
+.review-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.review-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.review-name {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.review-stars {
+  color: var(--accent);
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+}
+
+.review-text {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin-bottom: 8px;
+}
+
+.review-date {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  opacity: 0.7;
+}
+
 </style>
 </head>
 <body>
-<h1>??? Restaurant Menu</h1>
-<p class="subtitle" id="countLabel">Showing all dishes</p>
-<div class="filter-bar">
-  <button class="filter-btn active" data-filter="all">All</button>
-  <button class="filter-btn" data-filter="veg">?? Veg Only</button>
-  <button class="filter-btn" data-filter="nonveg">?? Non-Veg Only</button>
-</div>
-<div class="menu-section" data-veg="both">
-<h2>?? SOUP</h2>
-<table>
-<tr><th>Dish</th><th>Small</th><th>Large</th><th>Rating</th></tr>
-<tr data-veg="nonveg"><td>Thai Soup (Shrimp / Chicken)</td><td class="price">$7.99</td><td class="price">$12.99</td><td class="rating">?????</td></tr>
-<tr data-veg="nonveg"><td>Salmon Soup</td><td class="price">$10.99</td><td class="price">$13.99</td><td class="rating">?????</td></tr>
-<tr data-veg="veg"><td>Veggie Soup</td><td class="price">$6.99</td><td class="price">$8.99</td><td class="rating">????</td></tr>
-</table>
+
+<div class="page-wrapper">
+
+<!-- Header -->
+<header class="header" role="banner">
+  <div class="header-content">
+    <a href="#" class="logo" aria-label="Home">
+      <div class="logo-icon" aria-hidden="true">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+          <path d="M2 17l10 5 10-5"></path>
+          <path d="M2 12l10 5 10-5"></path>
+        </svg>
+      </div>
+      <div>
+        <span class="logo-text">Menu</span>
+        <div class="logo-tagline">Curated Selection</div>
+      </div>
+    </a>
+    <div class="header-actions">
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode" title="Toggle theme">
+        <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="5"></circle>
+          <line x1="12" y1="1" x2="12" y2="3"></line>
+          <line x1="12" y1="21" x2="12" y2="23"></line>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+          <line x1="1" y1="12" x2="3" y2="12"></line>
+          <line x1="21" y1="12" x2="23" y2="12"></line>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+        <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+      </button>
+      <a href="#signin" class="signin-btn" role="button" aria-label="Sign In or Sign Up">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+          <circle cx="12" cy="7" r="4"></circle>
+        </svg>
+        <span>Sign In</span>
+      </a>
+      <a href="#reviews" class="review-btn" role="button" aria-label="Read reviews">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+        </svg>
+        <span>Review</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<!-- Title Section -->
+<section class="title-section" aria-labelledby="mainTitle">
+  <h1 id="mainTitle" class="main-title">Our Menu</h1>
+  <p class="subtitle">Handcrafted dishes • Fresh ingredients • Made with passion</p>
+  <div class="counter-badge" id="counterBadge">
+    <span class="count" id="visibleCount">0</span> items showing
+  </div>
+</section>
+
+<!-- Filter Bar -->
+<div class="filter-bar" role="group" aria-label="Dietary filters">
+  <button class="filter-btn active" data-filter="all" role="tab" aria-selected="true">
+    <span class="filter-icon" aria-hidden="true">✦</span>
+    <span>All</span>
+  </button>
+  <button class="filter-btn" data-filter="veg" role="tab" aria-selected="false">
+    <span class="filter-icon" aria-hidden="true">🥬</span>
+    <span>Veg Only</span>
+  </button>
+  <button class="filter-btn" data-filter="nonveg" role="tab" aria-selected="false">
+    <span class="filter-icon" aria-hidden="true">🥩</span>
+    <span>Non-Veg</span>
+  </button>
+</div><!-- Menu Sections -->
+<div class="menu-section" data-veg="both" style="--i:1">
+  <header class="section-header">
+    <h2 class="section-title"><span class="section-emoji">🍲</span> SOUP <span class="section-count">3 items</span></h2>
+    <button class="section-toggle" aria-label="Toggle section" aria-expanded="true"><span>Collapse</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+  </header>
+  <div class="section-content">
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>Dish</th><th>Small</th><th>Large</th><th>Rating</th></tr></thead>
+        <tbody>
+          <tr data-veg="nonveg"><td><span class="dish-name">Thai Soup (Shrimp / Chicken)</span></td><td class="price">Rs 663</td><td class="price">Rs 1078</td><td class="rating">★★★★★</td></tr>
+          <tr data-veg="nonveg"><td><span class="dish-name">Salmon Soup</span></td><td class="price">Rs 912</td><td class="price">Rs 1161</td><td class="rating">★★★★★</td></tr>
+          <tr data-veg="veg"><td><span class="dish-name">Veggie Soup</span></td><td class="price">Rs 580</td><td class="price">Rs 746</td><td class="rating">★★★★</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>
 
-<div class="menu-section" data-veg="both">
-<h2>?? SALAD</h2>
-<table>
-<tr><th>Dish</th><th>Price</th><th>Rating</th></tr>
-<tr data-veg="nonveg"><td>Chicken Salad</td><td class="price">$9.99</td><td class="rating">?????</td></tr>
-<tr data-veg="nonveg"><td>Cashew Nut Salad with Chicken</td><td class="price">$11.99</td><td class="rating">?????</td></tr>
-<tr data-veg="veg"><td>Greek Salad</td><td class="price">$10.99</td><td class="rating">????</td></tr>
-</table>
+<div class="menu-section" data-veg="both" style="--i:2">
+  <header class="section-header">
+    <h2 class="section-title"><span class="section-emoji">🥗</span> SALAD <span class="section-count">3 items</span></h2>
+    <button class="section-toggle" aria-label="Toggle section" aria-expanded="true"><span>Collapse</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+  </header>
+  <div class="section-content">
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>Dish</th><th>Price</th><th>Rating</th></tr></thead>
+        <tbody>
+          <tr data-veg="nonveg"><td><span class="dish-name">Chicken Salad</span></td><td class="price">Rs 829</td><td class="rating">★★★★★</td></tr>
+          <tr data-veg="nonveg"><td><span class="dish-name">Cashew Nut Salad with Chicken</span></td><td class="price">Rs 995</td><td class="rating">★★★★★</td></tr>
+          <tr data-veg="veg"><td><span class="dish-name">Greek Salad</span></td><td class="price">Rs 912</td><td class="rating">★★★★</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>
 
-<div class="menu-section" data-veg="nonveg">
-<h2>?? FRIED SPECIAL</h2>
-<table>
-<tr><th>Dish</th><th>Price</th><th>Rating</th></tr>
-<tr><td>Hot Wings (6 pieces)</td><td class="price">$9.99</td><td class="rating">?????</td></tr>
-<tr><td>Peri Peri Wings (6 pieces)</td><td class="price">$11.99</td><td class="rating">?????</td></tr>
-<tr><td>Buffalo Wings (6 pieces)</td><td class="price">$9.99</td><td class="rating">????</td></tr>
-<tr><td>Chicken Tenders (3 pieces with fries)</td><td class="price">$6.99</td><td class="rating">????</td></tr>
-<tr><td>Jumbo Shrimp</td><td class="price">$7.99</td><td class="rating">????</td></tr>
-<tr><td>Shrimp Tempura (6 pcs)</td><td class="price">$7.99</td><td class="rating">????</td></tr>
-<tr><td>Fish and Chips</td><td class="price">$7.00</td><td class="rating">???</td></tr>
-</table>
-</div>
-<div class="menu-section" data-veg="both">
-<h2>?? RICE</h2>
-<table>
-<tr><th>Dish</th><th>Small</th><th>Large</th><th>Rating</th></tr>
-<tr data-veg="veg"><td>Kabuli Pulao</td><td class="price">$9.99</td><td class="price">$12.99</td><td class="rating">?????</td></tr>
-<tr data-veg="nonveg"><td>Chicken Fried Rice</td><td class="price">$9.99</td><td class="price">$12.99</td><td class="rating">?????</td></tr>
-<tr data-veg="nonveg"><td>Shrimp Fried Rice</td><td class="price">$9.99</td><td class="price">$12.99</td><td class="rating">????</td></tr>
-<tr data-veg="nonveg"><td>Mix Fried Rice</td><td class="price">$9.99</td><td class="price">$12.99</td><td class="rating">????</td></tr>
-</table>
-</div>
-
-<div class="menu-section" data-veg="both">
-<h2>?? SANDWICHES & BURGERS</h2>
-<table>
-<tr><th>Dish</th><th>Small</th><th>Large</th><th>Rating</th></tr>
-<tr data-veg="nonveg"><td>Chicken Shawarma</td><td class="price">$8.99</td><td class="price">$12.99</td><td class="rating">?????</td></tr>
-<tr data-veg="nonveg"><td>Lamb Shawarma</td><td class="price">$9.99</td><td class="price">$13.99</td><td class="rating">?????</td></tr>
-<tr data-veg="nonveg"><td>Mix Shawarma</td><td class="price">$9.99</td><td class="price">$13.99</td><td class="rating">?????</td></tr>
-<tr data-veg="nonveg"><td>Chicken Kebab / Kofta Wrap</td><td class="price">$9.99</td><td class="price">$10.99</td><td class="rating">?????</td></tr>
-<tr data-veg="nonveg"><td>Beef Kebab / Kofta Wrap</td><td class="price">$11.99</td><td class="price">$12.99</td><td class="rating">?????</td></tr>
-<tr data-veg="nonveg"><td>Philly Cheese Steak</td><td class="price">$9.99</td><td class="price">$11.99</td><td class="rating">????</td></tr>
-<tr data-veg="veg"><td>Falafel Sandwich</td><td class="price">$9.99</td><td class="price">$10.99</td><td class="rating">????</td></tr>
-<tr data-veg="nonveg"><td>Chopped Salmon</td><td class="price">$13.99</td><td class="price">$14.99</td><td class="rating">?????</td></tr>
-</table>
+<div class="menu-section" data-veg="nonveg" style="--i:3">
+  <header class="section-header">
+    <h2 class="section-title"><span class="section-emoji">🍗</span> FRIED SPECIAL <span class="section-count">7 items</span></h2>
+    <button class="section-toggle" aria-label="Toggle section" aria-expanded="true"><span>Collapse</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+  </header>
+  <div class="section-content">
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>Dish</th><th>Price</th><th>Rating</th></tr></thead>
+        <tbody>
+          <tr><td><span class="dish-name">Hot Wings (6 pieces)</span></td><td class="price">Rs 829</td><td class="rating">★★★★★</td></tr>
+          <tr><td><span class="dish-name">Peri Peri Wings (6 pieces)</span></td><td class="price">Rs 995</td><td class="rating">★★★★★</td></tr>
+          <tr><td><span class="dish-name">Buffalo Wings (6 pieces)</span></td><td class="price">Rs 829</td><td class="rating">★★★★</td></tr>
+          <tr><td><span class="dish-name">Chicken Tenders (3 pieces with fries)</span></td><td class="price">Rs 580</td><td class="rating">★★★★</td></tr>
+          <tr><td><span class="dish-name">Jumbo Shrimp</span></td><td class="price">Rs 663</td><td class="rating">★★★★</td></tr>
+          <tr><td><span class="dish-name">Shrimp Tempura (6 pcs)</span></td><td class="price">Rs 663</td><td class="rating">★★★★</td></tr>
+          <tr><td><span class="dish-name">Fish and Chips</span></td><td class="price">Rs 581</td><td class="rating">★★★</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>
 
-<div class="menu-section" data-veg="nonveg">
-<h2>?? COMBO</h2>
-<table>
-<tr><th>Dish</th><th>Only Fries</th><th>Combo Fries &amp; Soda</th><th>Rating</th></tr>
-<tr><td>Chicken Burger / Home Style</td><td class="price">$8.99</td><td class="price">$11.99</td><td class="rating">?????</td></tr>
-<tr><td>Beef Burger / Home Style</td><td class="price">$9.99</td><td class="price">$11.99</td><td class="rating">?????</td></tr>
-<tr><td>Fish Burger</td><td class="price">$8.99</td><td class="price">$10.99</td><td class="rating">????</td></tr>
-<tr><td>Chicken Sandwich</td><td class="price">$7.99</td><td class="price">$10.99</td><td class="rating">????</td></tr>
-</table>
-</div>
-<div class="menu-section" data-veg="nonveg">
-<h2>?? MEDITERRANEAN MIX GRILL</h2>
-<table>
-<tr><th>Dish</th><th>Price</th><th>Rating</th></tr>
-<tr><td>Combo Special (1 Person)</td><td class="price">$24.99</td><td class="rating">?????</td></tr>
-<tr><td>Combo Special (3 Person)</td><td class="price">$59.99</td><td class="rating">?????</td></tr>
-<tr><td>Combo Special (5 Person)</td><td class="price">$84.99</td><td class="rating">?????</td></tr>
-</table>
-</div>
-
-<div class="menu-section" data-veg="nonveg">
-<h2>?? BEEF PLATTER</h2>
-<table>
-<tr><th>Dish</th><th>Price</th><th>Rating</th></tr>
-<tr><td>Beef Kofta</td><td class="price">$13.99</td><td class="rating">?????</td></tr>
-<tr><td>Beef Chapli Kebab</td><td class="price">$19.99</td><td class="rating">?????</td></tr>
-<tr><td>Beef T-Bone Steak</td><td class="price">$23.99</td><td class="rating">?????</td></tr>
-</table>
+<div class="menu-section" data-veg="both" style="--i:4">
+  <header class="section-header">
+    <h2 class="section-title"><span class="section-emoji">🍚</span> RICE <span class="section-count">4 items</span></h2>
+    <button class="section-toggle" aria-label="Toggle section" aria-expanded="true"><span>Collapse</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+  </header>
+  <div class="section-content">
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>Dish</th><th>Small</th><th>Large</th><th>Rating</th></tr></thead>
+        <tbody>
+          <tr data-veg="veg"><td><span class="dish-name">Kabuli Pulao</span></td><td class="price">Rs 829</td><td class="price">Rs 1078</td><td class="rating">★★★★★</td></tr>
+          <tr data-veg="nonveg"><td><span class="dish-name">Chicken Fried Rice</span></td><td class="price">Rs 829</td><td class="price">Rs 1078</td><td class="rating">★★★★★</td></tr>
+          <tr data-veg="nonveg"><td><span class="dish-name">Shrimp Fried Rice</span></td><td class="price">Rs 829</td><td class="price">Rs 1078</td><td class="rating">★★★★</td></tr>
+          <tr data-veg="nonveg"><td><span class="dish-name">Mix Fried Rice</span></td><td class="price">Rs 829</td><td class="price">Rs 1078</td><td class="rating">★★★★</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>
 
-<div class="menu-section" data-veg="nonveg">
-<h2>?? LAMB PLATTER</h2>
-<table>
-<tr><th>Dish</th><th>Price</th><th>Rating</th></tr>
-<tr><td>Baby Lamb Chop (3 pcs)</td><td class="price">$24.99</td><td class="rating">?????</td></tr>
-<tr><td>Lamb Kebab</td><td class="price">$15.99</td><td class="rating">?????</td></tr>
-<tr><td>Lamb Shawarma Platter</td><td class="price">$12.50</td><td class="rating">????</td></tr>
-<tr><td>Lamb + Chicken Mix Platter</td><td class="price">$12.50</td><td class="rating">????</td></tr>
-<tr><td>Mix Kebab Platter</td><td class="price">$13.99</td><td class="rating">?????</td></tr>
-</table>
+<div class="menu-section" data-veg="both" style="--i:5">
+  <header class="section-header">
+    <h2 class="section-title"><span class="section-emoji">🌯</span> SANDWICHES & BURGERS <span class="section-count">8 items</span></h2>
+    <button class="section-toggle" aria-label="Toggle section" aria-expanded="true"><span>Collapse</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+  </header>
+  <div class="section-content">
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>Dish</th><th>Small</th><th>Large</th><th>Rating</th></tr></thead>
+        <tbody>
+          <tr data-veg="nonveg"><td><span class="dish-name">Chicken Shawarma</span></td><td class="price">Rs 746</td><td class="price">Rs 1078</td><td class="rating">★★★★★</td></tr>
+          <tr data-veg="nonveg"><td><span class="dish-name">Lamb Shawarma</span></td><td class="price">Rs 829</td><td class="price">Rs 1161</td><td class="rating">★★★★★</td></tr>
+          <tr data-veg="nonveg"><td><span class="dish-name">Mix Shawarma</span></td><td class="price">Rs 829</td><td class="price">Rs 1161</td><td class="rating">★★★★★</td></tr>
+          <tr data-veg="nonveg"><td><span class="dish-name">Chicken Kebab / Kofta Wrap</span></td><td class="price">Rs 829</td><td class="price">Rs 912</td><td class="rating">★★★★★</td></tr>
+          <tr data-veg="nonveg"><td><span class="dish-name">Beef Kebab / Kofta Wrap</span></td><td class="price">Rs 995</td><td class="price">Rs 1078</td><td class="rating">★★★★★</td></tr>
+          <tr data-veg="nonveg"><td><span class="dish-name">Philly Cheese Steak</span></td><td class="price">Rs 829</td><td class="price">Rs 995</td><td class="rating">★★★★</td></tr>
+          <tr data-veg="veg"><td><span class="dish-name">Falafel Sandwich</span></td><td class="price">Rs 829</td><td class="price">Rs 912</td><td class="rating">★★★★</td></tr>
+          <tr data-veg="nonveg"><td><span class="dish-name">Chopped Salmon</span></td><td class="price">Rs 1161</td><td class="price">Rs 1244</td><td class="rating">★★★★★</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>
 
-<div class="menu-section" data-veg="nonveg">
-<h2>?? CHICKEN PLATTER</h2>
-<table>
-<tr><th>Dish</th><th>Price</th><th>Rating</th></tr>
-<tr><td>Chicken Tikka Kebab</td><td class="price">$12.99</td><td class="rating">?????</td></tr>
-<tr><td>Chicken Behari Kebab</td><td class="price">$13.99</td><td class="rating">?????</td></tr>
-<tr><td>Peri Peri Chicken</td><td class="price">$15.99</td><td class="rating">?????</td></tr>
-<tr><td>Chicken Kofta Kebab</td><td class="price">$12.99</td><td class="rating">?????</td></tr>
-<tr><td>Grill Chicken</td><td class="price">$14.99</td><td class="rating">?????</td></tr>
-<tr><td>Chicken Shawarma</td><td class="price">$12.99</td><td class="rating">?????</td></tr>
-<tr><td>Chicken Wings (B.B.Q)</td><td class="price">$13.99</td><td class="rating">?????</td></tr>
-<tr><td>Falafel Platter</td><td class="price">$12.99</td><td class="rating">????</td></tr>
-</table>
+<div class="menu-section" data-veg="nonveg" style="--i:6">
+  <header class="section-header">
+    <h2 class="section-title"><span class="section-emoji">🍔</span> COMBO <span class="section-count">4 items</span></h2>
+    <button class="section-toggle" aria-label="Toggle section" aria-expanded="true"><span>Collapse</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+  </header>
+  <div class="section-content">
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>Dish</th><th>Only Fries</th><th>Combo Fries & Soda</th><th>Rating</th></tr></thead>
+        <tbody>
+          <tr><td><span class="dish-name">Chicken Burger / Home Style</span></td><td class="price">Rs 746</td><td class="price">Rs 995</td><td class="rating">★★★★★</td></tr>
+          <tr><td><span class="dish-name">Beef Burger / Home Style</span></td><td class="price">Rs 829</td><td class="price">Rs 995</td><td class="rating">★★★★★</td></tr>
+          <tr><td><span class="dish-name">Fish Burger</span></td><td class="price">Rs 746</td><td class="price">Rs 912</td><td class="rating">★★★★</td></tr>
+          <tr><td><span class="dish-name">Chicken Sandwich</span></td><td class="price">Rs 663</td><td class="price">Rs 912</td><td class="rating">★★★★</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<div class="menu-section" data-veg="nonveg" style="--i:7">
+  <header class="section-header">
+    <h2 class="section-title"><span class="section-emoji">🥩</span> MEDITERRANEAN MIX GRILL <span class="section-count">3 items</span></h2>
+    <button class="section-toggle" aria-label="Toggle section" aria-expanded="true"><span>Collapse</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+  </header>
+  <div class="section-content">
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>Dish</th><th>Price</th><th>Rating</th></tr></thead>
+        <tbody>
+          <tr><td><span class="dish-name">Combo Special (1 Person)</span></td><td class="price">Rs 2074</td><td class="rating">★★★★★</td></tr>
+          <tr><td><span class="dish-name">Combo Special (3 Person)</span></td><td class="price">Rs 4980</td><td class="rating">★★★★★</td></tr>
+          <tr><td><span class="dish-name">Combo Special (5 Person)</span></td><td class="price">Rs 7057</td><td class="rating">★★★★★</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>
 
-<div class="menu-section" data-veg="nonveg">
-<h2>?? GRILL FISH &amp; SEAFOOD</h2>
-<table>
-<tr><th>Dish</th><th>Price</th><th>Rating</th></tr>
-<tr><td>Grill Salmon</td><td class="price">$21.99</td><td class="rating">?????</td></tr>
-<tr><td>Tandoori Salmon</td><td class="price">$16.99</td><td class="rating">?????</td></tr>
-<tr><td>Grill Jumbo Shrimp (6 pcs)</td><td class="price">$14.99</td><td class="rating">?????</td></tr>
-<tr><td>Grill Fish Fillet</td><td class="price">$13.99</td><td class="rating">????</td></tr>
-<tr><td>Whole Branzino Fish</td><td class="price">$26.99</td><td class="rating">?????</td></tr>
-</table>
-</div>
-<div class="menu-section" data-veg="veg">
-<h2>?? BEVERAGE MENU</h2>
-<h3>?? REFRESHER SERIES � Large</h3>
-<table>
-<tr><th>Drink</th><th>Price</th><th>Rating</th></tr>
-<tr><td>Strawberry Four Seasons</td><td class="price">$6.99</td><td class="rating">????</td></tr>
-<tr><td>Passionfruit Jasmine</td><td class="price">$6.99</td><td class="rating">????</td></tr>
-<tr><td>Mango Jasmine</td><td class="price">$6.99</td><td class="rating">????</td></tr>
-<tr><td>Tropical Hawaiian</td><td class="price">$6.99</td><td class="rating">????</td></tr>
-<tr><td>Lemonade</td><td class="price">$5.99</td><td class="rating">????</td></tr>
-<tr><td>Ocean Blue Lemonade</td><td class="price">$5.99</td><td class="rating">????</td></tr>
-<tr><td>Peachy Paradise</td><td class="price">$5.99</td><td class="rating">????</td></tr>
-<tr><td>Tropical Punch</td><td class="price">$5.99</td><td class="rating">????</td></tr>
-<tr><td>Iced Tea</td><td class="price">$5.99</td><td class="rating">???</td></tr>
-</table>
-<h3>?? PROTEIN SHAKE � Large</h3>
-<table>
-<tr><th>Flavor</th><th>Price</th><th>Rating</th></tr>
-<tr><td>French Vanilla</td><td class="price">$7.99</td><td class="rating">????</td></tr>
-<tr><td>Peach</td><td class="price">$7.99</td><td class="rating">????</td></tr>
-<tr><td>Milk &amp; Yogurt</td><td class="price">$7.99</td><td class="rating">????</td></tr>
-<tr><td>Melon</td><td class="price">$7.99</td><td class="rating">????</td></tr>
-</table>
-<h3> Mango SLUSH / SMOOTHIE SERIES � Large</h3>
-<table>
-<tr><th>Drink</th><th>Price</th><th>Rating</th></tr>
-<tr><td>Mango Pomelo</td><td class="price">$7.99</td><td class="rating">?????</td></tr>
-<tr><td>Peachy Slush</td><td class="price">$7.99</td><td class="rating">?????</td></tr>
-<tr><td>Mango / Strawberry Slush</td><td class="price">$7.99</td><td class="rating">?????</td></tr>
-<tr><td>Passionfruit Slush</td><td class="price">$7.99</td><td class="rating">?????</td></tr>
-<tr><td>Mango/Strawberry Slush</td><td class="price">$7.99</td><td class="rating">?????</td></tr>
-</table>
-<h3>?? MOJITO SERIES</h3>
-<table>
-<tr><th>Drink</th><th>Price</th><th>Rating</th></tr>
-<tr><td>Mango Mojito</td><td class="price">$6.99</td><td class="rating">?????</td></tr>
-</table>
-</div>
-<div class="divider"></div>
-<h2 style="text-align:center;color:#555;">?? Menu 2 � Wraps, Breakfast &amp; Snacks</h2>
-
-<div class="menu-section" data-veg="both">
-<h2>Folder WRAPS</h2>
-<table>
-<tr><th>Dish</th><th>Price</th><th>Rating</th></tr>
-<tr data-veg="veg"><td>Bombay Frankie (Veg Wrap)</td><td class="price">8,000</td><td class="rating">????</td></tr>
-<tr data-veg="veg"><td>Paneer Wrap Plate</td><td class="price">14,000</td><td class="rating">?????</td></tr>
-<tr data-veg="nonveg"><td>Chicken Wrap Plate</td><td class="price">12,000</td><td class="rating">?????</td></tr>
-</table>
+<div class="menu-section" data-veg="nonveg" style="--i:8">
+  <header class="section-header">
+    <h2 class="section-title"><span class="section-emoji">🥩</span> BEEF PLATTER <span class="section-count">3 items</span></h2>
+    <button class="section-toggle" aria-label="Toggle section" aria-expanded="true"><span>Collapse</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+  </header>
+  <div class="section-content">
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>Dish</th><th>Price</th><th>Rating</th></tr></thead>
+        <tbody>
+          <tr><td><span class="dish-name">Beef Kofta</span></td><td class="price">Rs 1161</td><td class="rating">★★★★★</td></tr>
+          <tr><td><span class="dish-name">Beef Chapli Kebab</span></td><td class="price">Rs 1659</td><td class="rating">★★★★★</td></tr>
+          <tr><td><span class="dish-name">Beef T-Bone Steak</span></td><td class="price">Rs 1991</td><td class="rating">★★★★★</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>
 
-<div class="menu-section" data-veg="both">
-<h2> fries FOOD SIGNATURE</h2>
-<table>
-<tr><th>Dish</th><th>Price</th><th>Rating</th></tr>
-<tr data-veg="nonveg"><td>Kebab Loaded Fries (Beef / Chicken)</td><td class="price">18,000</td><td class="rating">?????</td></tr>
-<tr data-veg="veg"><td>Paneer Loaded Fries</td><td class="price">20,000</td><td class="rating">????</td></tr>
-</table>
+<div class="menu-section" data-veg="nonveg" style="--i:9">
+  <header class="section-header">
+    <h2 class="section-title"><span class="section-emoji">🐑</span> LAMB PLATTER <span class="section-count">5 items</span></h2>
+    <button class="section-toggle" aria-label="Toggle section" aria-expanded="true"><span>Collapse</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+  </header>
+  <div class="section-content">
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>Dish</th><th>Price</th><th>Rating</th></tr></thead>
+        <tbody>
+          <tr><td><span class="dish-name">Baby Lamb Chop (3 pcs)</span></td><td class="price">Rs 2074</td><td class="rating">★★★★★</td></tr>
+          <tr><td><span class="dish-name">Lamb Kebab</span></td><td class="price">Rs 1327</td><td class="rating">★★★★★</td></tr>
+          <tr><td><span class="dish-name">Lamb Shawarma Platter</span></td><td class="price">Rs 1038</td><td class="rating">★★★★</td></tr>
+          <tr><td><span class="dish-name">Lamb + Chicken Mix Platter</span></td><td class="price">Rs 1038</td><td class="rating">★★★★</td></tr>
+          <tr><td><span class="dish-name">Mix Kebab Platter</span></td><td class="price">Rs 1161</td><td class="rating">★★★★★</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>
 
-<div class="menu-section" data-veg="both">
-<h2>?? BREAKFAST</h2>
-<table>
-<tr><th>Dish</th><th>Price</th><th>Rating</th></tr>
-<tr data-veg="nonveg"><td>Full English</td><td class="price">14,500</td><td class="rating">?????</td></tr>
-<tr data-veg="nonveg"><td>B&amp;B Egg Wrap</td><td class="price">9,000</td><td class="rating">????</td></tr>
-<tr data-veg="nonveg"><td>Spanish Omelette</td><td class="price">8,500</td><td class="rating">????</td></tr>
-<tr data-veg="nonveg"><td>Omelette</td><td class="price">7,000</td><td class="rating">???</td></tr>
-<tr data-veg="veg"><td>French Toast</td><td class="price">11,000</td><td class="rating">?????</td></tr>
-<tr data-veg="veg"><td>Classic Pancakes</td><td class="price">12,000</td><td class="rating">?????</td></tr>
-<tr data-veg="veg"><td>Mocha Pancakes</td><td class="price">14,000</td><td class="rating">?????</td></tr>
-<tr data-veg="veg"><td>Mini Pancakes</td><td class="price">11,000</td><td class="rating">????</td></tr>
-<tr data-veg="veg"><td>Nutella Pancakes</td><td class="price">12,000</td><td class="rating">?????</td></tr>
-</table>
-<h3>ADD ON � 2,000 each</h3>
-<table>
-<tr><th>Item</th><th>Price</th><th>Rating</th></tr>
-<tr data-veg="nonveg"><td>Sausage (2 pcs)</td><td class="price">2,000</td><td class="rating">???</td></tr>
-<tr data-veg="veg"><td>Toast (2 pcs)</td><td class="price">2,000</td><td class="rating">???</td></tr>
-<tr data-veg="nonveg"><td>Egg</td><td class="price">2,000</td><td class="rating">???</td></tr>
-<tr data-veg="veg"><td>Maple Syrup</td><td class="price">2,000</td><td class="rating">????</td></tr>
-<tr data-veg="veg"><td>Nutella</td><td class="price">2,000</td><td class="rating">?????</td></tr>
-<tr data-veg="veg"><td>Honey</td><td class="price">2,000</td><td class="rating">????</td></tr>
-<tr data-veg="veg"><td>Chapati</td><td class="price">2,000</td><td class="rating">???</td></tr>
-<tr data-veg="veg"><td>Baked Beans</td><td class="price">2,000</td><td class="rating">???</td></tr>
-<tr data-veg="veg"><td>Avocado</td><td class="price">2,000</td><td class="rating">????</td></tr>
-</table>
-</div>
-<div class="menu-section" data-veg="nonveg">
-<h2>?? NON-VEG</h2>
-<table>
-<tr><th>Dish</th><th>Price</th><th>Rating</th></tr>
-<tr><td>Beef Kebabs</td><td class="price">8,000</td><td class="rating">?????</td></tr>
-<tr><td>Mutton Kebabs</td><td class="price">8,000</td><td class="rating">?????</td></tr>
-<tr><td>Chicken Kebabs</td><td class="price">8,000</td><td class="rating">?????</td></tr>
-<tr><td>Shaami Kebabs</td><td class="price">8,000</td><td class="rating">?????</td></tr>
-<tr><td>Beef Samosas</td><td class="price">8,000</td><td class="rating">????</td></tr>
-<tr><td>Mutton Samosas</td><td class="price">8,000</td><td class="rating">????</td></tr>
-<tr><td>Chicken Samosas</td><td class="price">9,000</td><td class="rating">?????</td></tr>
-<tr><td>Chicken Wrap</td><td class="price">8,000</td><td class="rating">?????</td></tr>
-</table>
+<div class="menu-section" data-veg="nonveg" style="--i:10">
+  <header class="section-header">
+    <h2 class="section-title"><span class="section-emoji">🍗</span> CHICKEN PLATTER <span class="section-count">8 items</span></h2>
+    <button class="section-toggle" aria-label="Toggle section" aria-expanded="true"><span>Collapse</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+  </header>
+  <div class="section-content">
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>Dish</th><th>Price</th><th>Rating</th></tr></thead>
+        <tbody>
+          <tr><td><span class="dish-name">Chicken Tikka Kebab</span></td><td class="price">Rs 1078</td><td class="rating">★★★★★</td></tr>
+          <tr><td><span class="dish-name">Chicken Behari Kebab</span></td><td class="price">Rs 1161</td><td class="rating">★★★★★</td></tr>
+          <tr><td><span class="dish-name">Peri Peri Chicken</span></td><td class="price">Rs 1327</td><td class="rating">★★★★★</td></tr>
+          <tr><td><span class="dish-name">Chicken Kofta Kebab</span></td><td class="price">Rs 1078</td><td class="rating">★★★★★</td></tr>
+          <tr><td><span class="dish-name">Grill Chicken</span></td><td class="price">Rs 1244</td><td class="rating">★★★★★</td></tr>
+          <tr><td><span class="dish-name">Chicken Shawarma</span></td><td class="price">Rs 1078</td><td class="rating">★★★★★</td></tr>
+          <tr><td><span class="dish-name">Chicken Wings (B.B.Q)</span></td><td class="price">Rs 1161</td><td class="rating">★★★★★</td></tr>
+          <tr><td><span class="dish-name">Falafel Platter</span></td><td class="price">Rs 1078</td><td class="rating">★★★★</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>
 
-<div class="menu-section" data-veg="veg">
-<h2>?? VEG</h2>
-<table>
-<tr><th>Dish</th><th>Price</th><th>Rating</th></tr>
-<tr><td>Samosas</td><td class="price">8,000</td><td class="rating">????</td></tr>
-<tr><td>B&amp;B Fries</td><td class="price">7,000</td><td class="rating">????</td></tr>
-<tr><td>Maru Bhajia</td><td class="price">6,000</td><td class="rating">???</td></tr>
-<tr><td>Dal Bhajia</td><td class="price">6,000</td><td class="rating">???</td></tr>
-<tr><td>Spring Potato</td><td class="price">6,000</td><td class="rating">???</td></tr>
-<tr><td>Dal Kachori</td><td class="price">8,000</td><td class="rating">????</td></tr>
-<tr><td>Spring Roll</td><td class="price">8,000</td><td class="rating">???</td></tr>
-<tr><td>Plain Fries</td><td class="price">4,000</td><td class="rating">???</td></tr>
-</table>
+<div class="menu-section" data-veg="nonveg" style="--i:11">
+  <header class="section-header">
+    <h2 class="section-title"><span class="section-emoji">🐟</span> GRILL FISH & SEAFOOD <span class="section-count">5 items</span></h2>
+    <button class="section-toggle" aria-label="Toggle section" aria-expanded="true"><span>Collapse</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+  </header>
+  <div class="section-content">
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>Dish</th><th>Price</th><th>Rating</th></tr></thead>
+        <tbody>
+          <tr><td><span class="dish-name">Grill Salmon</span></td><td class="price">Rs 1825</td><td class="rating">★★★★★</td></tr>
+          <tr><td><span class="dish-name">Tandoori Salmon</span></td><td class="price">Rs 1410</td><td class="rating">★★★★★</td></tr>
+          <tr><td><span class="dish-name">Grill Jumbo Shrimp (6 pcs)</span></td><td class="price">Rs 1244</td><td class="rating">★★★★★</td></tr>
+          <tr><td><span class="dish-name">Grill Fish Fillet</span></td><td class="price">Rs 1161</td><td class="rating">★★★★</td></tr>
+          <tr><td><span class="dish-name">Whole Branzino Fish</span></td><td class="price">Rs 2240</td><td class="rating">★★★★★</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>
 
-<p class="footer-note">Ratings are illustrative. Prices as shown on the menu.</p>
+<!-- Sign In / Sign Up Section -->
+<section id="signin" class="menu-section" style="--i:12">
+  <header class="section-header">
+    <h2 class="section-title"><span class="section-emoji">&#128100;</span> SIGN IN / SIGN UP</h2>
+  </header>
+  <div class="section-content">
+    <div class="signin-wrapper">
+      <div class="signin-card">
+        <h3>Welcome Back</h3>
+        <p class="signin-subtitle">Sign in to order, save favorites, and track your orders</p>
+        <form class="signin-form" onsubmit="return false;">
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" placeholder="Enter your email" required>
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="Enter your password" required>
+          </div>
+          <button type="submit" class="signin-submit-btn">Sign In</button>
+        </form>
+        <div class="signin-divider"><span>or</span></div>
+        <button class="signup-btn" type="button">Create New Account</button>
+        <p class="signin-footer">New here? <a href="#" class="signup-link">Sign Up</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Reviews Section -->
+<section id="reviews" class="menu-section" style="--i:13">
+  <header class="section-header">
+    <h2 class="section-title"><span class="section-emoji">&#127968;</span> REVIEWS & FEEDBACK</h2>
+    <span class="section-count">Customer Reviews</span>
+  </header>
+  <div class="section-content">
+    <div class="reviews-summary">
+      <div class="reviews-overall">
+        <div class="reviews-big-rating">4.8</div>
+        <div class="reviews-stars">★★★★★</div>
+        <div class="reviews-count">Based on 2,451 reviews</div>
+      </div>
+      <div class="reviews-bars">
+        <div class="reviews-bar"><span>5</span><div class="reviews-bar-track"><div class="reviews-bar-fill" style="width:78%"></div></div><span>78%</span></div>
+        <div class="reviews-bar"><span>4</span><div class="reviews-bar-track"><div class="reviews-bar-fill" style="width:15%"></div></div><span>15%</span></div>
+        <div class="reviews-bar"><span>3</span><div class="reviews-bar-track"><div class="reviews-bar-fill" style="width:5%"></div></div><span>5%</span></div>
+        <div class="reviews-bar"><span>2</span><div class="reviews-bar-track"><div class="reviews-bar-fill" style="width:1.5%"></div></div><span>1.5%</span></div>
+        <div class="reviews-bar"><span>1</span><div class="reviews-bar-track"><div class="reviews-bar-fill" style="width:0.5%"></div></div><span>0.5%</span></div>
+      </div>
+    </div>
+    <div class="reviews-list">
+      <div class="review-card">
+        <div class="review-header">
+          <div class="review-avatar">A</div>
+          <div>
+            <div class="review-name">Aarav Sharma</div>
+            <div class="review-stars">★★★★★</div>
+          </div>
+        </div>
+        <p class="review-text">Amazing food quality and quick delivery. The Chicken Tikka Kebab was outstanding!</p>
+        <div class="review-date">2 days ago</div>
+      </div>
+      <div class="review-card">
+        <div class="review-header">
+          <div class="review-avatar">P</div>
+          <div>
+            <div class="review-name">Priya Patel</div>
+            <div class="review-stars">★★★★★</div>
+          </div>
+        </div>
+        <p class="review-text">Best grilled fish in town. The Whole Branzino was cooked to perfection. Highly recommended!</p>
+        <div class="review-date">1 week ago</div>
+      </div>
+      <div class="review-card">
+        <div class="review-header">
+          <div class="review-avatar">R</div>
+          <div>
+            <div class="review-name">Rahul Verma</div>
+            <div class="review-stars">★★★★</div>
+          </div>
+        </div>
+        <p class="review-text">Great ambiance and menu variety. The Beef T-Bone Steak was good but slightly overpriced.</p>
+        <div class="review-date">2 weeks ago</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <p>&copy; 2026 Restaurant. All rights reserved.</p>
+  <div class="footer-links">
+    <a href="#">Privacy Policy</a>
+    <a href="#">Terms of Service</a>
+    <a href="#">Contact Us</a>
+  </div>
+</footer>
+
+</div>
 
 <script>
-(function(){
-  var buttons = document.querySelectorAll('.filter-btn');
-  var label = document.getElementById('countLabel');
-  function applyFilter(filter){
-    var visible = 0;
-    document.querySelectorAll('.menu-section').forEach(function(sec){
-      var secVeg = sec.getAttribute('data-veg');
-      var show = false;
-      if(filter === 'all'){ show = true; }
-      else if(filter === 'veg'){ show = (secVeg === 'veg' || secVeg === 'both'); }
-      else if(filter === 'nonveg'){ show = (secVeg === 'nonveg' || secVeg === 'both'); }
-      sec.classList.toggle('hidden', !show);
-      if(show){
-        sec.querySelectorAll('tr').forEach(function(row){
-          if(row.hasAttribute('data-veg')){
-            var rv = row.getAttribute('data-veg');
-            var rowShow = (filter === 'all') || (rv === filter) || (rv === 'both');
-            row.classList.toggle('hidden', !rowShow);
-            if(rowShow) visible++;
-          }
-        });
-      }
+(function() {
+  var toggle = document.getElementById('themeToggle');
+  var html = document.documentElement;
+  if (toggle) {
+    toggle.addEventListener('click', function() {
+      var current = html.getAttribute('data-theme');
+      html.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
     });
-    var map = {all:'all dishes', veg:'veg dishes', nonveg:'non-veg dishes'};
-    label.textContent = 'Showing ' + visible + ' ' + map[filter];
-    buttons.forEach(function(b){ b.classList.toggle('active', b.getAttribute('data-filter') === filter); });
   }
-  buttons.forEach(function(b){
-    b.addEventListener('click', function(){ applyFilter(b.getAttribute('data-filter')); });
+
+  var sections = document.querySelectorAll('.menu-section');
+  sections.forEach(function(section) {
+    var toggleBtn = section.querySelector('.section-toggle');
+    var content = section.querySelector('.section-content');
+    if (toggleBtn && content) {
+      toggleBtn.addEventListener('click', function() {
+        var collapsed = content.style.display === 'none';
+        content.style.display = collapsed ? 'block' : 'none';
+        toggleBtn.setAttribute('aria-expanded', String(!collapsed));
+        toggleBtn.classList.toggle('collapsed', !collapsed);
+        var label = toggleBtn.querySelector('span');
+        if (label) label.textContent = collapsed ? 'Collapse' : 'Expand';
+      });
+    }
   });
-  applyFilter('all');
+
+  var counter = document.getElementById('visibleCount');
+  var filterBtns = document.querySelectorAll('.filter-btn');
+  var allItems = document.querySelectorAll('.menu-section');
+  if (counter) {
+    var updateCount = function() {
+      var visible = 0;
+      allItems.forEach(function(section) {
+        var rows = section.querySelectorAll('tbody tr');
+        rows.forEach(function(row) {
+          var v = row.getAttribute('data-veg');
+          var active = document.querySelector('.filter-btn.active');
+          var filter = active ? active.getAttribute('data-filter') : 'all';
+          if (filter === 'all' || v === filter || v === 'both') visible++;
+        });
+      });
+      counter.textContent = visible;
+    };
+    updateCount();
+    filterBtns.forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        filterBtns.forEach(function(b) { b.classList.remove('active'); b.setAttribute('aria-selected', 'false'); });
+        btn.classList.add('active');
+        btn.setAttribute('aria-selected', 'true');
+        var filter = btn.getAttribute('data-filter');
+        allItems.forEach(function(section) {
+          var v = section.getAttribute('data-veg');
+          section.style.display = (filter === 'all' || v === filter || v === 'both') ? '' : 'none';
+        });
+        updateCount();
+      });
+    });
+  }
 })();
 </script>
+
 </body>
 </html>
