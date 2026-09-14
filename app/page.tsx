@@ -9,23 +9,22 @@ import CartDrawer from '@/components/CartDrawer'
 import CheckoutModal from '@/components/CheckoutModal'
 import BookingModal from '@/components/BookingModal'
 import DiningAssistantModal from '@/components/DiningAssistantModal'
+import FoodCard from '@/components/FoodCard'
+import OfferCard from '@/components/OfferCard'
+import ReviewCard from '@/components/ReviewCard'
+import FoodGallery from '@/components/FoodGallery'
+import LocationSection from '@/components/LocationSection'
+import LiveOrderToast from '@/components/LiveOrderToast'
 import {
   ArrowRight,
   Award,
   Bot,
   Calendar,
-  Clock,
   Compass,
-  Gift,
+  Flame,
   Heart,
-  MapPin,
-  Phone,
-  Plus,
   ShieldCheck,
-  ShoppingBag,
   Sparkles,
-  Star,
-  Users,
   Utensils,
 } from 'lucide-react'
 
@@ -63,6 +62,7 @@ export default function Home() {
 
   return (
     <div className="main-wrapper">
+      {/* Task L-01: Header */}
       <Navbar
         cartCount={cartCount}
         onOpenCart={() => setIsCartOpen(true)}
@@ -74,7 +74,9 @@ export default function Home() {
         <div className="hero-bg-overlay" />
         <div className="hero-grid">
           <div className="hero-content">
-            <span className="gold-eyebrow">A CULINARY HAVEN ON SH 19 · SAUSAR</span>
+            <span className="gold-eyebrow">
+              <Flame size={12} className="gold-icon inline mr-1 animate-bounce" /> A CULINARY HAVEN ON SH 19 · SAUSAR
+            </span>
             <h1>
               Good Food.<br />
               <i>Good Mood.</i><br />
@@ -124,7 +126,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* BRAND PHILOSOPHY / STORY TEASER */}
+      {/* BRAND PHILOSOPHY */}
       <section className="luxury-section">
         <div className="section-head">
           <span className="gold-eyebrow">OUR CULINARY PHILOSOPHY</span>
@@ -167,7 +169,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* CHEF'S SIGNATURE SHOWCASE */}
+      {/* Task L-03: CHEF'S SIGNATURE SHOWCASE (REUSABLE FOODCARDS) */}
       <section className="luxury-section" style={{ background: 'var(--bg-card)', borderRadius: '32px' }}>
         <div className="section-head">
           <span className="gold-eyebrow">CHEF&apos;S MASTERPIECES</span>
@@ -177,31 +179,11 @@ export default function Home() {
 
         <div className="food-card-grid">
           {signatureDishes.map((item) => (
-            <div key={item.id} className="luxury-food-card">
-              <div className="food-card-img-wrap">
-                <img src={item.image} alt={item.name} />
-                {item.badge && <span className="item-badge-pill">{item.badge}</span>}
-                <div className={`veg-indicator-dot ${item.veg ? 'veg' : 'non-veg'}`} title={item.veg ? 'Pure Veg' : 'Non-Veg'} />
-              </div>
-              <div className="food-card-body">
-                <span className="food-card-category">{item.category}</span>
-                <h3 className="food-card-title">{item.name}</h3>
-                <p className="food-card-desc">{item.description}</p>
-                <div className="food-card-meta-row">
-                  <span className="rating-stars"><Star size={14} fill="currentColor" /> {item.rating}</span>
-                  <span>({item.reviews} reviews)</span>
-                </div>
-                <div className="food-card-footer">
-                  <div className="food-card-price-block">
-                    <span className="price-main">₹{item.price}</span>
-                    <span className="price-original">{item.priceLabel}</span>
-                  </div>
-                  <button onClick={() => addToCart(item)} className="add-to-cart-btn">
-                    <Plus size={15} /> Add to Order
-                  </button>
-                </div>
-              </div>
-            </div>
+            <FoodCard
+              key={item.id}
+              item={item}
+              onAddToCart={addToCart}
+            />
           ))}
         </div>
 
@@ -212,65 +194,48 @@ export default function Home() {
         </div>
       </section>
 
-      {/* SPECIAL OFFERS BANNER */}
+      {/* Task L-04: OFFERS SECTION (REUSABLE OFFERCARDS) */}
       <section className="luxury-section">
-        <div
-          style={{
-            background: 'linear-gradient(135deg, #1b2333 0%, #0d121c 100%)',
-            border: '1px solid var(--border-gold)',
-            borderRadius: '24px',
-            padding: '48px',
-            display: 'grid',
-            gridTemplateColumns: '1fr 1fr',
-            gap: '40px',
-            alignItems: 'center',
-          }}
-        >
-          <div>
-            <span className="gold-eyebrow">MIDWEEK LUXURY OFFER</span>
-            <h2 style={{ fontSize: '38px', color: '#fff', marginBottom: '16px' }}>
-              Enjoy 20% Off Your Dine-In Bill
-            </h2>
-            <p style={{ color: 'var(--text-muted)', fontSize: '15px', lineHeight: '1.6', marginBottom: '24px' }}>
-              Travelers and families dining Monday to Thursday receive an instant 20% savings on all platters and beverages.
-            </p>
-            <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-              <span
-                style={{
-                  background: 'rgba(212, 175, 55, 0.15)',
-                  border: '1px border-gold',
-                  color: 'var(--gold-light)',
-                  padding: '8px 16px',
-                  borderRadius: '8px',
-                  fontFamily: 'monospace',
-                  fontWeight: 700,
-                }}
-              >
-                PROMO CODE: MIDWEEK20
-              </span>
-              <button
-                onClick={() => {
-                  navigator.clipboard?.writeText('MIDWEEK20')
-                  alert('Coupon code MIDWEEK20 copied to clipboard!')
-                }}
-                className="btn-luxury-gold"
-              >
-                Copy Code
-              </button>
-            </div>
-          </div>
+        <div className="section-head">
+          <span className="gold-eyebrow">EXCLUSIVE PRIVILEGES</span>
+          <h2>Good Things Come In Offers</h2>
+          <p>Claim digital discount passes for your dine-in and delivery orders</p>
+        </div>
 
-          <div style={{ textAlign: 'center' }}>
-            <img
-              src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=800&q=80"
-              alt="Special Meal Feast"
-              style={{ width: '100%', maxHeight: '300px', objectFit: 'cover', borderRadius: '16px' }}
-            />
-          </div>
+        <div className="food-card-grid">
+          <OfferCard
+            kicker="WEEKDAY SPECIAL"
+            title="20% Off Dine-In Bill"
+            description="Enjoy 20% off your total bill when you dine in Monday to Thursday with family or friends."
+            code="MIDWEEK20"
+            icon="percent"
+          />
+
+          <OfferCard
+            kicker="ONLINE ORDER BONUS"
+            title="₹150 Off First Order"
+            description="Get ₹150 off your first online order above ₹699. Instant express delivery or pickup."
+            code="FIRSTBITE"
+            icon="gift"
+            bgGradient="linear-gradient(135deg, #241d18 0%, #15100c 100%)"
+          />
+
+          <OfferCard
+            kicker="ROYAL GROUP PASS"
+            title="Complimentary Dessert"
+            description="Complimentary signature chef dessert for dining groups of 6 or more."
+            code="GROUPDESSERT"
+            icon="sparkles"
+            bgGradient="linear-gradient(135deg, #19251c 0%, #0e1710 100%)"
+            onClaim={() => setIsBookingOpen(true)}
+          />
         </div>
       </section>
 
-      {/* TESTIMONIALS */}
+      {/* Task L-06: FOOD GALLERY SECTION */}
+      <FoodGallery />
+
+      {/* Task L-05: REVIEWS SECTION (REUSABLE REVIEWCARDS) */}
       <section className="luxury-section">
         <div className="section-head">
           <span className="gold-eyebrow">VOICES OF OUR GUESTS</span>
@@ -279,34 +244,31 @@ export default function Home() {
         </div>
 
         <div className="food-card-grid">
-          <div className="luxury-food-card" style={{ padding: '28px' }}>
-            <div className="rating-stars mb-3"><Star size={16} fill="currentColor" /><Star size={16} fill="currentColor" /><Star size={16} fill="currentColor" /><Star size={16} fill="currentColor" /><Star size={16} fill="currentColor" /></div>
-            <p style={{ color: '#e0e0e0', fontStyle: 'italic', fontSize: '15px', lineHeight: '1.6', marginBottom: '20px' }}>
-              “We stopped here on our drive from Nagpur and were completely blown away. The Kabuli Pulao and Mango Pomelo smoothie were divine. Truly world-class hospitality on SH 19.”
-            </p>
-            <strong style={{ color: 'var(--gold-light)', display: 'block', fontSize: '14px' }}>— Major Rajesh Sharma</strong>
-            <small style={{ color: 'var(--text-muted)' }}>Google Verified Review</small>
-          </div>
+          <ReviewCard
+            rating={5}
+            customerName="Major Rajesh Sharma"
+            date="September 2026"
+            review="We stopped here on our drive from Nagpur and were completely blown away. The Kabuli Pulao and Mango Pomelo smoothie were divine. Truly world-class hospitality on SH 19."
+          />
 
-          <div className="luxury-food-card" style={{ padding: '28px' }}>
-            <div className="rating-stars mb-3"><Star size={16} fill="currentColor" /><Star size={16} fill="currentColor" /><Star size={16} fill="currentColor" /><Star size={16} fill="currentColor" /><Star size={16} fill="currentColor" /></div>
-            <p style={{ color: '#e0e0e0', fontStyle: 'italic', fontSize: '15px', lineHeight: '1.6', marginBottom: '20px' }}>
-              “The Baby Lamb Chops and Paneer Loaded Fries are incredible. 100% unique dish presentation and ultra clean atmosphere. Highly recommended for families!”
-            </p>
-            <strong style={{ color: 'var(--gold-light)', display: 'block', fontSize: '14px' }}>— Dr. Ananya Deshmukh</strong>
-            <small style={{ color: 'var(--text-muted)' }}>Food Critic & Traveler</small>
-          </div>
+          <ReviewCard
+            rating={5}
+            customerName="Dr. Ananya Deshmukh"
+            date="August 2026"
+            review="The Baby Lamb Chops and Paneer Loaded Fries are incredible. 100% unique dish presentation and ultra clean atmosphere. Highly recommended for families!"
+          />
 
-          <div className="luxury-food-card" style={{ padding: '28px' }}>
-            <div className="rating-stars mb-3"><Star size={16} fill="currentColor" /><Star size={16} fill="currentColor" /><Star size={16} fill="currentColor" /><Star size={16} fill="currentColor" /><Star size={16} fill="currentColor" /></div>
-            <p style={{ color: '#e0e0e0', fontStyle: 'italic', fontSize: '15px', lineHeight: '1.6', marginBottom: '20px' }}>
-              “Cleanest restaurant on the highway with authentic Mediterranean kebabs! Quick order placement and friendly staff. Will always stop here.”
-            </p>
-            <strong style={{ color: 'var(--gold-light)', display: 'block', fontSize: '14px' }}>— Vikramaditya Singh</strong>
-            <small style={{ color: 'var(--text-muted)' }}>Frequent Highway Traveler</small>
-          </div>
+          <ReviewCard
+            rating={5}
+            customerName="Vikramaditya Singh"
+            date="July 2026"
+            review="Cleanest restaurant on the highway with authentic Mediterranean kebabs! Quick order placement and friendly staff. Will always stop here."
+          />
         </div>
       </section>
+
+      {/* Task L-07: LOCATION SECTION */}
+      <LocationSection onOpenBooking={() => setIsBookingOpen(true)} />
 
       {/* FLOATING AI ASSISTANT TRIGGER */}
       <button
@@ -318,7 +280,10 @@ export default function Home() {
         <span>Ask Aaditya&apos;s Assistant</span>
       </button>
 
-      {/* FOOTER */}
+      {/* Mouth-Watering Live Order Toast */}
+      <LiveOrderToast />
+
+      {/* Task L-02: Footer */}
       <Footer />
 
       {/* MODALS */}

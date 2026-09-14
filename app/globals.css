@@ -111,6 +111,13 @@ h1, h2, h3, h4, .serif-font {
   background-color: #40c057;
   border-radius: 50%;
   box-shadow: 0 0 8px #40c057;
+  animation: pulseGreen 2s infinite;
+}
+
+@keyframes pulseGreen {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(64, 192, 87, 0.7); }
+  70% { transform: scale(1.1); box-shadow: 0 0 0 8px rgba(64, 192, 87, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(64, 192, 87, 0); }
 }
 
 .announcement-tag {
@@ -263,6 +270,13 @@ h1, h2, h3, h4, .serif-font {
   display: grid;
   place-items: center;
   box-shadow: 0 2px 8px rgba(201, 85, 62, 0.5);
+  animation: badgePop 0.3s ease;
+}
+
+@keyframes badgePop {
+  0% { transform: scale(0.6); }
+  50% { transform: scale(1.25); }
+  100% { transform: scale(1); }
 }
 
 .btn-luxury-gold {
@@ -410,6 +424,12 @@ h1, h2, h3, h4, .serif-font {
   padding: 12px;
   background: linear-gradient(135deg, rgba(212, 175, 55, 0.3) 0%, rgba(255, 255, 255, 0.05) 100%);
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+  animation: heroFloat 6s ease-in-out infinite;
+}
+
+@keyframes heroFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
 }
 
 .hero-visual-img {
@@ -432,11 +452,18 @@ h1, h2, h3, h4, .serif-font {
   align-items: center;
   gap: 14px;
   box-shadow: 0 12px 30px rgba(0,0,0,0.5);
+  backdrop-filter: blur(8px);
 }
 
 .badge-icon-star {
   font-size: 28px;
   color: var(--gold-primary);
+  animation: spinSlow 12s linear infinite;
+}
+
+@keyframes spinSlow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 .badge-text strong {
@@ -481,7 +508,7 @@ h1, h2, h3, h4, .serif-font {
   line-height: 1.6;
 }
 
-/* Card Styling */
+/* Motion & Appetite Card Styling */
 .food-card-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
@@ -493,15 +520,15 @@ h1, h2, h3, h4, .serif-font {
   border: 1px solid var(--border-subtle);
   border-radius: 20px;
   overflow: hidden;
-  transition: all 0.35s ease;
+  transition: all 0.35s cubic-bezier(0.165, 0.84, 0.44, 1);
   display: flex;
   flex-direction: column;
 }
 
-.luxury-food-card:hover {
-  transform: translateY(-6px);
+.luxury-food-card.motion-card:hover {
+  transform: translateY(-8px) scale(1.015);
   border-color: var(--border-gold);
-  box-shadow: 0 16px 40px rgba(212, 175, 55, 0.12);
+  box-shadow: 0 20px 45px rgba(212, 175, 55, 0.18);
   background: var(--bg-card-hover);
 }
 
@@ -512,15 +539,22 @@ h1, h2, h3, h4, .serif-font {
   overflow: hidden;
 }
 
-.food-card-img-wrap img {
+.food-img-zoom {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.6s ease;
+  transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
-.luxury-food-card:hover .food-card-img-wrap img {
-  transform: scale(1.08);
+.luxury-food-card:hover .food-img-zoom {
+  transform: scale(1.12);
+}
+
+.steam-overlay-effect {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 60%, rgba(11, 14, 20, 0.9) 100%);
+  pointer-events: none;
 }
 
 .item-badge-pill {
@@ -536,6 +570,30 @@ h1, h2, h3, h4, .serif-font {
   padding: 5px 12px;
   border-radius: 20px;
   backdrop-filter: blur(8px);
+}
+
+.item-badge-pill.motion-badge {
+  animation: pulseGold 2.5s infinite;
+}
+
+@keyframes pulseGold {
+  0%, 100% { border-color: var(--border-gold); }
+  50% { border-color: var(--gold-light); box-shadow: 0 0 12px var(--gold-glow); }
+}
+
+.spicy-tag-pulse {
+  color: #ff6b6b;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-left: auto;
+  font-weight: 600;
+  animation: flamePulse 1.5s infinite;
+}
+
+@keyframes flamePulse {
+  0%, 100% { opacity: 0.8; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.08); }
 }
 
 .veg-indicator-dot {
@@ -786,6 +844,241 @@ h1, h2, h3, h4, .serif-font {
 .order-bar-info small {
   font-size: 11px;
   color: var(--text-muted);
+}
+
+/* Gallery & Offer Card Enhancements */
+.gallery-grid-animated {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 24px;
+}
+
+.gallery-item-card {
+  position: relative;
+  height: 280px;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid var(--border-subtle);
+}
+
+.gallery-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.gallery-item-card:hover .gallery-img {
+  transform: scale(1.12);
+}
+
+.gallery-card-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 40%, rgba(11, 14, 20, 0.92) 100%);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.gallery-tag-pill {
+  align-self: flex-start;
+  background: rgba(11, 14, 20, 0.85);
+  border: 1px solid var(--border-gold);
+  color: var(--gold-light);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 20px;
+  backdrop-filter: blur(8px);
+}
+
+.gallery-cat {
+  font-size: 11px;
+  color: var(--gold-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.gallery-title {
+  font-size: 18px;
+  font-family: Georgia, serif;
+  color: #ffffff;
+}
+
+.menu-insta-banner {
+  background: var(--bg-card);
+  border: 1px solid var(--border-gold);
+  border-radius: 20px;
+  padding: 24px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.banner-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.banner-left strong {
+  display: block;
+  font-size: 16px;
+  color: #fff;
+  font-family: Georgia, serif;
+}
+
+.banner-left p {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.banner-right {
+  display: flex;
+  gap: 12px;
+}
+
+/* Map Embed Placeholder */
+.map-embed-placeholder {
+  position: relative;
+  height: 200px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #182030 0%, #0d121d 100%);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border: 1px solid var(--border-subtle);
+}
+
+.pulsing-map-pin {
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+
+.pin-pulse-wave {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(212, 175, 55, 0.4);
+  animation: pinPulse 2s infinite;
+}
+
+@keyframes pinPulse {
+  0% { transform: scale(0.5); opacity: 1; }
+  100% { transform: scale(2.2); opacity: 0; }
+}
+
+.map-badge-card {
+  position: absolute;
+  bottom: 14px;
+  left: 14px;
+  background: rgba(11, 14, 20, 0.9);
+  border: 1px solid var(--border-gold);
+  padding: 8px 14px;
+  border-radius: 10px;
+  backdrop-filter: blur(8px);
+}
+.map-badge-card strong {
+  display: block;
+  font-size: 13px;
+  color: #fff;
+}
+.map-badge-card small {
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+/* Live Order Toast Notification */
+.live-order-toast-container {
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  z-index: 38;
+}
+
+.live-toast-card {
+  background: rgba(20, 24, 34, 0.94);
+  border: 1px solid var(--border-gold);
+  border-radius: 16px;
+  padding: 12px 18px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(12px);
+  animation: toastSlideIn 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+@keyframes toastSlideIn {
+  from { transform: translateY(30px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.toast-icon {
+  font-size: 24px;
+}
+
+.toast-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.toast-headline {
+  font-size: 10px;
+  color: var(--gold-primary);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.toast-item-title {
+  font-size: 13px;
+  font-family: Georgia, serif;
+  color: #ffffff;
+}
+
+.toast-meta {
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+.toast-close {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  margin-left: 8px;
+}
+
+.code-pill-box {
+  background: rgba(212, 175, 55, 0.15);
+  border: 1px solid var(--border-gold);
+  color: var(--gold-light);
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-family: monospace;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.reviewer-avatar-circle {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: rgba(212, 175, 55, 0.18);
+  border: 1px solid var(--border-gold);
+  color: var(--gold-light);
+  font-family: Georgia, serif;
+  font-weight: 700;
+  display: grid;
+  place-items: center;
+  font-size: 14px;
 }
 
 /* Modals & Backdrop */
@@ -1186,7 +1479,6 @@ h1, h2, h3, h4, .serif-font {
   font-size: 9px;
   color: var(--gold-primary);
   font-weight: 700;
-
 }
 
 .rec-price {
@@ -1358,7 +1650,7 @@ h1, h2, h3, h4, .serif-font {
   display: inline-flex;
 }
 
-/* Responsiveness */
+/* Responsiveness (Task L-08) */
 @media (max-width: 900px) {
   .hero-grid {
     grid-template-columns: 1fr;
@@ -1374,6 +1666,14 @@ h1, h2, h3, h4, .serif-font {
   }
   .footer-grid {
     grid-template-columns: 1fr 1fr;
+  }
+  .live-order-toast-container {
+    bottom: 80px;
+    left: 16px;
+    right: 16px;
+  }
+  .live-toast-card {
+    width: 100%;
   }
   .mobile-nav-overlay {
     position: fixed;
@@ -1413,6 +1713,9 @@ h1, h2, h3, h4, .serif-font {
     gap: 16px;
   }
   .food-card-grid {
+    grid-template-columns: 1fr;
+  }
+  .gallery-grid-animated {
     grid-template-columns: 1fr;
   }
   .floating-ai-fab span {

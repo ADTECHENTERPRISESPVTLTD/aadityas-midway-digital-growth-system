@@ -8,6 +8,7 @@ import CartDrawer from '@/components/CartDrawer'
 import CheckoutModal from '@/components/CheckoutModal'
 import BookingModal from '@/components/BookingModal'
 import DiningAssistantModal from '@/components/DiningAssistantModal'
+import FoodCard from '@/components/FoodCard'
 import {
   ArrowRight,
   Bot,
@@ -156,42 +157,12 @@ export default function MenuPage() {
         ) : (
           <div className="food-card-grid">
             {filteredItems.map((item) => (
-              <div key={item.id} className="luxury-food-card">
-                <div
-                  className="food-card-img-wrap"
-                  onClick={() => setDetailItem(item)}
-                  style={{ cursor: 'pointer' }}
-                >
-                  <img src={item.image} alt={item.name} />
-                  {item.badge && <span className="item-badge-pill">{item.badge}</span>}
-                  <div className={`veg-indicator-dot ${item.veg ? 'veg' : 'non-veg'}`} title={item.veg ? 'Pure Veg' : 'Non-Veg'} />
-                </div>
-                <div className="food-card-body">
-                  <span className="food-card-category">{item.category}</span>
-                  <h3
-                    className="food-card-title"
-                    onClick={() => setDetailItem(item)}
-                    style={{ cursor: 'pointer' }}
-                  >
-                    {item.name}
-                  </h3>
-                  <p className="food-card-desc">{item.description}</p>
-                  <div className="food-card-meta-row">
-                    <span className="rating-stars"><Star size={14} fill="currentColor" /> {item.rating}</span>
-                    <span>({item.reviews} reviews)</span>
-                    {item.spicy && <span style={{ color: '#ff6b6b', display: 'flex', alignItems: 'center', gap: '2px', marginLeft: 'auto' }}><Flame size={12} /> Spicy</span>}
-                  </div>
-                  <div className="food-card-footer">
-                    <div className="food-card-price-block">
-                      <span className="price-main">₹{item.price}</span>
-                      <span className="price-original">{item.priceLabel}</span>
-                    </div>
-                    <button onClick={() => addToCart(item)} className="add-to-cart-btn">
-                      <Plus size={15} /> Add
-                    </button>
-                  </div>
-                </div>
-              </div>
+              <FoodCard
+                key={item.id}
+                item={item}
+                onAddToCart={addToCart}
+                onSelect={setDetailItem}
+              />
             ))}
           </div>
         )}

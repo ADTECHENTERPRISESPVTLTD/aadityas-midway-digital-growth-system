@@ -2,6 +2,8 @@ import Link from 'next/link'
 import { Camera, Clock, MapPin, Phone, ShieldCheck, Sparkles } from 'lucide-react'
 
 export default function Footer() {
+  const INSTAGRAM_URL = 'https://www.instagram.com/aadityasmidway?stkn=MWI0amd6ZzlsanEydg=='
+
   return (
     <footer className="luxury-footer">
       <div className="footer-top-gold-line" />
@@ -21,13 +23,13 @@ export default function Footer() {
             </p>
             <div className="social-links">
               <a
-                href="https://www.instagram.com/aadityasmidway"
+                href={INSTAGRAM_URL}
                 target="_blank"
                 rel="noreferrer"
                 className="social-btn"
-                aria-label="Instagram"
+                aria-label="Instagram Profile"
               >
-                <Camera size={18} />
+                <Camera size={18} /> @aadityasmidway
               </a>
             </div>
           </div>
@@ -56,12 +58,12 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Contact & Hours */}
+          {/* Contact & Hours (Task L-02 Requirements) */}
           <div className="footer-col contact-col">
             <h4 className="footer-title">Reach Our Haven</h4>
             <div className="contact-info-item">
               <MapPin size={18} className="gold-icon" />
-              <span>SH 19, Gokuldham, Sausar, Madhya Pradesh</span>
+              <span>Aaditya&apos;s Midway SH 19, Gokuldham, Sausar</span>
             </div>
             <div className="contact-info-item">
               <Clock size={18} className="gold-icon" />
@@ -81,9 +83,11 @@ export default function Footer() {
         <div className="footer-bottom">
           <p>© {new Date().getFullYear()} Aaditya&apos;s Midway. Designed with passion for culinary excellence.</p>
           <div className="bottom-meta">
-            <span>SH 19 Sausar</span>
+            <span>Aaditya&apos;s Midway SH 19, Gokuldham, Sausar</span>
             <span className="dot">•</span>
-            <span>Premium Dining & Drive-In</span>
+            <a href={INSTAGRAM_URL} target="_blank" rel="noreferrer" style={{ color: 'var(--gold-light)' }}>
+              Instagram Official
+            </a>
           </div>
         </div>
       </div>
