@@ -344,7 +344,7 @@ export const ALL_MENU_ITEMS: MenuItem[] = [
     priceLabel: '₹1031',
     currency: 'INR',
     description: 'Juicy spiced beef kofta skewer grilled over charcoal, wrapped with fresh herb salad, pickles, and sesame tahini.',
-    image: 'https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=900&q=85',
+    image: 'https://images.unsplash.com/photo-1771285119318-b342c3ecc51c?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
     rating: 4.9,
     reviews: 84,
     veg: false,
@@ -614,7 +614,7 @@ export const ALL_MENU_ITEMS: MenuItem[] = [
     priceLabel: '₹1117',
     currency: 'INR',
     description: 'Boneless chicken breast marinated in yogurt, saffron, lemon, and tandoori spice, charcoal grilled on skewers.',
-    image: 'https://images.unsplash.com/photo-1599488615731-7e5c2823ff28?auto=format&fit=crop&w=900&q=85',
+    image: 'https://images.unsplash.com/photo-1727280376746-b89107a5b0df?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Y2hpY2tlbiUyMHRpa2thJTIwa2ViYWJ8ZW58MHx8MHx8fDA%3D'
     rating: 4.9,
     reviews: 165,
     badge: 'Popular',
@@ -989,7 +989,7 @@ export const ALL_MENU_ITEMS: MenuItem[] = [
     priceLabel: '₹687',
     currency: 'INR',
     description: 'Frosty slushie made with Georgia peach nectar and crushed ice topped with peach popping boba.',
-    image: 'https://images.unsplash.com/photo-1481391319762-47dff72954d9?auto=format&fit=crop&w=900&q=85',
+    image: '',
     rating: 4.8,
     reviews: 62,
     veg: true,
