@@ -975,7 +975,7 @@ export const ALL_MENU_ITEMS: MenuItem[] = [
     priceLabel: '₹687',
     currency: 'INR',
     description: 'Hong Kong specialty: sweet mango smoothie layered with coconut milk, chewy sago pearls, and fresh pomelo segments.',
-    image: ',
+    image: 'https://media.istockphoto.com/id/2166834889/photo/mango-pomelo-sago-love-jade-toothpick-nectar-served-in-bowl-isolated-on-grey-background-top.jpg?s=1024x1024&w=is&k=20&c=w3iEREXCDR7ZYXzpptqOy7ddfMBDIpkdrOLN0KqfvtM=',
     rating: 5.0,
     reviews: 156,
     badge: 'Signature',
