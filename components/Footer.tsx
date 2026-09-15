@@ -41,6 +41,8 @@ export default function Footer() {
               <li><Link href="/">Home & Highlights</Link></li>
               <li><Link href="/menu">Culinary Menu (~80 Dishes)</Link></li>
               <li><Link href="/story">Our Midway Story</Link></li>
+              <li><Link href="/gallery">Food & Ambience Gallery</Link></li>
+              <li><Link href="/reviews">Guest Reviews</Link></li>
               <li><Link href="/offers">VIP Passes & Offers</Link></li>
               <li><Link href="/visit">Location & Reservations</Link></li>
             </ul>

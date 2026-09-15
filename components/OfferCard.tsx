@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, type CSSProperties } from 'react'
 import { Copy, Gift, Percent, Sparkles } from 'lucide-react'
 
 interface OfferCardProps {
@@ -35,12 +35,12 @@ export default function OfferCard({
     <div
       className="luxury-food-card offer-card-motion"
       style={{
-        background: bgGradient,
+        '--offer-bg': bgGradient,
         border: '1px solid var(--border-gold)',
         padding: '32px',
         position: 'relative',
         overflow: 'hidden',
-      }}
+      } as CSSProperties}
     >
       <div className="shimmer-gold-line" />
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>

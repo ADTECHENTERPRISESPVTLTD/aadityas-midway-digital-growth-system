@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Flame, ShoppingBag, Sparkles, X } from 'lucide-react'
+import { Flame, X } from 'lucide-react'
 
 const RECENT_ORDERS = [
   { item: 'Saffron Kabuli Pulao', area: 'Sausar', price: '₹859', icon: '🍲' },
