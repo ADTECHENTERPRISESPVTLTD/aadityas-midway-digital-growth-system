@@ -24,17 +24,32 @@ export function getMenuItemById(id: number): MenuItem | undefined {
 // Matches both ways on purpose: a short query like "shawarma" should find
 // every item whose name contains it, and a full sentence like "how much
 // is chicken shawarma" should find the item name contained in it.
-// Longer name matches are ranked first (more specific match wins).
+//
+// A name match always outranks a category-only match, even a longer one.
+// Without this, "how much does salmon soup cost" would match every item
+// in the "Soup" category (because the word "soup" is a substring of the
+// query) and the *longest-named* soup would win the tie-break -- not the
+// dish actually named in the question. Category-only matches exist so a
+// generic question like "tell me about your wraps" still lists the
+// category; they just must never outrank a specific dish name.
 export function searchMenu(query: string): MenuItem[] {
   const q = query.trim().toLowerCase()
   if (!q) return []
-  return getMenu()
-    .filter((item) => {
+
+  const scored = getMenu()
+    .map((item) => {
       const name = item.name.toLowerCase()
       const category = item.category.toLowerCase()
-      return name.includes(q) || q.includes(name) || category.includes(q) || q.includes(category)
+      const nameMatches = name.includes(q) || q.includes(name)
+      const categoryMatches = category.includes(q) || q.includes(category)
+      if (nameMatches) return { item, score: 1000 + name.length }
+      if (categoryMatches) return { item, score: category.length }
+      return null
     })
-    .sort((a, b) => b.name.length - a.name.length)
+    .filter((x): x is { item: MenuItem; score: number } => x !== null)
+
+  scored.sort((a, b) => b.score - a.score)
+  return scored.map((x) => x.item)
 }
 
 export function getMenuByCategory(category: string): MenuItem[] {
