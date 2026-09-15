@@ -1560,7 +1560,7 @@ export const ALL_MENU_ITEMS: MenuItem[] = [
     priceLabel: '₹256',
     currency: 'INR',
     description: 'Crispy flaky fried puff pastry stuffed with spicy yellow moong dal and served with sweet tamarind chutney.',
-    image: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=900&q=85',
+    image: 'https://media.istockphoto.com/id/653841382/photo/indian-vegetarian-food-kachori.webp?a=1&b=1&s=612x612&w=0&k=20&c=Cwi4wBziEwU1WHUfY5cWZPr5jo1gbD3yq9oK7Cf7pWA=',
     rating: 4.8,
     reviews: 62,
     veg: true,
