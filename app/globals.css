@@ -84,9 +84,14 @@ html {
 }
 
 body {
-  background-color: var(--bg-obsidian);
+  background-color: #0b0e14;
   color: var(--text-main);
   overflow-x: hidden;
+}
+
+.main-wrapper {
+  background-color: #0b0e14;
+  min-height: 100vh;
 }
 
 /* Typography styles */
@@ -525,6 +530,7 @@ h1, h2, h3, h4, .serif-font {
   padding: 100px 24px;
   max-width: 1240px;
   margin: 0 auto;
+  background: #0b0e14;
 }
 
 .section-head {
@@ -1721,8 +1727,8 @@ h1, h2, h3, h4, .serif-font {
     position: fixed;
     inset: 0;
     z-index: 50;
-    background: rgba(0, 0, 0, 0.82);
-    backdrop-filter: blur(8px);
+    background: #0b0e14;
+    backdrop-filter: none;
     display: flex;
     justify-content: flex-end;
   }
@@ -1730,9 +1736,10 @@ h1, h2, h3, h4, .serif-font {
 
 .luxury-mobile-drawer {
   width: min(340px, 92vw);
-  background: var(--bg-card) !important;
+  background: #0b0e14 !important;
   border-left: 1px solid var(--border-gold);
   height: 100%;
+  min-height: 100vh;
   padding: 24px;
   display: flex;
   flex-direction: column;
@@ -1903,5 +1910,18 @@ h1, h2, h3, h4, .serif-font {
   .floating-ai-fab {
     padding: 14px;
     border-radius: 50%;
+  }
+
+  /* Solid black backgrounds for all sections on mobile */
+  .luxury-section, .hero-section, .intro-band, .contact-section,
+  .offers-section, .reviews-section, .instagram-section,
+  .feature-section, .menu-section {
+    background: #0b0e14 !important;
+  }
+  .luxury-mobile-drawer {
+    background: #0b0e14 !important;
+  }
+  .mobile-nav-overlay {
+    background: #0b0e14 !important;
   }
 }
