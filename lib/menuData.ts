@@ -331,7 +331,7 @@ export const ALL_MENU_ITEMS: MenuItem[] = [
     priceLabel: '₹859',
     currency: 'INR',
     description: 'Charcoal-grilled minced chicken kofta skewer rolled in flatbread with crisp lettuce, sumac onions, and garlic sauce.',
-    image: 'https://images.unsplash.com/photo-1628840042765-356cda07504e?auto=format&fit=crop&w=800&q=80,
+    image: 'https://images.unsplash.com/photo-1561651823-34feb02250e4?auto=format&fit=crop&w=900&q=85,
     rating: 4.8,
     reviews: 72,
     veg: false,
