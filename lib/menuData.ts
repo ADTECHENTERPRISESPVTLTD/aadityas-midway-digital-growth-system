@@ -975,7 +975,7 @@ export const ALL_MENU_ITEMS: MenuItem[] = [
     priceLabel: '₹687',
     currency: 'INR',
     description: 'Hong Kong specialty: sweet mango smoothie layered with coconut milk, chewy sago pearls, and fresh pomelo segments.',
-    image: 'https://images.unsplash.com/photo-1546171753-97d7676e4602?auto=format&fit=crop&w=900&q=85',
+    image: 'https://images.unsplash.com/photo-1553530666-ba11a90bb0ae?auto=format&fit=crop&w=900&q=85',
     rating: 5.0,
     reviews: 156,
     badge: 'Signature',
@@ -1023,7 +1023,7 @@ export const ALL_MENU_ITEMS: MenuItem[] = [
   },
   {
     id: 71,
-    name: 'Mango/Strawberry Slush',
+    name: 'Strawberry Slush',
     category: 'Smoothies',
     price: 687,
     priceLabel: '₹687',
