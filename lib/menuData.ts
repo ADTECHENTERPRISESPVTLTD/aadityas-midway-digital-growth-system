@@ -947,7 +947,7 @@ export const ALL_MENU_ITEMS: MenuItem[] = [
     priceLabel: '₹687',
     currency: 'INR',
     description: 'Thick probiotic lassi style protein shake made with fresh cultured curd, cold milk, and cardamom.',
-    image: 'https://images.unsplash.com/photo-1577805947697-89e18249d767?auto=format&fit=crop&w=900&q=85',
+    image: 'https://images.unsplash.com/photo-1685967836529-b0e8d6938227?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     rating: 4.9,
     reviews: 66,
     veg: true,
