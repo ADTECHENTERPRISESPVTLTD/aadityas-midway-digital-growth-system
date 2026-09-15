@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect, useRef } from 'react'
 import { MenuItem } from '@/lib/menuData'
 import { ArrowRight, Minus, Plus, ShoppingBag, Trash2, X } from 'lucide-react'
 
@@ -20,6 +21,21 @@ export default function CartDrawer({
   onUpdateQuantity,
   onCheckout,
 }: CartDrawerProps) {
+  const panelRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!isOpen) return
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose()
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    const focusable = panelRef.current?.querySelector<HTMLElement>(
+      'button, a, [tabindex]:not([tabindex="-1"])'
+    )
+    focusable?.focus()
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [isOpen, onClose])
+
   if (!isOpen) return null
 
   const cartItems = allItems.filter((item) => cart[item.id] > 0)
@@ -29,8 +45,8 @@ export default function CartDrawer({
   const grandTotal = subtotal + deliveryFee
 
   return (
-    <div className="modal-backdrop" onClick={onClose}>
-      <div className="cart-drawer-panel" onClick={(e) => e.stopPropagation()}>
+    <div className="modal-backdrop" onClick={onClose} role="dialog" aria-modal="true" aria-label="Shopping cart">
+      <div className="cart-drawer-panel" ref={panelRef} onClick={(e) => e.stopPropagation()}>
         {/* Header */}
         <div className="drawer-header">
           <div className="drawer-title-group">

@@ -25,6 +25,7 @@ import {
   Flame,
   Heart,
   ShieldCheck,
+  ShoppingBag,
   Sparkles,
   Utensils,
 } from 'lucide-react'
@@ -241,6 +242,18 @@ export default function Home() {
 
       {/* Task L-07: LOCATION SECTION */}
       <LocationSection onOpenBooking={() => setIsBookingOpen(true)} />
+
+      {cartCount > 0 && (
+        <div className="sticky-mobile-order-bar" aria-live="polite">
+          <div className="order-bar-info">
+            <strong>{cartCount} Item{cartCount > 1 ? 's' : ''} Selected</strong>
+            <small>Total: ₹{subtotal.toLocaleString('en-IN')}</small>
+          </div>
+          <button onClick={() => setIsCartOpen(true)} className="btn-luxury-gold" aria-label="View cart and checkout">
+            View Cart & Checkout <ShoppingBag size={15} />
+          </button>
+        </div>
+      )}
 
       {/* FLOATING AI ASSISTANT TRIGGER */}
       <button

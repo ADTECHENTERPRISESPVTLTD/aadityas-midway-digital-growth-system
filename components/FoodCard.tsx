@@ -16,15 +16,29 @@ export default function FoodCard({ item, onAddToCart, onSelect }: FoodCardProps)
       <div
         className="food-card-img-wrap"
         onClick={() => onSelect?.(item)}
+        role={onSelect ? 'button' : undefined}
+        tabIndex={onSelect ? 0 : undefined}
+        aria-label={onSelect ? `Select ${item.name}` : undefined}
+        onKeyDown={
+          onSelect
+            ? (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault()
+                  onSelect(item)
+                }
+              }
+            : undefined
+        }
         style={{ cursor: onSelect ? 'pointer' : 'default' }}
       >
-        <img src={item.image} alt={item.name} className="food-img-zoom" />
+        <img src={item.image} alt={item.name} className="food-img-zoom" loading="lazy" />
         <div className="steam-overlay-effect" />
-        
+
         {item.badge && <span className="item-badge-pill motion-badge">{item.badge}</span>}
         <div
           className={`veg-indicator-dot ${item.veg ? 'veg' : 'non-veg'}`}
           title={item.veg ? 'Pure Veg' : 'Non-Veg'}
+          aria-label={item.veg ? 'Pure Veg' : 'Non-Veg'}
         />
       </div>
 
@@ -34,6 +48,19 @@ export default function FoodCard({ item, onAddToCart, onSelect }: FoodCardProps)
         <h3
           className="food-card-title"
           onClick={() => onSelect?.(item)}
+          role={onSelect ? 'button' : undefined}
+          tabIndex={onSelect ? 0 : undefined}
+          aria-label={onSelect ? `Select ${item.name}` : undefined}
+          onKeyDown={
+            onSelect
+              ? (e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault()
+                    onSelect(item)
+                  }
+                }
+              : undefined
+          }
           style={{ cursor: onSelect ? 'pointer' : 'default' }}
         >
           {item.name}
@@ -59,7 +86,11 @@ export default function FoodCard({ item, onAddToCart, onSelect }: FoodCardProps)
             <span className="price-main">₹{item.price}</span>
             <span className="price-original">{item.priceLabel}</span>
           </div>
-          <button onClick={() => onAddToCart(item)} className="add-to-cart-btn ripple-btn">
+          <button
+            onClick={() => onAddToCart(item)}
+            className="add-to-cart-btn ripple-btn"
+            aria-label={`Add ${item.name} to cart for ₹${item.price}`}
+          >
             <Plus size={15} /> Add
           </button>
         </div>

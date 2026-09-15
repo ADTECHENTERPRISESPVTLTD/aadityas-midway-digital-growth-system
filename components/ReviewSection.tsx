@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import ReviewCard from '@/components/ReviewCard'
 import { CheckCircle2, MessageSquarePlus, Sparkles, Star, X } from 'lucide-react'
 
@@ -47,6 +47,22 @@ export default function ReviewSection() {
   const [hoverRating, setHoverRating] = useState(0)
   const [reviewText, setReviewText] = useState('')
   const [submitted, setSubmitted] = useState(false)
+  const panelRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!isModalOpen) return
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setIsModalOpen(false)
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    const focusable = panelRef.current?.querySelector<HTMLElement>(
+      'input, textarea, button, [tabindex]:not([tabindex="-1"])'
+    )
+    focusable?.focus()
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [isModalOpen])
 
   function handleSubmitReview(e: React.FormEvent) {
     e.preventDefault()
@@ -65,10 +81,11 @@ export default function ReviewSection() {
     setSubmitted(true)
     setTimeout(() => {
       setSubmitted(false)
-      setIsModalOpen(false)
       setName('')
       setReviewText('')
       setRating(5)
+      setHoverRating(0)
+      setIsModalOpen(false)
     }, 2000)
   }
 
@@ -113,8 +130,14 @@ export default function ReviewSection() {
 
       {/* Add Review Modal */}
       {isModalOpen && (
-        <div className="modal-backdrop" onClick={() => setIsModalOpen(false)}>
-          <div className="luxury-modal-card" onClick={(e) => e.stopPropagation()}>
+        <div
+          className="modal-backdrop"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Write a review"
+          onClick={() => setIsModalOpen(false)}
+        >
+          <div className="luxury-modal-card" ref={panelRef} onClick={(e) => e.stopPropagation()}>
             <button className="close-btn" onClick={() => setIsModalOpen(false)} aria-label="Close review modal">
               <X size={20} />
             </button>

@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import {
@@ -32,6 +32,7 @@ export default function Navbar({ cartCount, onOpenCart, onOpenBooking }: NavbarP
   const pathname = usePathname()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [theme, setTheme] = useState<'dark' | 'light'>('dark')
+  const mobileNavRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const savedTheme = localStorage.getItem('am_theme') as 'dark' | 'light' | null
@@ -42,6 +43,19 @@ export default function Navbar({ cartCount, onOpenCart, onOpenBooking }: NavbarP
       }
     }
   }, [])
+
+  useEffect(() => {
+    if (!mobileMenuOpen) return
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setMobileMenuOpen(false)
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    const focusable = mobileNavRef.current?.querySelector<HTMLElement>(
+      'a, button, [tabindex]:not([tabindex="-1"])'
+    )
+    focusable?.focus()
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [mobileMenuOpen])
 
   function toggleTheme() {
     const nextTheme = theme === 'dark' ? 'light' : 'dark'
@@ -117,7 +131,8 @@ export default function Navbar({ cartCount, onOpenCart, onOpenBooking }: NavbarP
               onClick={toggleTheme}
               className="theme-toggle-btn"
               title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Mode`}
-              aria-label="Toggle Theme"
+              aria-label={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+              aria-pressed={theme === 'light'}
             >
               {theme === 'dark' ? <Sun size={18} className="gold-icon" /> : <Moon size={18} />}
             </button>
@@ -150,8 +165,18 @@ export default function Navbar({ cartCount, onOpenCart, onOpenBooking }: NavbarP
 
         {/* Mobile Navigation Drawer - Ultra Visible High-Contrast Panel */}
         {mobileMenuOpen && (
-          <div className="mobile-nav-overlay" onClick={() => setMobileMenuOpen(false)}>
-            <div className="mobile-nav-panel luxury-mobile-drawer" onClick={(e) => e.stopPropagation()}>
+          <div
+            className="mobile-nav-overlay"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Mobile navigation menu"
+            onClick={() => setMobileMenuOpen(false)}
+          >
+            <div
+              className="mobile-nav-panel luxury-mobile-drawer"
+              ref={mobileNavRef}
+              onClick={(e) => e.stopPropagation()}
+            >
               <div className="mobile-nav-header">
                 <Link href="/" onClick={() => setMobileMenuOpen(false)} className="brand-logo">
                   <div className="brand-emblem">AM</div>

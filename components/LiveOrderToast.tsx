@@ -4,12 +4,12 @@ import { useEffect, useState } from 'react'
 import { Flame, X } from 'lucide-react'
 
 const RECENT_ORDERS = [
-  { item: 'Saffron Kabuli Pulao', area: 'Sausar', price: '₹859', icon: '🍲' },
-  { item: 'Wood-Fired Baby Lamb Chops', area: 'Nagpur Highway', price: '₹2,149', icon: '🍖' },
-  { item: 'Hong Kong Mango Pomelo Sago', area: 'Gokuldham', price: '₹687', icon: '🥭' },
-  { item: 'Peshawari Beef Chapli Kebab', area: 'SH 19 Drive-In', price: '₹1,719', icon: '🔥' },
-  { item: 'Paneer Loaded Fries', area: 'Sausar Local', price: '₹640', icon: '🍟' },
-  { item: 'Thai Tom Yum Soup', area: 'Traveler Table 4', price: '₹687', icon: '🥣' },
+  { item: 'Saffron Kabuli Pulao', area: 'Sausar', price: '₹859' },
+  { item: 'Wood-Fired Baby Lamb Chops', area: 'Nagpur Highway', price: '₹2,149' },
+  { item: 'Hong Kong Mango Pomelo Sago', area: 'Gokuldham', price: '₹687' },
+  { item: 'Peshawari Beef Chapli Kebab', area: 'SH 19 Drive-In', price: '₹1,719' },
+  { item: 'Paneer Loaded Fries', area: 'Sausar Local', price: '₹640' },
+  { item: 'Thai Tom Yum Soup', area: 'Traveler Table 4', price: '₹687' },
 ]
 
 export default function LiveOrderToast() {
@@ -42,12 +42,17 @@ export default function LiveOrderToast() {
   const currentOrder = RECENT_ORDERS[currentIndex]
 
   return (
-    <div className="live-order-toast-container animate-bounce-subtle">
+    <div
+      className="live-order-toast-container animate-bounce-subtle"
+      role="status"
+      aria-live="polite"
+      aria-label="Live order notification"
+    >
       <div className="live-toast-card">
-        <span className="toast-icon">{currentOrder.icon}</span>
+        <Flame size={18} className="gold-icon toast-icon" aria-hidden="true" />
         <div className="toast-content">
           <span className="toast-headline">
-            <Flame size={12} className="gold-icon inline mr-1" /> Someone just ordered!
+            <Flame size={12} className="gold-icon inline mr-1" aria-hidden="true" /> Someone just ordered!
           </span>
           <strong className="toast-item-title">{currentOrder.item}</strong>
           <small className="toast-meta">{currentOrder.area} · {currentOrder.price}</small>

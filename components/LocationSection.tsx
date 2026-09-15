@@ -13,7 +13,7 @@ export default function LocationSection({ onOpenBooking }: LocationSectionProps)
         <p>Conveniently located at Gokuldham, Sausar. Easy drive-in access and ample parking.</p>
       </div>
 
-      <div className="hero-grid">
+      <div className="location-hero-grid">
         {/* Address & Contact Info */}
         <div>
           <span className="gold-eyebrow">LOCATION DETAILS</span>
@@ -86,6 +86,8 @@ export default function LocationSection({ onOpenBooking }: LocationSectionProps)
             justifyContent: 'space-between',
             position: 'relative',
             overflow: 'hidden',
+            width: '100%',
+            height: '100%',
             minHeight: '360px',
           }}
         >

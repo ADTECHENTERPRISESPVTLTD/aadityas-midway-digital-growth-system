@@ -46,7 +46,7 @@ try {
   await page.screenshot({ path: join(shotsDir, '01-homepage.png') })
   log('Homepage loads', true, await page.title())
 
-  for (const [label, path] of [['Menu', '/menu'], ['Offers', '/offers'], ['Story', '/story'], ['Visit', '/visit']]) {
+  for (const [label, path] of [['Menu', '/menu'], ['Offers', '/offers'], ['Story', '/story'], ['Visit', '/visit'], ['Gallery', '/gallery'], ['Reviews', '/reviews']]) {
     try {
       await page.goto(`${BASE_URL}${path}`, { waitUntil: 'domcontentloaded', timeout: 15000 })
       await page.waitForTimeout(600)
@@ -97,7 +97,7 @@ try {
     log('Chat assistant opens', true, '')
 
     const questions = [
-      { q: 'how much is chicken shawarma platter', expect: '₹' }, // rupee sign - must be a real converted price
+      { q: 'how much is chicken shawarma platter', expect: '₹' },
       { q: 'any offers today', expect: 'MIDWEEK20' },
     ]
     for (const { q, expect } of questions) {
@@ -107,10 +107,29 @@ try {
       await page.waitForTimeout(2500)
       const bubbles = await page.locator('.chat-bubble, [class*="message" i]').allTextContents()
       const lastReplies = bubbles.slice(-3).join(' | ')
-      const ok = bubbles.length > 0 && !lastReplies.toLowerCase().includes("couldn't reach") && lastReplies.includes(expect)
-      log(`Chat: "${q}"`, ok, lastReplies.slice(0, 250))
+      const noError = !lastReplies.toLowerCase().includes("couldn't reach") && !lastReplies.includes("Sorry, I couldn't reach")
+      const hasExpect = lastReplies.includes(expect)
+      const hasContent = bubbles.some((b) => b.length > 10)
+      log(`Chat UI: "${q}"`, noError && hasExpect && hasContent, lastReplies.slice(0, 250))
     }
     await page.screenshot({ path: join(shotsDir, '04-chat.png') })
+
+    try {
+      const apiRes = await fetch(`${BASE_URL}/api/ai/chat`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: 'what is chicken shawarma' }),
+      })
+      const apiData = await apiRes.json()
+      const apiOk = apiRes.ok && apiData.ok === true && apiData.data
+        && typeof apiData.data.reply === 'string'
+        && apiData.data.reply.length > 5
+        && typeof apiData.data.intent === 'string'
+        && typeof apiData.data.groundedInData === 'boolean'
+      log('API: /api/ai/chat', apiOk, `intent=${apiData.data?.intent} reply=${apiData.data?.reply?.slice(0, 80)}`)
+    } catch (e) {
+      log('API: /api/ai/chat', false, String(e.message).slice(0, 200))
+    }
   } catch (e) {
     log('Chat assistant flow', false, String(e.message).slice(0, 300))
   }

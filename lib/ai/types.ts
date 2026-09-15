@@ -5,7 +5,7 @@ export type MenuItem = {
   priceLabel: string
   description: string
   veg: boolean
-  currency: '$' | 'TZS'
+  currency: 'INR'
   bestseller: boolean
   available: boolean
 }

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { MenuItem } from '@/lib/menuData'
 import { Bot, Plus, Send, Sparkles, X } from 'lucide-react'
 
@@ -25,13 +25,32 @@ export default function DiningAssistantModal({
 }: DiningAssistantModalProps) {
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      from: 'ai',
-      text: 'Greetings! I am Aaditya\'s Sommelier & Dining Concierge. I can help you pick the best dish for your palate, recommend food pairings, or answer questions about our ~80 signature dishes!',
-      suggestedItem: allItems.find((i) => i.name.includes('Kabuli Pulao')) || allItems[0],
-    },
-  ])
+  const [messages, setMessages] = useState<Message[]>(() => {
+    const fallback = allItems[0]
+    if (!fallback) return []
+    const found = allItems.find((i) => i.name.includes('Kabuli Pulao')) || fallback
+    return [
+      {
+        from: 'ai',
+        text: "Greetings! I am Aaditya's Sommelier & Dining Concierge. I can help you pick the best dish for your palate, recommend food pairings, or answer questions about our ~80 signature dishes!",
+        suggestedItem: found,
+      },
+    ]
+  })
+  const panelRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!isOpen) return
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose()
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    const focusable = panelRef.current?.querySelector<HTMLElement>(
+      'input, button, [tabindex]:not([tabindex="-1"])'
+    )
+    focusable?.focus()
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [isOpen, onClose])
 
   if (!isOpen) return null
 
@@ -72,8 +91,8 @@ export default function DiningAssistantModal({
   }
 
   return (
-    <div className="modal-backdrop" onClick={onClose}>
-      <div className="chat-modal-panel" onClick={(e) => e.stopPropagation()}>
+    <div className="modal-backdrop" onClick={onClose} role="dialog" aria-modal="true" aria-label="Dining assistant">
+      <div className="chat-modal-panel" ref={panelRef} onClick={(e) => e.stopPropagation()}>
         {/* Header */}
         <div className="chat-modal-header">
           <div className="chat-bot-avatar">

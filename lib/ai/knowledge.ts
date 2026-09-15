@@ -71,6 +71,7 @@ export function getCustomers(): Customer[] {
 // the AI must say the same numbers, not the original $/TZS priceLabel.
 // If the frontend's conversion ever changes, update it here too.
 export function formatPriceInr(priceLabel: string, currency: string): string {
+  if (currency === 'INR') return priceLabel
   const rate = currency === '$' ? 86 : 0.032
   const amounts = priceLabel.match(/\d[\d,]*(?:\.\d+)?/g) ?? []
   const converted = amounts.map((value) =>

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Calendar, CheckCircle2, Clock, MapPin, Sparkles, Users, Utensils, X } from 'lucide-react'
 
 interface BookingModalProps {
@@ -16,12 +16,43 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
   const [seating, setSeating] = useState('Indoor AC Dining')
   const [name, setName] = useState('')
   const [phone, setPhone] = useState('')
+  const [phoneError, setPhoneError] = useState('')
   const [specialRequest, setSpecialRequest] = useState('')
+  const panelRef = useRef<HTMLDivElement>(null)
+
+  const todayStr = new Date().toISOString().split('T')[0]
+
+  useEffect(() => {
+    if (!isOpen) return
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') handleReset()
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    const focusable = panelRef.current?.querySelector<HTMLElement>(
+      'input, select, button, [tabindex]:not([tabindex="-1"])'
+    )
+    focusable?.focus()
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [isOpen])
 
   if (!isOpen) return null
 
+  function validatePhone(value: string) {
+    const digits = value.replace(/\D/g, '')
+    if (value && digits.length !== 10) {
+      return 'Enter a valid 10-digit mobile number'
+    }
+    return ''
+  }
+
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
+    const err = validatePhone(phone)
+    if (err) {
+      setPhoneError(err)
+      return
+    }
+    setPhoneError('')
     setSubmitted(true)
   }
 
@@ -34,8 +65,8 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
   }
 
   return (
-    <div className="modal-backdrop" onClick={onClose}>
-      <div className="luxury-modal-card responsive-booking-card" onClick={(e) => e.stopPropagation()}>
+    <div className="modal-backdrop" onClick={onClose} role="dialog" aria-modal="true" aria-label="Book a table">
+      <div className="luxury-modal-card responsive-booking-card" ref={panelRef} onClick={(e) => e.stopPropagation()}>
         <button className="close-btn" onClick={onClose} aria-label="Close modal">
           <X size={20} />
         </button>
@@ -105,6 +136,7 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
                 <input
                   required
                   type="date"
+                  min={todayStr}
                   value={date}
                   onChange={(e) => setDate(e.target.value)}
                 />
@@ -150,10 +182,20 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
                 <input
                   required
                   type="tel"
+                  inputMode="tel"
+                  pattern="[0-9]{10}"
                   placeholder="10-digit mobile number"
                   value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
+                  onChange={(e) => {
+                    setPhone(e.target.value)
+                    if (phoneError) setPhoneError('')
+                  }}
                 />
+                {phoneError && (
+                  <span style={{ color: 'var(--gold-light)', fontSize: '12px', marginTop: '4px', display: 'block' }}>
+                    {phoneError}
+                  </span>
+                )}
               </div>
 
               <div className="form-field full">
