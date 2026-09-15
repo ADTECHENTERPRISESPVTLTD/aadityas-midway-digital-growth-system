@@ -1461,7 +1461,7 @@ export const ALL_MENU_ITEMS: MenuItem[] = [
     priceLabel: '₹288',
     currency: 'INR',
     description: 'Golden crunchy samosa pockets filled with tender spiced minced chicken breast.',
-    image: 'https://images.unsplash.com/photo-1589301760014-d929f3979dbc?auto=format&fit=crop&w=900&q=85',
+    image: 'https://plus.unsplash.com/premium_photo-1695297516142-398762d80f66?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTd8fGNoaWNrZW4lMjBzYW1vc2F8ZW58MHx8MHx8fDA%3D',
     rating: 4.8,
     reviews: 102,
     badge: 'Bestseller',
