@@ -21,9 +21,29 @@ export function getMenuItemById(id: number): MenuItem | undefined {
   return getMenu().find((item) => item.id === id)
 }
 
+function escapeRegExp(s: string): string {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+}
+
+// True if `needle` appears in `haystack` as a whole word/phrase, not just
+// as a raw substring. Plain `.includes()` would let a short category name
+// match inside an unrelated longer word -- e.g. "price" contains "rice"
+// as a bare substring, so "chicken kebab price" would falsely match the
+// "Rice" category and the assistant would confidently quote Kabuli
+// Pulao's price for a question that has nothing to do with rice. Found by
+// stress-testing with ~100 real-sounding questions; this fix is why we
+// don't just use .includes() for this direction.
+function containsWholeWord(haystack: string, needle: string): boolean {
+  if (!needle) return false
+  return new RegExp(`\\b${escapeRegExp(needle)}\\b`, 'i').test(haystack)
+}
+
 // Matches both ways on purpose: a short query like "shawarma" should find
-// every item whose name contains it, and a full sentence like "how much
-// is chicken shawarma" should find the item name contained in it.
+// every item whose name contains it (plain substring -- intentionally
+// loose, for partial/fuzzy typing), and a full sentence like "how much is
+// chicken shawarma" should find the item name contained in it (whole-word
+// match -- see containsWholeWord above for why this direction can't be a
+// raw substring check).
 //
 // A name match always outranks a category-only match, even a longer one.
 // Without this, "how much does salmon soup cost" would match every item
@@ -40,8 +60,12 @@ export function searchMenu(query: string): MenuItem[] {
     .map((item) => {
       const name = item.name.toLowerCase()
       const category = item.category.toLowerCase()
-      const nameMatches = name.includes(q) || q.includes(name)
-      const categoryMatches = category.includes(q) || q.includes(category)
+      // Below 3 characters, a plain substring check matches almost
+      // anything (e.g. a lone "." matches "Chicken Wings (B.B.Q)" because
+      // the name literally contains a period; "a" matches nearly every
+      // name). Require whole-word matching only for such short queries.
+      const nameMatches = (q.length >= 3 && name.includes(q)) || containsWholeWord(q, name)
+      const categoryMatches = (q.length >= 3 && category.includes(q)) || containsWholeWord(q, category)
       if (nameMatches) return { item, score: 1000 + name.length }
       if (categoryMatches) return { item, score: category.length }
       return null
