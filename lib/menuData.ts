@@ -1532,7 +1532,7 @@ export const ALL_MENU_ITEMS: MenuItem[] = [
     priceLabel: '₹192',
     currency: 'INR',
     description: 'Golden crunchy lentil fritters seasoned with green chili, ginger, and curry leaves.',
-    image: 'https://images.unsplash.com/photo-1601050690117-94f5f6fa8bd7?auto=format&fit=crop&w=900&q=85',
+    image: 'https://media.istockphoto.com/id/1731327372/photo/pakora-or-pakoda-a-traditional-and-popular-indian-vegetarian-snack-in-a-tray.webp?a=1&b=1&s=612x612&w=0&k=20&c=jtkx3WWQXYva4sfF4cvlNcgkx8ibvjBkYfMua2ZPnUU=',
     rating: 4.7,
     reviews: 58,
     veg: true,
