@@ -989,7 +989,7 @@ export const ALL_MENU_ITEMS: MenuItem[] = [
     priceLabel: '₹687',
     currency: 'INR',
     description: 'Frosty slushie made with Georgia peach nectar and crushed ice topped with peach popping boba.',
-    image: '',
+    image: 'https://images.unsplash.com/photo-1579175971811-d30298ce0830?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fHBlYWNoeSUyMHNsdXNofGVufDB8fDB8fHww',
     rating: 4.8,
     reviews: 62,
     veg: true,
