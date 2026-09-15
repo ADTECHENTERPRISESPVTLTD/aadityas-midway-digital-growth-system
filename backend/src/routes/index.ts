@@ -1,0 +1,9 @@
+export { default as authRoutes } from "./auth.routes";
+export { default as menuRoutes } from "./menu.routes";
+export { default as orderRoutes } from "./order.routes";
+export { default as bookingRoutes } from "./booking.routes";
+export { default as offerRoutes } from "./offer.routes";
+export { default as customerRoutes } from "./customer.routes";
+export { default as reviewRoutes } from "./review.routes";
+export { default as analyticsRoutes } from "./analytics.routes";
+export { default as adminRoutes } from "./admin.routes";

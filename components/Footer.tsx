@@ -90,6 +90,10 @@ export default function Footer() {
             <a href={INSTAGRAM_URL} target="_blank" rel="noreferrer" style={{ color: 'var(--gold-light)' }}>
               Instagram Official
             </a>
+            <span className="dot">•</span>
+            <Link href="/admin/ai-tools" style={{ color: 'var(--text-muted)' }}>
+              AI Tools
+            </Link>
           </div>
         </div>
       </div>
