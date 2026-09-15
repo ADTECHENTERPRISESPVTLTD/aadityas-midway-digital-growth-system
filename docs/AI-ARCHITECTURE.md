@@ -225,3 +225,27 @@ committed).
   prototype, but it will occasionally miss phrasing outside the patterns
   in `intents.ts`. The chat handler falls back to a direct menu search
   before giving up, which covers most of these gaps.
+- Asking for the price of a whole category ("price of chicken platter")
+  returns one arbitrary item from that category rather than clarifying
+  which dish you mean — a category doesn't have a single price, and the
+  assistant doesn't yet detect this case to ask a follow-up question.
+- Typos beyond simple letter substitutions (e.g. "pulaoo" for "pulao")
+  aren't corrected — the assistant honestly says it can't find the item
+  rather than guessing, which is the right tradeoff given "must not
+  invent information," but a real fuzzy-match (e.g. Levenshtein
+  distance) would be friendlier. Not implemented, to keep matching
+  100% predictable for a prototype.
+- Stress-tested with ~100 varied/adversarial questions
+  (misspellings, multi-intent, negation, off-topic, injection-style
+  strings, empty/garbage input, unicode). Found and fixed two real bugs
+  in the process: (1) `searchMenu` matched a hidden substring inside an
+  unrelated word — "price" contains "rice", so any price question that
+  didn't otherwise match a specific dish silently fell back to quoting
+  a random Rice-category item; (2) very short queries (1-2 chars, e.g.
+  a lone ".") matched almost any item via naive substring inclusion.
+  Both fixed in `lib/ai/knowledge.ts` with whole-word matching and a
+  minimum query length for loose substring matching. All security-probe
+  and off-topic questions (script tags, SQL-injection-style strings,
+  "ignore previous instructions", off-topic trivia) were correctly
+  declined without crashing or leaking anything, since there's no
+  database or LLM here for such strings to affect either way.
