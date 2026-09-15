@@ -1311,7 +1311,7 @@ export const ALL_MENU_ITEMS: MenuItem[] = [
     priceLabel: '₹64',
     currency: 'INR',
     description: 'Extra portion of creamy Nutella hazelnut spread.',
-    image: 'https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?auto=format&fit=crop&w=900&q=85',
+    image: 'https://media.istockphoto.com/id/478112819/photo/slice-of-bread-with-chocolate-cream.webp?a=1&b=1&s=612x612&w=0&k=20&c=xdiqHISRAw5Jltyicf_yYeyzETngdKjwEnVgn0J_blQ=',
     rating: 4.9,
     reviews: 50,
     veg: true,
