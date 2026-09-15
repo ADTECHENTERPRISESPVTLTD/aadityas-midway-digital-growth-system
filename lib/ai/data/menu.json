@@ -1152,18 +1152,6 @@
     "price": 256
   },
   {
-    "id": 97,
-    "name": "Mutton Kebabs",
-    "category": "Non-Veg Snacks",
-    "priceLabel": "₹256",
-    "description": "Crispy spiced minced mutton kebabs.",
-    "veg": false,
-    "currency": "INR",
-    "bestseller": true,
-    "available": true,
-    "price": 256
-  },
-  {
     "id": 98,
     "name": "Chicken Kebabs",
     "category": "Non-Veg Snacks",

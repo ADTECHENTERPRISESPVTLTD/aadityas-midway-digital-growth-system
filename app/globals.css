@@ -892,12 +892,14 @@ h1, h2, h3, h4, .serif-font {
 
 .category-tabs-scroll {
   display: flex;
-  gap: 10px;
+  gap: 12px;
   overflow-x: auto;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
   padding-bottom: 6px;
 }
 .category-tabs-scroll::-webkit-scrollbar {
-  height: 4px;
+  display: none;
 }
 .category-tabs-scroll::-webkit-scrollbar-thumb {
   background: var(--border-gold);
@@ -914,6 +916,7 @@ h1, h2, h3, h4, .serif-font {
   white-space: nowrap;
   cursor: pointer;
   transition: all 0.2s ease;
+  flex-shrink: 0;
 }
 
 .cat-tab-btn:hover, .cat-tab-btn.active {
