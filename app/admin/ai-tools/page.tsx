@@ -170,9 +170,14 @@ export default function AiToolsPage() {
 
         {sentiment && (
           <div style={{ display: 'grid', gap: '10px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '100px 90px 1fr', padding: '0 14px', fontSize: '11px', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+              <span>Review</span>
+              <span>Sentiment</span>
+              <span>Themes</span>
+            </div>
             {sentiment.map((r, i) => (
-              <div key={i} style={{ display: 'flex', justifyContent: 'space-between', padding: '10px 14px', borderRadius: '10px', border: '1px solid var(--border-subtle)', fontSize: '13px' }}>
-                <span>Review #{r.reviewId}</span>
+              <div key={i} style={{ display: 'grid', gridTemplateColumns: '100px 90px 1fr', alignItems: 'center', padding: '10px 14px', borderRadius: '10px', border: '1px solid var(--border-subtle)', fontSize: '13px' }}>
+                <span>#{r.reviewId}</span>
                 <span style={{ textTransform: 'capitalize' }}>{r.sentiment}</span>
                 <span style={{ color: 'var(--text-muted)' }}>{r.themes.join(', ') || '—'}</span>
               </div>
