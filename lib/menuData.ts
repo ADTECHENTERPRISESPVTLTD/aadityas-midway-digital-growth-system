@@ -1573,7 +1573,7 @@ export const ALL_MENU_ITEMS: MenuItem[] = [
     priceLabel: '₹256',
     currency: 'INR',
     description: 'Golden fried crispy spring rolls packed with shredded cabbage, carrots, bell peppers, and sweet chili sauce.',
-    image: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=900&q=85',
+    image: 'https://images.unsplash.com/photo-1669340781012-ae89fbac9fc3?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8c3ByaW5nJTIwcm9sbHxlbnwwfHwwfHx8MA%3D%3D',
     rating: 4.7,
     reviews: 70,
     veg: true,
