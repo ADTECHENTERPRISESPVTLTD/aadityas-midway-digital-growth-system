@@ -7,7 +7,8 @@
     "dev": "nodemon --watch src -e ts --exec ts-node src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js",
-    "seed:admin": "ts-node src/seedAdmin.ts"
+    "seed:admin": "ts-node src/seedAdmin.ts",
+    "seed:menu": "ts-node src/seedMenu.ts"
   },
   "dependencies": {
     "bcryptjs": "^3.0.2",
