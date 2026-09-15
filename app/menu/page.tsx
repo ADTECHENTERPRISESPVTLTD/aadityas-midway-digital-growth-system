@@ -1,7 +1,8 @@
 'use client'
 
 import { useMemo, useState } from 'react'
-import { ALL_MENU_ITEMS, CATEGORIES, MenuItem } from '@/lib/menuData'
+import { CATEGORIES, MenuItem } from '@/lib/menuData'
+import { useLiveMenu } from '@/lib/useLiveMenu'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import CartDrawer from '@/components/CartDrawer'
@@ -33,6 +34,7 @@ export default function MenuPage() {
   const [isBookingOpen, setIsBookingOpen] = useState(false)
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false)
   const [isAssistantOpen, setIsAssistantOpen] = useState(false)
+  const { items: ALL_MENU_ITEMS } = useLiveMenu()
 
   const cartCount = Object.values(cart).reduce((a, b) => a + b, 0)
   const subtotal = ALL_MENU_ITEMS.filter((item) => cart[item.id] > 0).reduce(
@@ -51,7 +53,7 @@ export default function MenuPage() {
         item.category.toLowerCase().includes(searchQuery.toLowerCase())
       return matchCategory && matchDiet && matchSearch
     })
-  }, [selectedCategory, dietaryFilter, searchQuery])
+  }, [ALL_MENU_ITEMS, selectedCategory, dietaryFilter, searchQuery])
 
   function updateQuantity(id: number, delta: number) {
     setCart((prev) => {
