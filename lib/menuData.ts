@@ -331,7 +331,7 @@ export const ALL_MENU_ITEMS: MenuItem[] = [
     priceLabel: '₹859',
     currency: 'INR',
     description: 'Charcoal-grilled minced chicken kofta skewer rolled in flatbread with crisp lettuce, sumac onions, and garlic sauce.',
-    image: 'https://images.unsplash.com/photo-1604467794349-0b74285de7e7?auto=format&fit=crop&w=900&q=85',
+    image: 'https://images.unsplash.com/photo-1628840042765-356cda07504e?auto=format&fit=crop&w=800&q=80,
     rating: 4.8,
     reviews: 72,
     veg: false,
@@ -1393,7 +1393,7 @@ export const ALL_MENU_ITEMS: MenuItem[] = [
     priceLabel: '₹256',
     currency: 'INR',
     description: 'Succulent fried spiced minced mutton kebabs packed with herbs and crushed black pepper.',
-    image: 'https://images.unsplash.com/photo-1599488615731-7e5c2823ff28?auto=format&fit=crop&w=900&q=85',
+    image: https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=800&q=80
     rating: 4.9,
     reviews: 85,
     veg: false,
