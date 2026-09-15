@@ -1023,7 +1023,7 @@ export const ALL_MENU_ITEMS: MenuItem[] = [
   },
   {
     id: 71,
-    name: 'Mango/Strawberry Slush',
+    name: 'Strawberry Slush',
     category: 'Smoothies',
     price: 687,
     priceLabel: '₹687',
@@ -1075,7 +1075,7 @@ export const ALL_MENU_ITEMS: MenuItem[] = [
     priceLabel: '₹448',
     currency: 'INR',
     description: 'Marinated paneer tikka grilled with peppers, wrapped in soft tortilla, served with house french fries and garlic dip.',
-    image: 'https://images.unsplash.com/photo-1604467794349-0b74285de7e7?auto=format&fit=crop&w=900&q=85',
+    image: '',
     rating: 4.9,
     reviews: 82,
     badge: 'Popular',
