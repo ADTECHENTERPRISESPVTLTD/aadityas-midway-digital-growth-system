@@ -934,7 +934,7 @@ export const ALL_MENU_ITEMS: MenuItem[] = [
     priceLabel: '₹687',
     currency: 'INR',
     description: 'Real sliced peaches blended with vanilla protein powder, Greek yogurt, and honey.',
-    image: 'https://images.unsplash.com/photo-1553787499-6f9133860278?auto=format&fit=crop&w=900&q=85',
+    image: 'https://images.unsplash.com/photo-1655505384900-60b94b56252d?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     rating: 4.8,
     reviews: 42,
     veg: true,
