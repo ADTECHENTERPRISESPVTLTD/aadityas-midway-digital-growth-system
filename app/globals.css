@@ -54,7 +54,7 @@ html.light-mode {
 }
 
 .theme-toggle-btn {
-  background: var(--bg-card);
+  background: #0b0e14;
   border: 1px solid var(--border-gold);
   color: var(--text-main);
   width: 44px;
@@ -127,7 +127,7 @@ h1, h2, h3, h4, .serif-font {
 
 /* Announcement Top Bar */
 .top-announcement-bar {
-  background: linear-gradient(90deg, #161c28 0%, #1f2738 50%, #161c28 100%);
+  background: #0b0e14;
   border-bottom: 1px solid var(--border-gold);
   padding: 9px 5%;
   font-size: 11px;
@@ -188,8 +188,8 @@ h1, h2, h3, h4, .serif-font {
   position: sticky;
   top: 0;
   z-index: 40;
-  background: rgba(11, 14, 20, 0.88);
-  backdrop-filter: blur(16px);
+  background: #0b0e14;
+  backdrop-filter: none;
   border-bottom: 1px solid var(--border-subtle);
   transition: all 0.3s ease;
 }
@@ -285,7 +285,7 @@ h1, h2, h3, h4, .serif-font {
 
 .cart-trigger-btn {
   position: relative;
-  background: var(--bg-card);
+  background: #0b0e14;
   border: 1px solid var(--border-gold);
   color: var(--gold-light);
   width: 44px;
@@ -491,7 +491,7 @@ h1, h2, h3, h4, .serif-font {
   position: absolute;
   bottom: -20px;
   left: -20px;
-  background: var(--bg-card);
+  background: #0b0e14;
   border: 1px solid var(--border-gold);
   padding: 16px 22px;
   border-radius: 16px;
@@ -564,7 +564,7 @@ h1, h2, h3, h4, .serif-font {
 }
 
 .luxury-food-card {
-  background: var(--bg-card);
+  background: #0b0e14;
   border: 1px solid var(--border-subtle);
   border-radius: 20px;
   overflow: hidden;
@@ -577,7 +577,7 @@ h1, h2, h3, h4, .serif-font {
   transform: translateY(-8px) scale(1.015);
   border-color: var(--border-gold);
   box-shadow: 0 20px 45px rgba(212, 175, 55, 0.18);
-  background: var(--bg-card-hover);
+  background: #141822;
 }
 
 .food-card-img-wrap {
@@ -768,7 +768,7 @@ h1, h2, h3, h4, .serif-font {
 
 /* Category Filter Toolbar */
 .menu-toolbar-wrapper {
-  background: var(--bg-card);
+  background: #0b0e14;
   border: 1px solid var(--border-subtle);
   border-radius: 16px;
   padding: 16px 20px;
@@ -956,7 +956,7 @@ h1, h2, h3, h4, .serif-font {
 }
 
 .menu-insta-banner {
-  background: var(--bg-card);
+  background: #0b0e14;
   border: 1px solid var(--border-gold);
   border-radius: 20px;
   padding: 24px 32px;
@@ -1143,7 +1143,7 @@ h1, h2, h3, h4, .serif-font {
 
 .luxury-modal-card {
   position: relative;
-  background: var(--bg-card);
+  background: #0b0e14;
   border: 1px solid var(--border-gold);
   border-radius: 24px;
   width: min(580px, 100%);
@@ -1285,7 +1285,7 @@ h1, h2, h3, h4, .serif-font {
   right: 0;
   bottom: 0;
   width: min(440px, 100%);
-  background: var(--bg-card);
+  background: #0b0e14;
   border-left: 1px solid var(--border-gold);
   z-index: 50;
   display: flex;
@@ -1494,7 +1494,7 @@ h1, h2, h3, h4, .serif-font {
 }
 
 .chat-bubble-row.ai .chat-bubble {
-  background: var(--bg-card);
+  background: #0b0e14;
   border: 1px solid var(--border-subtle);
   color: var(--text-main);
 }
@@ -1556,7 +1556,7 @@ h1, h2, h3, h4, .serif-font {
 
 .chat-input-bar input {
   flex: 1;
-  background: var(--bg-card);
+  background: #0b0e14;
   border: 1px solid var(--border-subtle);
   border-radius: 10px;
   padding: 10px 14px;
@@ -1603,7 +1603,7 @@ h1, h2, h3, h4, .serif-font {
 
 /* Footer Styling */
 .luxury-footer {
-  background: #07090d;
+  background: #0b0e14;
   border-top: 1px solid var(--border-subtle);
   position: relative;
 }
@@ -1808,7 +1808,7 @@ h1, h2, h3, h4, .serif-font {
   width: 34px;
   height: 34px;
   border-radius: 8px;
-  background: var(--bg-card);
+  background: #0b0e14;
   border: 1px solid var(--border-gold);
   display: grid;
   place-items: center;

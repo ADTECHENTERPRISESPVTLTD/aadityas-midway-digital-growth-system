@@ -1,0 +1,9 @@
+[
+  { "id": "r1", "customerName": "Ananya Mehta", "rating": 5, "date": "2026-08-14", "text": "We stopped here on a road trip and ended up staying for three hours. The food was amazing and the staff were so warm." },
+  { "id": "r2", "customerName": "Rohit Sharma", "rating": 4, "date": "2026-08-20", "text": "Great taste and generous portions, but we waited almost 40 minutes for our order on a busy Saturday night." },
+  { "id": "r3", "customerName": "Priya Nair", "rating": 2, "date": "2026-08-25", "text": "Food was cold by the time it reached our table and the waiter seemed distracted the whole time." },
+  { "id": "r4", "customerName": "Karan Patel", "rating": 5, "date": "2026-09-01", "text": "Loved the ambience, perfect lighting for a date night. The chicken shawarma was excellent too." },
+  { "id": "r5", "customerName": "Sneha Joshi", "rating": 3, "date": "2026-09-05", "text": "Food was okay, nothing special. Service was fine but the place felt a bit noisy and crowded." },
+  { "id": "r6", "customerName": "Vikram Rao", "rating": 1, "date": "2026-09-08", "text": "Terrible experience, we waited over an hour and the order was still wrong when it arrived. Very disappointed." },
+  { "id": "r7", "customerName": "Meera Iyer", "rating": 5, "date": "2026-09-10", "text": "Best kebabs in Sausar, hands down. Quick service and the staff remembered our usual order." }
+]

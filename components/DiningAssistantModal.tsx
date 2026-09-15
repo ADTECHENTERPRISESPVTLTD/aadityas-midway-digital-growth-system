@@ -24,6 +24,7 @@ export default function DiningAssistantModal({
   allItems,
 }: DiningAssistantModalProps) {
   const [input, setInput] = useState('')
+  const [loading, setLoading] = useState(false)
   const [messages, setMessages] = useState<Message[]>([
     {
       from: 'ai',
@@ -34,43 +35,40 @@ export default function DiningAssistantModal({
 
   if (!isOpen) return null
 
-  function handleSend() {
-    if (!input.trim()) return
+  // Wired to the AI Lead's real assistant (/api/ai/chat) — grounded in the
+  // actual menu/business data, so it can't invent dishes or prices. This
+  // replaces the earlier hardcoded reference implementation.
+  async function handleSend() {
+    if (!input.trim() || loading) return
 
     const userQuery = input.trim()
-    const newMsgs: Message[] = [...messages, { from: 'user', text: userQuery }]
+    setMessages((prev) => [...prev, { from: 'user', text: userQuery }])
     setInput('')
+    setLoading(true)
 
-    // Match query to dish recommendations
-    const queryLower = userQuery.toLowerCase()
-    let replyText = 'Our master chefs take immense pride in every preparation on SH 19.'
-    let recItem = allItems.find((i) => i.badge === 'Signature' || i.badge === 'Chef Special')
+    try {
+      const response = await fetch('/api/ai/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: userQuery }),
+      })
+      const payload = await response.json()
+      if (!response.ok || !payload.ok) throw new Error(payload.error || 'AI request failed')
 
-    if (queryLower.includes('soup') || queryLower.includes('starter')) {
-      replyText = 'For a warming starter, our Thai Tom Yum or Nordic Salmon Soup are guest favorites!'
-      recItem = allItems.find((i) => i.category === 'Soup' && i.badge === 'Chef Special')
-    } else if (queryLower.includes('biryani') || queryLower.includes('pulao') || queryLower.includes('rice')) {
-      replyText = 'You must experience our Royal Kabuli Pulao, cooked with tender braised lamb shank and caramelized carrots.'
-      recItem = allItems.find((i) => i.name.includes('Kabuli Pulao'))
-    } else if (queryLower.includes('drink') || queryLower.includes('shake') || queryLower.includes('refresher')) {
-      replyText = 'Our Ocean Blue Lemonade and Hong Kong Mango Pomelo Sago are stunningly refreshing!'
-      recItem = allItems.find((i) => i.name.includes('Mango Pomelo'))
-    } else if (queryLower.includes('veg') || queryLower.includes('paneer')) {
-      replyText = 'Our Paneer Loaded Fries and Maru Bhajias offer rich, crispy vegetarian indulgence!'
-      recItem = allItems.find((i) => i.name.includes('Paneer Loaded Fries'))
-    } else if (queryLower.includes('lamb') || queryLower.includes('chop') || queryLower.includes('steak')) {
-      replyText = 'For a meat lover\'s dream, order our Wood-Fired Baby Lamb Chops or 14oz T-Bone Steak!'
-      recItem = allItems.find((i) => i.name.includes('Baby Lamb Chop'))
+      const firstRecommendation = payload.data.recommendations?.[0]
+      const suggestedItem = firstRecommendation
+        ? allItems.find((item) => item.id === firstRecommendation.itemId)
+        : undefined
+
+      setMessages((prev) => [...prev, { from: 'ai', text: payload.data.reply, suggestedItem }])
+    } catch {
+      setMessages((prev) => [
+        ...prev,
+        { from: 'ai', text: "Sorry, I couldn't reach the assistant just now. Please try again in a moment." },
+      ])
+    } finally {
+      setLoading(false)
     }
-
-    setMessages([
-      ...newMsgs,
-      {
-        from: 'ai',
-        text: replyText,
-        suggestedItem: recItem,
-      },
-    ])
   }
 
   return (
@@ -116,6 +114,13 @@ export default function DiningAssistantModal({
               </div>
             </div>
           ))}
+          {loading && (
+            <div className="chat-bubble-row ai">
+              <div className="chat-bubble">
+                <p>Thinking…</p>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Input area */}
@@ -126,8 +131,9 @@ export default function DiningAssistantModal({
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSend()}
+            disabled={loading}
           />
-          <button onClick={handleSend} className="chat-send-btn" aria-label="Send query">
+          <button onClick={handleSend} className="chat-send-btn" aria-label="Send query" disabled={loading}>
             <Send size={16} />
           </button>
         </div>

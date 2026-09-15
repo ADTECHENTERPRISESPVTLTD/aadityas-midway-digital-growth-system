@@ -83,7 +83,7 @@ export default function LocationSection({ onOpenBooking }: LocationSectionProps)
             padding: '30px',
             display: 'flex',
             flexDirection: 'column',
-            justify: 'space-between',
+            justifyContent: 'space-between',
             position: 'relative',
             overflow: 'hidden',
             minHeight: '360px',
