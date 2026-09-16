@@ -46,7 +46,7 @@ export default function FoodGallery() {
     {
       title: 'Paneer Loaded Fries',
       category: 'Signature Snacks',
-      image: 'https://images.unsplash.com/photo-1585109649139-366815a0d713?auto=format&fit=crop&w=800&q=85',
+      image: 'https://media.istockphoto.com/id/1142391723/photo/french-fries-with-mayonese-and-vegetables.webp?a=1&b=1&s=612x612&w=0&k=20&c=NPyVHwpyv9F90OBRzMxjsu612rwS8JCA1mkjm5xDUoM=',
       tag: 'Pure Veg Indulgence',
     },
   ]
