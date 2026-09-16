@@ -22,7 +22,7 @@ export default function FoodGallery() {
     {
       title: 'Wood-Fired Baby Lamb Chops',
       category: 'Charcoal Grill',
-      image: 'https://images.unsplash.com/photo-1603048588665-791ca8aea617?auto=format&fit=crop&w=800&q=85',
+      image: 'https://plus.unsplash.com/premium_photo-1693221705288-7a2531eaa5e5?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fGNoYXJjb2FsJTIwZ3JpbGx8ZW58MHx8MHx8fDA%3D',
       tag: 'Chef Secret Recipe',
     },
     {
