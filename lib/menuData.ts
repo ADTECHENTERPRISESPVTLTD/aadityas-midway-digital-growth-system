@@ -497,7 +497,7 @@ export const ALL_MENU_ITEMS: MenuItem[] = [
     name: 'Beef Kofta',
     category: 'Beef Platter',
     price: 1203,
-    priceLabel: '₹1203',
+    priceLabel: '₹1203', 
     currency: 'INR',
     description: 'Three skewers of spiced minced beef kofta grilled over wood charcoal, served over saffron basmati rice with grilled tomato.',
     image: 'https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?auto=format&fit=crop&w=900&q=85',
