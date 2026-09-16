@@ -585,7 +585,7 @@ export const ALL_MENU_ITEMS: MenuItem[] = [
     priceLabel: '₹1075',
     currency: 'INR',
     description: 'The best of both worlds: half spiced lamb shawarma and half garlic chicken shawarma over spiced rice.',
-    image: 'https://images.unsplash.com/photo-1603048588665-791ca8aea617?auto=format&fit=crop&w=900&q=85',
+    image: 'https://media.istockphoto.com/id/2252218921/photo/mixed-grill-platter-with-kebabs-chicken-and-fries.webp?a=1&b=1&s=612x612&w=0&k=20&c=DPG1vezYAiMZpzor1HTtLAZ6n7Sdb2-YH7Bby_yIl6A=',
     rating: 4.9,
     reviews: 112,
     badge: 'Bestseller',
