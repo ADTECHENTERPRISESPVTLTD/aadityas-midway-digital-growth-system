@@ -65,7 +65,13 @@ export default function CheckoutModal({ isOpen, onClose, totalAmount, onSuccess 
       setDiscount(discountVal)
       setAppliedCoupon('FIRSTBITE')
       setCouponMessage('🎉 Flat ₹150 discount applied!')
-    } else {
+
+    }else if (code === 'GROUPDESSERT') {
+      setDiscount(0)
+      setAppliedCoupon('GROUPDESSERT')
+      setCouponMessage('🍨 Complimentary Chef Dessert added to your order!')
+    }
+    else {
       setDiscount(0)
       setAppliedCoupon('')
       setCouponMessage('❌ Invalid coupon code')
