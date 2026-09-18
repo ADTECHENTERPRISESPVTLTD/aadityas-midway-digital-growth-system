@@ -28,7 +28,7 @@ export default function OfferCard({
     navigator.clipboard?.writeText(code)
     setCopied(true)
     setTimeout(() => setCopied(false), 2200)
-    onClaim?.()
+    
   }
 
   return (
