@@ -33,6 +33,7 @@ export default function Navbar({ cartCount, onOpenCart, onOpenBooking }: NavbarP
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [theme, setTheme] = useState<'dark' | 'light'>('dark')
   const mobileNavRef = useRef<HTMLDivElement>(null)
+  const mobileMenuId = 'mobile-navigation'
 
   useEffect(() => {
     const savedTheme = localStorage.getItem('am_theme') as 'dark' | 'light' | null
@@ -46,6 +47,8 @@ export default function Navbar({ cartCount, onOpenCart, onOpenBooking }: NavbarP
 
   useEffect(() => {
     if (!mobileMenuOpen) return
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') setMobileMenuOpen(false)
     }
@@ -54,7 +57,10 @@ export default function Navbar({ cartCount, onOpenCart, onOpenBooking }: NavbarP
       'a, button, [tabindex]:not([tabindex="-1"])'
     )
     focusable?.focus()
-    return () => window.removeEventListener('keydown', handleKeyDown)
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown)
+      document.body.style.overflow = previousOverflow
+    }
   }, [mobileMenuOpen])
 
   function toggleTheme() {
@@ -128,6 +134,7 @@ export default function Navbar({ cartCount, onOpenCart, onOpenBooking }: NavbarP
           <div className="navbar-actions">
             {/* Theme Toggle Button */}
             <button
+              type="button"
               onClick={toggleTheme}
               className="theme-toggle-btn"
               title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Mode`}
@@ -139,6 +146,7 @@ export default function Navbar({ cartCount, onOpenCart, onOpenBooking }: NavbarP
 
             {/* Cart Button */}
             <button
+              type="button"
               onClick={onOpenCart}
               className="cart-trigger-btn"
               aria-label="Open Order Cart"
@@ -148,15 +156,18 @@ export default function Navbar({ cartCount, onOpenCart, onOpenBooking }: NavbarP
             </button>
 
             {/* Book Table Button */}
-            <button onClick={onOpenBooking} className="btn-luxury-gold desk-only">
+            <button type="button" onClick={onOpenBooking} className="btn-luxury-gold desk-only">
               <Calendar size={15} /> Book a Table
             </button>
 
             {/* Mobile Menu Toggle */}
             <button
+              type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="mobile-toggle-btn"
-              aria-label="Toggle navigation"
+              aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+              aria-controls={mobileMenuId}
+              aria-expanded={mobileMenuOpen}
             >
               {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
@@ -173,6 +184,7 @@ export default function Navbar({ cartCount, onOpenCart, onOpenBooking }: NavbarP
             onClick={() => setMobileMenuOpen(false)}
           >
             <div
+              id={mobileMenuId}
               className="mobile-nav-panel luxury-mobile-drawer"
               ref={mobileNavRef}
               onClick={(e) => e.stopPropagation()}
@@ -185,7 +197,7 @@ export default function Navbar({ cartCount, onOpenCart, onOpenBooking }: NavbarP
                     <span className="brand-sub">MIDWAY · SAUSAR</span>
                   </div>
                 </Link>
-                <button onClick={() => setMobileMenuOpen(false)} className="close-btn" aria-label="Close navigation">
+                <button type="button" onClick={() => setMobileMenuOpen(false)} className="close-btn" aria-label="Close navigation">
                   <X size={20} />
                 </button>
               </div>
@@ -226,6 +238,7 @@ export default function Navbar({ cartCount, onOpenCart, onOpenBooking }: NavbarP
 
               <div className="mobile-nav-footer">
                 <button
+                  type="button"
                   onClick={toggleTheme}
                   className="btn-luxury-outline full-w mb-2"
                   style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
@@ -235,6 +248,7 @@ export default function Navbar({ cartCount, onOpenCart, onOpenBooking }: NavbarP
                 </button>
 
                 <button
+                  type="button"
                   onClick={() => {
                     setMobileMenuOpen(false)
                     onOpenBooking()
