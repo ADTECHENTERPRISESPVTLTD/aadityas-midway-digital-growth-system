@@ -211,16 +211,31 @@ committed).
   later. No code change needed for that swap — everything reads through
   `lib/ai/knowledge.ts`, so replacing `lib/ai/data/menu.json` (and the
   matching array in `app/page.tsx`) with the real menu is enough.
-- All data is static JSON, not a database — matches the current state of
-  the rest of the project (no backend yet). See "Data retrieval" above
-  for the swap path once FS-02/FS-03 land.
+- The assistant's data is still static JSON, not the live database, even
+  though the website's menu page now loads from the backend. See "Data
+  retrieval" above for the swap path. **Consequence: the menu exists in
+  three copies** — `lib/menuData.ts` (website fallback),
+  `backend/src/data/menuSeed.json` (what `npm run seed:menu` loads into
+  MongoDB), and `lib/ai/data/menu.json` (the assistant). They drift when
+  someone edits only one (this already happened: dishes were renamed on
+  the website but not in the AI file, so recommendation cards pointed at
+  the wrong dish). When the website menu changes: update
+  `lib/ai/data/menu.json` to match (same `id` per dish — the AI's
+  `itemId` is the website's cart id), regenerate the seed file, and
+  re-run `npm run seed:menu`.
+- The website matches live database dishes to the website's own ids by
+  name (then name+price, then same category+price after a rename) in
+  `lib/liveMenuMapping.ts`, so carts and AI recommendation cards stay
+  correct while live data loads. A dish that exists on the website but has
+  no counterpart in the database at all cannot be ordered; checkout tells
+  the customer instead of pretending.
 - `bestseller` flags and all of `reviews.json`/`customers.json` are seed
   data, clearly not real business records.
-- The menu has two items literally both named "Chicken Shawarma" (one
-  under Sandwiches & Burgers, one under Chicken Platter) — an existing
-  ambiguity in the source menu data, not something the AI invents. Price
-  lookups return the first match; this should be resolved by giving menu
-  items distinct names when the real menu is finalized.
+- Two dishes on the website are both named "Strawberry Slush" (ids 69
+  and 71, same price). The earlier "Chicken Shawarma" duplicate was
+  fixed on the website by renaming one to "Chicken Shawarma Platter".
+  Same-named dishes make price/menu lookups return the first match;
+  give them distinct names when the real menu is finalized.
 - Intent classification is keyword-based, not NLU — good enough for a
   prototype, but it will occasionally miss phrasing outside the patterns
   in `intents.ts`. The chat handler falls back to a direct menu search

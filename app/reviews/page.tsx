@@ -2,7 +2,8 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { ALL_MENU_ITEMS, MenuItem } from '@/lib/menuData'
+import { MenuItem } from '@/lib/menuData'
+import { useLiveMenu } from '@/lib/useLiveMenu'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import CartDrawer from '@/components/CartDrawer'
@@ -18,6 +19,7 @@ export default function ReviewsPage() {
   const [isBookingOpen, setIsBookingOpen] = useState(false)
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false)
   const [isAssistantOpen, setIsAssistantOpen] = useState(false)
+  const { items: ALL_MENU_ITEMS } = useLiveMenu()
 
   const cartCount = Object.values(cart).reduce((a, b) => a + b, 0)
   const subtotal = ALL_MENU_ITEMS.filter((item) => cart[item.id] > 0).reduce(

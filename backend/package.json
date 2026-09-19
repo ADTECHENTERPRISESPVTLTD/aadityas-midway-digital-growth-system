@@ -8,7 +8,8 @@
     "build": "tsc",
     "start": "node dist/server.js",
     "seed:admin": "ts-node src/seedAdmin.ts",
-    "seed:menu": "ts-node src/seedMenu.ts"
+    "seed:menu": "ts-node src/seedMenu.ts",
+    "seed:coupons": "ts-node src/seedCoupons.ts"
   },
   "dependencies": {
     "bcryptjs": "^3.0.2",

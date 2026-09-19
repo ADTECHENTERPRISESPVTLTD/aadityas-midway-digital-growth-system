@@ -3,44 +3,7 @@
 import { useEffect, useState } from 'react'
 import { ALL_MENU_ITEMS, MenuItem } from './menuData'
 import { API_URL } from './apiUrl'
-
-interface BackendMenuItem {
-  _id: string
-  name: string
-  description: string
-  category: { _id: string; name: string } | string
-  price: number
-  image?: string
-  available: boolean
-  bestseller: boolean
-  veg: boolean
-  spicy: boolean
-  rating: number
-  reviews: number
-  badge?: string
-}
-
-function toFrontendItem(item: BackendMenuItem, index: number): MenuItem {
-  const categoryName = typeof item.category === 'string' ? item.category : item.category.name
-  return {
-    id: index + 1,
-    backendId: item._id,
-    name: item.name,
-    category: categoryName,
-    price: item.price,
-    priceLabel: `₹${item.price}`,
-    currency: 'INR',
-    description: item.description,
-    image:
-      item.image ||
-      'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80',
-    rating: item.rating,
-    reviews: item.reviews,
-    badge: item.badge,
-    veg: item.veg,
-    spicy: item.spicy,
-  }
-}
+import { BackendMenuItem, mapBackendItems } from './liveMenuMapping'
 
 // Starts with the static menu (so the page renders immediately and still
 // works for anyone not running the backend locally), then swaps in real
@@ -60,7 +23,7 @@ export function useLiveMenu(): { items: MenuItem[]; source: 'static' | 'live' } 
         if (cancelled) return
         const backendItems = body.data ?? []
         if (backendItems.length === 0) return
-        setItems(backendItems.map(toFrontendItem))
+        setItems(mapBackendItems(backendItems, ALL_MENU_ITEMS))
         setSource('live')
       })
       .catch(() => {
