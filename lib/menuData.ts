@@ -12,6 +12,10 @@ export interface MenuItem {
   badge?: string
   veg: boolean
   spicy?: boolean
+  // Present only when this item came from the live backend (see useLiveMenu).
+  // Real orders/bookings need this actual MongoDB _id -- the numeric `id`
+  // above is just a display/cart key and doesn't exist in the database.
+  backendId?: string
 }
 
 export const CATEGORIES = [
