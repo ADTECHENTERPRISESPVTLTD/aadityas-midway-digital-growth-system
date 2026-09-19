@@ -24,7 +24,7 @@ import {
 } from 'lucide-react'
 
 export default function MenuPage() {
-  const [cart, setCart] = useState<Record<number, number>>({})
+  const [cart, setCart] = useState<Record<string, number>>({})
   const [selectedCategory, setSelectedCategory] = useState<string>('All')
   const [dietaryFilter, setDietaryFilter] = useState<'All' | 'Veg' | 'Non-Veg'>('All')
   const [searchQuery, setSearchQuery] = useState('')
@@ -55,7 +55,7 @@ export default function MenuPage() {
     })
   }, [ALL_MENU_ITEMS, selectedCategory, dietaryFilter, searchQuery])
 
-  function updateQuantity(id: number, delta: number) {
+  function updateQuantity(id: string | number, delta: number) {
     setCart((prev) => {
       const current = prev[id] || 0
       const next = current + delta

@@ -26,7 +26,7 @@ import {
 } from 'lucide-react'
 
 export default function VisitPage() {
-  const [cart, setCart] = useState<Record<number, number>>({})
+  const [cart, setCart] = useState<Record<string, number>>({})
   const [isCartOpen, setIsCartOpen] = useState(false)
   const [isBookingOpen, setIsBookingOpen] = useState(false)
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false)
@@ -38,7 +38,7 @@ export default function VisitPage() {
     0
   )
 
-  function updateQuantity(id: number, delta: number) {
+  function updateQuantity(id: string | number, delta: number) {
     setCart((prev) => {
       const current = prev[id] || 0
       const next = current + delta

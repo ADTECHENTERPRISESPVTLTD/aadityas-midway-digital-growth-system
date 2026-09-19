@@ -23,10 +23,10 @@ interface BackendMenuItem {
   badge?: string
 }
 
-function toFrontendItem(item: BackendMenuItem, index: number): MenuItem {
+function toFrontendItem(item: BackendMenuItem): MenuItem {
   const categoryName = typeof item.category === 'string' ? item.category : item.category.name
   return {
-    id: index + 1,
+    id: item._id,
     name: item.name,
     category: categoryName,
     price: item.price,

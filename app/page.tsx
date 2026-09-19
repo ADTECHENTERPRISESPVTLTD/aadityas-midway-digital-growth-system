@@ -32,7 +32,7 @@ import {
 } from 'lucide-react'
 
 export default function Home() {
-  const [cart, setCart] = useState<Record<number, number>>({})
+  const [cart, setCart] = useState<Record<string, number>>({})
   const [isCartOpen, setIsCartOpen] = useState(false)
   const [isBookingOpen, setIsBookingOpen] = useState(false)
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false)
@@ -49,7 +49,7 @@ export default function Home() {
     (item) => item.badge === 'Signature' || item.badge === 'Chef Special' || item.badge === 'Bestseller'
   ).slice(0, 6)
 
-  function updateQuantity(id: number, delta: number) {
+  function updateQuantity(id: string | number, delta: number) {
     setCart((prev) => {
       const current = prev[id] || 0
       const next = current + delta

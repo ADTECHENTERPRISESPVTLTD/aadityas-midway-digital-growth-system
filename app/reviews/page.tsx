@@ -13,7 +13,7 @@ import ReviewSection from '@/components/ReviewSection'
 import { ArrowRight, Bot, Calendar, MessageSquare, Star } from 'lucide-react'
 
 export default function ReviewsPage() {
-  const [cart, setCart] = useState<Record<number, number>>({})
+  const [cart, setCart] = useState<Record<string, number>>({})
   const [isCartOpen, setIsCartOpen] = useState(false)
   const [isBookingOpen, setIsBookingOpen] = useState(false)
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false)
@@ -25,7 +25,7 @@ export default function ReviewsPage() {
     0
   )
 
-  function updateQuantity(id: number, delta: number) {
+  function updateQuantity(id: string | number, delta: number) {
     setCart((prev) => {
       const current = prev[id] || 0
       const next = current + delta

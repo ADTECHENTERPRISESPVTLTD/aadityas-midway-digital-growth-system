@@ -7,9 +7,9 @@ import { ArrowRight, Minus, Plus, ShoppingBag, Trash2, X } from 'lucide-react'
 interface CartDrawerProps {
   isOpen: boolean
   onClose: () => void
-  cart: Record<number, number>
+  cart: Record<string, number>
   allItems: MenuItem[]
-  onUpdateQuantity: (id: number, delta: number) => void
+  onUpdateQuantity: (id: string | number, delta: number) => void
   onCheckout: () => void
 }
 
