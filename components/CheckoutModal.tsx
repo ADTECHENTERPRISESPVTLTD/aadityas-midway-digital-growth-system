@@ -2,15 +2,19 @@
 
 import { FormEvent, useEffect, useRef, useState } from 'react'
 import { CheckCircle2, ShieldCheck, X } from 'lucide-react'
+import { MenuItem } from '@/lib/menuData'
+import { API_URL } from '@/lib/apiUrl'
 
 interface CheckoutModalProps {
   isOpen: boolean
   onClose: () => void
   totalAmount: number
   onSuccess: () => void
+  cart: Record<number, number>
+  allItems: MenuItem[]
 }
 
-export default function CheckoutModal({ isOpen, onClose, totalAmount, onSuccess }: CheckoutModalProps) {
+export default function CheckoutModal({ isOpen, onClose, totalAmount, onSuccess, cart, allItems }: CheckoutModalProps) {
   const [submitted, setSubmitted] = useState(false)
   const [name, setName] = useState('')
   const [phone, setPhone] = useState('')
@@ -78,7 +82,7 @@ export default function CheckoutModal({ isOpen, onClose, totalAmount, onSuccess 
     }
   }
 
-  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
     const err = validatePhone(phone)
     if (err) {
@@ -86,6 +90,37 @@ export default function CheckoutModal({ isOpen, onClose, totalAmount, onSuccess 
       return
     }
     setPhoneError('')
+
+    // Only items that came from the live backend have a real database id --
+    // cart items from the static fallback menu can't be saved as a real
+    // order (the backend has no record of them). Best-effort save; the
+    // order confirmation below is shown either way since there's no real
+    // payment step to fail against.
+    const items = Object.entries(cart)
+      .map(([id, quantity]) => {
+        const item = allItems.find((i) => i.id === Number(id))
+        return item?.backendId ? { menuItem: item.backendId, quantity } : null
+      })
+      .filter((row): row is { menuItem: string; quantity: number } => row !== null)
+
+    if (items.length > 0) {
+      try {
+        await fetch(`${API_URL}/api/orders`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            customerName: name,
+            customerPhone: phone,
+            items,
+            couponCode: appliedCoupon || undefined,
+          }),
+        })
+      } catch {
+        // Backend unreachable -- fall through to the same confirmation
+        // screen; there's no real payment happening here either way.
+      }
+    }
+
     setSubmitted(true)
     setTimeout(() => {
       onSuccess()

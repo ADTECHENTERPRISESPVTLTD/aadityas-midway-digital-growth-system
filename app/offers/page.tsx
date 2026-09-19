@@ -136,6 +136,8 @@ export default function OffersPage() {
         isOpen={isCheckoutOpen}
         onClose={() => setIsCheckoutOpen(false)}
         totalAmount={subtotal > 999 ? subtotal : subtotal + (subtotal > 0 ? 99 : 0)}
+        cart={cart}
+        allItems={ALL_MENU_ITEMS}
         onSuccess={() => {
           setCart({})
           setIsCheckoutOpen(false)
