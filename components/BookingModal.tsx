@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { Calendar, CheckCircle2, Clock, MapPin, Sparkles, Users, Utensils, X } from 'lucide-react'
-import { API_URL } from '@/lib/apiUrl'
+import { API_URL, fetchWithTimeout } from '@/lib/apiUrl'
 
 interface BookingModalProps {
   isOpen: boolean
@@ -28,14 +28,36 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
   const [phone, setPhone] = useState('')
   const [phoneError, setPhoneError] = useState('')
   const [specialRequest, setSpecialRequest] = useState('')
+  const [submitting, setSubmitting] = useState(false)
+  const [submitError, setSubmitError] = useState('')
+  const [reference, setReference] = useState('')
   const panelRef = useRef<HTMLDivElement>(null)
 
   const todayStr = new Date().toISOString().split('T')[0]
 
+  // This component stays mounted while closed, so its state survives between
+  // bookings. Without a reset, closing with the X and reopening would show
+  // the old "Table Reserved" screen instead of a fresh form.
+  useEffect(() => {
+    if (isOpen || !submitted) return
+    setSubmitted(false)
+    setSubmitError('')
+    setReference('')
+    setDate('')
+    setName('')
+    setPhone('')
+    setSpecialRequest('')
+  }, [isOpen, submitted])
+
+  function handleClose() {
+    if (submitting) return
+    onClose()
+  }
+
   useEffect(() => {
     if (!isOpen) return
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') handleReset()
+      if (e.key === 'Escape') handleClose()
     }
     window.addEventListener('keydown', handleKeyDown)
     const focusable = panelRef.current?.querySelector<HTMLElement>(
@@ -43,7 +65,7 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
     )
     focusable?.focus()
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [isOpen])
+  }, [isOpen, submitting, onClose])
 
   if (!isOpen) return null
 
@@ -57,15 +79,21 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
+    if (submitting) return
     const err = validatePhone(phone)
     if (err) {
       setPhoneError(err)
       return
     }
     setPhoneError('')
+    setSubmitError('')
+    setSubmitting(true)
 
+    // A reservation is only confirmed on screen once the backend has really
+    // saved it -- a false "Table Reserved" would leave a guest showing up to
+    // a table nobody knows about.
     try {
-      await fetch(`${API_URL}/api/bookings`, {
+      const res = await fetchWithTimeout(`${API_URL}/api/bookings`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -76,26 +104,32 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
           guests: parseInt(guests, 10),
         }),
       })
+      const body = await res.json().catch(() => null)
+      if (!res.ok || !body?.success) {
+        setSubmitError(
+          typeof body?.message === 'string' && body.message
+            ? `${body.message}.`
+            : 'We could not save your reservation. Please try again.'
+        )
+        return
+      }
+      setReference(typeof body.data?.reference === 'string' ? body.data.reference : '')
     } catch {
-      // Backend unreachable -- still confirm the reservation on screen,
-      // same fallback approach used for menu data and checkout.
+      setSubmitError(
+        'We could not reach our booking system right now. Please try again, or call us on +91 74153 88571 to reserve.'
+      )
+      return
+    } finally {
+      setSubmitting(false)
     }
 
     setSubmitted(true)
   }
 
-  function handleReset() {
-    setSubmitted(false)
-    setName('')
-    setPhone('')
-    setSpecialRequest('')
-    onClose()
-  }
-
   return (
-    <div className="modal-backdrop" onClick={onClose} role="dialog" aria-modal="true" aria-label="Book a table">
+    <div className="modal-backdrop" onClick={handleClose} role="dialog" aria-modal="true" aria-label="Book a table">
       <div className="luxury-modal-card responsive-booking-card" ref={panelRef} onClick={(e) => e.stopPropagation()}>
-        <button className="close-btn" onClick={onClose} aria-label="Close modal">
+        <button className="close-btn" onClick={handleClose} aria-label="Close modal">
           <X size={20} />
         </button>
 
@@ -119,7 +153,7 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', fontSize: '13px' }}>
                 <span style={{ color: 'var(--text-muted)' }}>Booking Reference:</span>
-                <strong style={{ color: 'var(--gold-light)', fontFamily: 'monospace' }}>AM-TBL-{Math.floor(1000 + Math.random() * 9000)}</strong>
+                <strong style={{ color: 'var(--gold-light)', fontFamily: 'monospace' }}>{reference}</strong>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px' }}>
                 <span style={{ color: 'var(--text-muted)' }}>Contact Mobile:</span>
@@ -127,7 +161,7 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
               </div>
             </div>
 
-            <button className="btn-luxury-gold full-w" onClick={handleReset}>
+            <button className="btn-luxury-gold full-w" onClick={handleClose}>
               Done & Return to Site
             </button>
           </div>
@@ -237,8 +271,14 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
               </div>
             </div>
 
-            <button type="submit" className="btn-luxury-gold full-w mt-3" style={{ padding: '14px' }}>
-              Confirm Instant Reservation <Sparkles size={16} />
+            {submitError && (
+              <div role="alert" style={{ color: '#f87171', fontSize: '13px', marginTop: '14px', lineHeight: '1.5' }}>
+                {submitError}
+              </div>
+            )}
+
+            <button type="submit" className="btn-luxury-gold full-w mt-3" style={{ padding: '14px' }} disabled={submitting}>
+              {submitting ? 'Reserving your table…' : <>Confirm Instant Reservation <Sparkles size={16} /></>}
             </button>
           </form>
         )}

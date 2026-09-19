@@ -289,7 +289,7 @@
   },
   {
     "id": 25,
-    "name": "Chopped Salmon",
+    "name": "Chopped Salmon Sandwich",
     "category": "Sandwiches & Burgers",
     "priceLabel": "₹1203",
     "description": "Small or large chopped salmon sandwich.",
@@ -541,7 +541,7 @@
   },
   {
     "id": 46,
-    "name": "Chicken Shawarma",
+    "name": "Chicken Shawarma Platter",
     "category": "Chicken Platter",
     "priceLabel": "₹1117",
     "description": "Chicken shawarma platter.",
@@ -817,7 +817,7 @@
   },
   {
     "id": 69,
-    "name": "Mango / Strawberry Slush",
+    "name": "Strawberry Slush",
     "category": "Smoothies",
     "priceLabel": "₹687",
     "description": "Large mango or strawberry slush.",
@@ -841,7 +841,7 @@
   },
   {
     "id": 71,
-    "name": "Mango/Strawberry Slush",
+    "name": "Strawberry Slush",
     "category": "Smoothies",
     "priceLabel": "₹687",
     "description": "Large mango and strawberry slush.",
@@ -1145,6 +1145,18 @@
     "category": "Non-Veg Snacks",
     "priceLabel": "₹256",
     "description": "Deep-fried minced beef kebabs.",
+    "veg": false,
+    "currency": "INR",
+    "bestseller": true,
+    "available": true,
+    "price": 256
+  },
+  {
+    "id": 97,
+    "name": "Mutton Kebabs",
+    "category": "Non-Veg Snacks",
+    "priceLabel": "₹256",
+    "description": "Crispy spiced minced mutton kebabs.",
     "veg": false,
     "currency": "INR",
     "bestseller": true,

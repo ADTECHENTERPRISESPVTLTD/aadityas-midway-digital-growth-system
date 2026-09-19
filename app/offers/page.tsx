@@ -8,7 +8,8 @@ import CheckoutModal from '@/components/CheckoutModal'
 import BookingModal from '@/components/BookingModal'
 import DiningAssistantModal from '@/components/DiningAssistantModal'
 import OfferCard from '@/components/OfferCard'
-import { ALL_MENU_ITEMS, MenuItem } from '@/lib/menuData'
+import { MenuItem } from '@/lib/menuData'
+import { useLiveMenu } from '@/lib/useLiveMenu'
 import {
   ArrowRight,
   Bot,
@@ -29,6 +30,7 @@ export default function OffersPage() {
   const [isBookingOpen, setIsBookingOpen] = useState(false)
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false)
   const [isAssistantOpen, setIsAssistantOpen] = useState(false)
+  const { items: ALL_MENU_ITEMS } = useLiveMenu()
   const [copiedCode, setCopiedCode] = useState<string | null>(null)
 
   const cartCount = Object.values(cart).reduce((a, b) => a + b, 0)

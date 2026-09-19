@@ -7,7 +7,8 @@ import CartDrawer from '@/components/CartDrawer'
 import CheckoutModal from '@/components/CheckoutModal'
 import BookingModal from '@/components/BookingModal'
 import DiningAssistantModal from '@/components/DiningAssistantModal'
-import { ALL_MENU_ITEMS, MenuItem } from '@/lib/menuData'
+import { MenuItem } from '@/lib/menuData'
+import { useLiveMenu } from '@/lib/useLiveMenu'
 import {
   ArrowRight,
   Award,
@@ -29,6 +30,7 @@ export default function StoryPage() {
   const [isBookingOpen, setIsBookingOpen] = useState(false)
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false)
   const [isAssistantOpen, setIsAssistantOpen] = useState(false)
+  const { items: ALL_MENU_ITEMS } = useLiveMenu()
 
   const cartCount = Object.values(cart).reduce((a, b) => a + b, 0)
   const subtotal = ALL_MENU_ITEMS.filter((item) => cart[item.id] > 0).reduce(

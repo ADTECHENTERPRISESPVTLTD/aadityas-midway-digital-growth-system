@@ -58,6 +58,14 @@ Create admin:
 npm run seed:admin
 ```
 
+Load the menu (111 dishes) and the checkout coupons (MIDWEEK20, FIRSTBITE, GROUPDESSERT).
+The website only accepts a coupon at checkout if it exists here. Safe to re-run:
+
+```bash
+npm run seed:menu
+npm run seed:coupons
+```
+
 Admin login:
 
 Email: admin@aadityasmidway.com
