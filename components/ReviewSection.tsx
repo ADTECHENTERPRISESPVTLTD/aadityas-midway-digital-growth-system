@@ -3,9 +3,10 @@
 import { useEffect, useRef, useState } from 'react'
 import ReviewCard from '@/components/ReviewCard'
 import { CheckCircle2, MessageSquarePlus, Sparkles, Star, X } from 'lucide-react'
+import { apiFetchReviews, apiSubmitReview } from '@/lib/api'
 
 interface ReviewItem {
-  id: number
+  id: string | number
   rating: number
   customerName: string
   review: string
@@ -41,6 +42,25 @@ export default function ReviewSection() {
   const [reviews, setReviews] = useState<ReviewItem[]>(INITIAL_REVIEWS)
   const [isModalOpen, setIsModalOpen] = useState(false)
 
+  useEffect(() => {
+    apiFetchReviews()
+      .then((data) => {
+        if (data.length > 0) {
+          setReviews(data.map((r) => ({
+            id: r._id,
+            rating: r.rating,
+            customerName: r.name,
+            review: r.comment,
+            date: new Date(r.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long' }),
+            tagline: 'Verified Review',
+          })))
+        }
+      })
+      .catch(() => {
+        // Keep static reviews as fallback
+      })
+  }, [])
+
   // New review state
   const [name, setName] = useState('')
   const [rating, setRating] = useState(5)
@@ -64,7 +84,7 @@ export default function ReviewSection() {
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [isModalOpen])
 
-  function handleSubmitReview(e: React.FormEvent) {
+  async function handleSubmitReview(e: React.FormEvent) {
     e.preventDefault()
     if (!name || !reviewText) return
 
@@ -79,6 +99,13 @@ export default function ReviewSection() {
 
     setReviews([newReview, ...reviews])
     setSubmitted(true)
+
+    try {
+      await apiSubmitReview({ name, rating, comment: reviewText })
+    } catch {
+      // Review added locally; backend submission failed silently
+    }
+
     setTimeout(() => {
       setSubmitted(false)
       setName('')

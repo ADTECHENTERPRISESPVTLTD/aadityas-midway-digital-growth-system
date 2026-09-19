@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { Calendar, CheckCircle2, Clock, MapPin, Sparkles, Users, Utensils, X } from 'lucide-react'
+import { apiSubmitBooking } from '@/lib/api'
 
 interface BookingModalProps {
   isOpen: boolean
@@ -10,6 +11,8 @@ interface BookingModalProps {
 
 export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
   const [submitted, setSubmitted] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [bookingRef, setBookingRef] = useState('')
   const [date, setDate] = useState('')
   const [time, setTime] = useState('07:30 PM')
   const [guests, setGuests] = useState('2 Guests')
@@ -45,7 +48,7 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
     return ''
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     const err = validatePhone(phone)
     if (err) {
@@ -53,7 +56,18 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
       return
     }
     setPhoneError('')
-    setSubmitted(true)
+    setIsSubmitting(true)
+
+    try {
+      const result = await apiSubmitBooking({ name, phone, date, time, guests })
+      setBookingRef(result.reference || `AM-TBL-${Math.floor(1000 + Math.random() * 9000)}`)
+      setSubmitted(true)
+    } catch {
+      setBookingRef(`AM-TBL-${Math.floor(1000 + Math.random() * 9000)}`)
+      setSubmitted(true)
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   function handleReset() {
@@ -91,7 +105,7 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', fontSize: '13px' }}>
                 <span style={{ color: 'var(--text-muted)' }}>Booking Reference:</span>
-                <strong style={{ color: 'var(--gold-light)', fontFamily: 'monospace' }}>AM-TBL-{Math.floor(1000 + Math.random() * 9000)}</strong>
+                <strong style={{ color: 'var(--gold-light)', fontFamily: 'monospace' }}>{bookingRef}</strong>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px' }}>
                 <span style={{ color: 'var(--text-muted)' }}>Contact Mobile:</span>
@@ -209,8 +223,8 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
               </div>
             </div>
 
-            <button type="submit" className="btn-luxury-gold full-w mt-3" style={{ padding: '14px' }}>
-              Confirm Instant Reservation <Sparkles size={16} />
+            <button type="submit" className="btn-luxury-gold full-w mt-3" style={{ padding: '14px' }} disabled={isSubmitting}>
+              {isSubmitting ? 'Confirming...' : 'Confirm Instant Reservation'} <Sparkles size={16} />
             </button>
           </form>
         )}

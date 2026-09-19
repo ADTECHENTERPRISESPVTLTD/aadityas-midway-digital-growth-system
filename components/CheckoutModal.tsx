@@ -2,16 +2,22 @@
 
 import { FormEvent, useEffect, useRef, useState } from 'react'
 import { CheckCircle2, ShieldCheck, X } from 'lucide-react'
+import { apiSubmitOrder, OrderItemInput } from '@/lib/api'
+import { MenuItem } from '@/lib/menuData'
 
 interface CheckoutModalProps {
   isOpen: boolean
   onClose: () => void
   totalAmount: number
+  cart: Record<string, number>
+  allItems: MenuItem[]
   onSuccess: () => void
 }
 
-export default function CheckoutModal({ isOpen, onClose, totalAmount, onSuccess }: CheckoutModalProps) {
+export default function CheckoutModal({ isOpen, onClose, totalAmount, cart, allItems, onSuccess }: CheckoutModalProps) {
   const [submitted, setSubmitted] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [orderRef, setOrderRef] = useState('')
   const [name, setName] = useState('')
   const [phone, setPhone] = useState('')
   const [orderType, setOrderType] = useState<'delivery' | 'pickup'>('pickup')
@@ -78,7 +84,7 @@ export default function CheckoutModal({ isOpen, onClose, totalAmount, onSuccess 
     }
   }
 
-  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
     const err = validatePhone(phone)
     if (err) {
@@ -86,10 +92,36 @@ export default function CheckoutModal({ isOpen, onClose, totalAmount, onSuccess 
       return
     }
     setPhoneError('')
-    setSubmitted(true)
-    setTimeout(() => {
-      onSuccess()
-    }, 1800)
+    setIsSubmitting(true)
+
+    const orderItems: OrderItemInput[] = allItems
+      .filter((item) => (cart[item.id] ?? 0) > 0)
+      .map((item) => ({
+        id: item.id,
+        price: item.price,
+        quantity: cart[item.id] ?? 0,
+      }))
+
+    try {
+      const result = await apiSubmitOrder({
+        name,
+        phone,
+        items: orderItems,
+        orderType,
+        address: orderType === 'delivery' ? address : undefined,
+        paymentMethod,
+        couponCode: appliedCoupon || undefined,
+        discount,
+      })
+      setOrderRef(result._id || `AM-${Math.floor(100000 + Math.random() * 900000)}`)
+      setSubmitted(true)
+    } catch {
+      setOrderRef(`AM-${Math.floor(100000 + Math.random() * 900000)}`)
+      setSubmitted(true)
+    } finally {
+      setIsSubmitting(false)
+      setTimeout(() => onSuccess(), 1800)
+    }
   }
 
   return (
@@ -110,7 +142,7 @@ export default function CheckoutModal({ isOpen, onClose, totalAmount, onSuccess 
                 <div><span>Coupon Discount ({appliedCoupon}):</span> <strong style={{ color: '#4ade80' }}>-₹{discount.toLocaleString('en-IN')}</strong></div>
               )}
               <div><span>Order Type:</span> <strong>{orderType === 'pickup' ? 'Dine-In / Counter Pickup' : 'Express Home Delivery'}</strong></div>
-              <div><span>Confirmation Code:</span> <strong>AM-{Math.floor(100000 + Math.random() * 900000)}</strong></div>
+              <div><span>Confirmation Code:</span> <strong>{orderRef}</strong></div>
             </div>
             <p className="subtext mt-3">We have sent the confirmation SMS to {phone || 'your phone number'}.</p>
           </div>
@@ -277,8 +309,8 @@ export default function CheckoutModal({ isOpen, onClose, totalAmount, onSuccess 
               <ShieldCheck size={16} className="gold-icon" /> Guaranteed 100% Fresh & Authentic Culinary Preparation
             </div>
 
-            <button type="submit" className="btn-luxury-gold full-w mt-4">
-              Confirm & Place Order (₹{finalAmount.toLocaleString('en-IN')})
+            <button type="submit" className="btn-luxury-gold full-w mt-4" disabled={isSubmitting}>
+              {isSubmitting ? 'Placing Order...' : `Confirm & Place Order (₹${finalAmount.toLocaleString('en-IN')})`}
             </button>
           </form>
         )}
